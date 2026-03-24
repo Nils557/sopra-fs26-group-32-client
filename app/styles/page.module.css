@@ -1,89 +1,99 @@
-.container {
+.fullPageContainer {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #0e1117;
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #0e1117; /* Dunkler Hintergrund aus Mockup */
+  padding: 40px;
 }
 
-.card {
-  background: #151c2c;
-  border-radius: 12px;
-  border: 1px solid #1e2940;
+/* Logo in the upper left corner */
+.cornerLogo {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  font-family: var(--font-syne), sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.cornerLogo span {
+  color: #f4941b;
+}
+
+/*Text + box centered */
+.centerWrapper {
   width: 100%;
-  max-width: 360px; /* Breite angepasst */
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.topbar {
-  padding: 12px 16px; /* Padding angepasst für Corner-Optik */
-  background: #151c2c;
-  border-bottom: 1px solid #1e2940;
-  display: flex;
-  align-items: center; /* Hält das Logo vertikal zentriert */
-}
-
-.logo {
-  font-family: var(--font-syne), sans-serif;
-  font-weight: 800;
-  color: #fff;
-  font-size: 16px;
-  /* Logo wird durch .topbar padding automatisch in die Ecke geschoben */
-}
-
-.logo span {
-  color: #f4941b; /* GeoGuess Orange */
-}
-
-.content {
-  padding: 30px 20px; /* Mehr Abstand für den Inhaltsbereich */
-}
-
-.title {
-  font-family: var(--font-syne), sans-serif;
-  font-size: 24px;
-  font-weight: 800;
-  color: #fff;
+  max-width: 600px; 
   text-align: center;
-  margin-bottom: 8px; /* Abstand zum Subtitle */
 }
 
-.subtitle {
+.heroText {
+  margin-bottom: 40px;
+}
+
+.hugeTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(32px, 8vw, 64px); /* Dynamic size */
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+}
+
+.hugeSubtitle {
+  font-size: clamp(16px, 2vw, 20px);
   color: #6b7280;
-  font-size: 13px;
-  text-align: center;
-  margin-bottom: 25px; /* Abstand zur Input-Box */
 }
 
-.inputField {
+.loginCard {
+  background: #151c2c;
+  border-radius: 16px;
+  border: 1px solid #1e2940;
+  padding: 40px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.largeInput {
   width: 100%;
   background: #1e2940;
-  border: 1px solid #2a3a5c;
-  border-radius: 8px;
-  padding: 12px;
+  border: 2px solid #2a3a5c;
+  border-radius: 12px;
+  padding: 18px 24px;
   color: #fff;
-  margin-bottom: 15px; /* Abstand zum Button */
+  font-size: 18px;
   outline: none;
-  font-family: var(--font-space), sans-serif; /* Wichtig für die Schriftart */
+  transition: border-color 0.2s;
 }
 
-.inputField:focus {
+.largeInput:focus {
   border-color: #4a7cf7;
 }
 
-.button {
+.largeButton {
   width: 100%;
-  background: #4a7cf7; /* GeoGuess Blau */
+  background: #4a7cf7;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 18px;
+  border-radius: 12px;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  font-family: var(--font-space), sans-serif; /* Wichtig für die Schriftart */
+  transition: transform 0.1s, background 0.2s;
 }
 
-.button:hover {
+.largeButton:hover {
   background: #3a6be0;
 }

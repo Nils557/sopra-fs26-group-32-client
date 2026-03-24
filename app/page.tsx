@@ -1,34 +1,49 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client";
+
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import styles from "@/styles/page.module.css";
+
 const Login: React.FC = () => {
+  const router = useRouter();
+  const apiService = useApi();
 
-  const handleLogin = 0
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name");
+    try {
+      await apiService.post<User>("/users", { name });
+      router.push("/users");
+    } catch (error) {
+      alert("Error while logging in. Check console.");
+      console.error(error);
+    }
+  };
 
-return (
-    <main className={styles.container}>
-      <div className={styles.card}>
-        <div className={styles.topbar}>
-          <div className={styles.logo}>Geo<span>Guess</span></div>
+  return (
+    <main className={styles.fullPageContainer}>
+      <div className={styles.cornerLogo}>
+        Geo<span>Guess</span>
+      </div>
+
+      <div className={styles.centerWrapper}>
+        <div className={styles.heroText}>
+          <h1 className={styles.hugeTitle}>Guess the City.</h1>
+          <p className={styles.hugeSubtitle}>Pick a username to get started.</p>
         </div>
-        
-        <div className={styles.content}>
-          <h1 className={styles.title}>Guess the City.</h1>
-          <p className={styles.subtitle}>Choose a nickname!</p>
-          
-          <form onSubmit={handleLogin}>
-            <input 
+        <div className={styles.loginCard}>
+          <form onSubmit={handleLogin} className={styles.form}>
+            <input
               name="name"
-              className={styles.inputField} 
-              placeholder="Your name" 
-              required 
+              className={styles.largeInput}
+              placeholder="Enter username"
+              required
               autoFocus
             />
-            
-            <button type="submit" className={styles.button}>
-              Enter game
+            <button type="submit" className={styles.largeButton}>
+              Enter game →
             </button>
           </form>
         </div>
