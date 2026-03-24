@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react"; 
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
@@ -8,16 +9,23 @@ import styles from "@/styles/page.module.css";
 const Login: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
+  
+  // State of error message
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorMsg(null); // delete error if tried again
+    
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     try {
       await apiService.post<User>("/users", { name });
       router.push("/users");
-    } catch (error) {
-      alert("Error while logging in. Check console.");
+    } catch (error: any) {
+      // No alert, it wrties it onto the page
+      const message = error.response?.data?.message || "Username already taken!";
+      setErrorMsg(message);
       console.error(error);
     }
   };
@@ -42,6 +50,13 @@ const Login: React.FC = () => {
               required
               autoFocus
             />
+            
+            {errorMsg && (
+              <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "-10px", textAlign: "left" }}>
+                {errorMsg}
+              </p>
+            )}
+
             <button type="submit" className={styles.largeButton}>
               Enter game →
             </button>
