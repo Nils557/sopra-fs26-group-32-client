@@ -22,9 +22,12 @@ const Login: React.FC = () => {
     try {
       await apiService.post<User>("/users", { name });
       router.push("/users");
-    } catch (error: any) {
-      // No alert, it wrties it onto the page
-      const message = error.response?.data?.message || "Username already taken!";
+} catch (error: unknown) {
+      // the error is now normally unknown
+      // check if it is an error with a response
+      const err = error as { response?: { data?: { message?: string } } };
+      
+      const message = err.response?.data?.message || "Username already taken";
       setErrorMsg(message);
       console.error(error);
     }
