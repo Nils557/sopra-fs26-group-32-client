@@ -41,7 +41,7 @@ reason).
 |                    | 27.03.26   | [3c7f844](https://github.com/Nils557/sopra-fs26-group-32-server/commit/3c7f844c1beeca1e29fc4b08fb88424cf637c6fb) | Implemented user creation and validation logic | To ensure that a user can be created only with a valid username (unique and not empty) |
 | **[@faiaz18]** | 28.03.26  | [069345a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/069345aac942cf163d44cedb9ba7250cdfc40d99) | Implemented automatic user deletion on disconnect | Players who leave should not persist in the system |
 |                    | 28.03.26   | [9d495ae](https://github.com/Nils557/sopra-fs26-group-32-server/commit/9d495aecb41ba30ce4b669490c8c91f7c290b9e7) | Created Lobby entity with status field | The game needs to track active lobbies and their state |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@Bleronn4]** | 29.03.26   | [e1e0f81](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e1e0f81) | created the Home Page and the Lobby Creation Page| The Player needs to have the option to host or join, if he hosts, he should be able to choose game parameters |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
 ---
