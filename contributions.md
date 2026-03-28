@@ -37,8 +37,8 @@ reason).
 | **[@Nils557]** | 24.3.26   | [0c562a1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/0c562a1b93bafe1c4bce200a2a43b1fadba4be35) | Created landingPage | A player needs to start somewhere |
 |                    | 24.3.26   | [412eef1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/412eef1ec9ae4ff31a1a530b869f00479986804f) | implemented handleLogin function | because the server needs to know the playername |
 |                    | 24.3.26   | [f4a9f46](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f4a9f4678273728b9714a18095a4d4f78c7a0473) | added a username taken warning | Because a user can't take an already taken username |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@vanix-dm]** | 27.03.26   | [75a4053](https://github.com/Nils557/sopra-fs26-group-32-server/commit/75a4053430d764c1910e21e97206e3b5ecd2b068), [aac0771](https://github.com/Nils557/sopra-fs26-group-32-server/commit/aac07714cfc32dbf604a1b2d2e65948a08c376c0) | Aligned User entity and repository with M2 report, removed all unnecessary fields from all files | To ensure that the user has the correct parameters (username, Id, etc) |
+|                    | 27.03.26   | [3c7f844](https://github.com/Nils557/sopra-fs26-group-32-server/commit/3c7f844c1beeca1e29fc4b08fb88424cf637c6fb) | Implemented user creation and validation logic | To ensure that a user can be created only with a valid username (unique and not empty) |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
