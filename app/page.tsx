@@ -20,8 +20,8 @@ const Login: React.FC = () => {
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     try {
-      await apiService.post<User>("/users", { name });
-      router.push("/users");
+      await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      router.push("/home");
 } catch (error: unknown) {
       // the error is now normally unknown
       // check if it is an error with a response
