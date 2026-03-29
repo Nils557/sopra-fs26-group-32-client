@@ -16,7 +16,7 @@ const CreateLobby: React.FC = () => {
 
   const handleCreation = async () => {
     try {
-      const response = await apiService.post<any>("/lobbies", {
+      const response = await apiService.post<{ lobbyCode: string }>("/lobbies", {
         hostUserId: Number(userId),
         maxPlayers: maxPlayers,
         totalRounds: rounds,
