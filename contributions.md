@@ -44,7 +44,7 @@ reason).
 | **[@Bleronn4]** | 29.03.26   | [e1e0f81](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e1e0f81) | created the Home Page and the Lobby Creation Page| The Player needs to have the option to host or join, if he hosts, he should be able to choose game parameters |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@scthisko]** | 29.03.26   | [76677dc](https://github.com/Nils557/sopra-fs26-group-32-server/commit/76677dc) | Implemented POST /lobbies endpoint including DTOs and service skeleton | The frontend needs an endpoint to create lobbies |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                 | 29.03.26   | [890c0e3](https://github.com/Nils557/sopra-fs26-group-32-server/commit/890c0e3) | Implemented unique lobby code generation | A unique code is needed so players can find and join the correct lobby |
 |                    | [date]   | [Link to Commit 3] | [Brief description of the task] | [Why this contribution is relevant] |
 ---
 
