@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import styles from "@/styles/page.module.css";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const Login: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
+  const { set: setUserId } = useLocalStorage<string>("userId", "");
+  const { set: setUsername } = useLocalStorage<string>("username", "");
   
   // State of error message
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -20,7 +23,9 @@ const Login: React.FC = () => {
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     try {
-      await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      const user = await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      setUserId(String(user.id));
+      setUsername(String(user.username));
       router.push("/home");
 } catch (error: unknown) {
       // the error is now normally unknown
