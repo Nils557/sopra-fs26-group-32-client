@@ -43,7 +43,9 @@ reason).
 |                    | 28.03.26   | [9d495ae](https://github.com/Nils557/sopra-fs26-group-32-server/commit/9d495aecb41ba30ce4b669490c8c91f7c290b9e7) | Created Lobby entity with status field | The game needs to track active lobbies and their state |
 | **[@Bleronn4]** | 29.03.26   | [e1e0f81](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e1e0f81) | created the Home Page and the Lobby Creation Page| The Player needs to have the option to host or join, if he hosts, he should be able to choose game parameters |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-
+| **[@scthisko]** | 29.03.26   | [76677dc](https://github.com/Nils557/sopra-fs26-group-32-server/commit/76677dc) | Implemented POST /lobbies endpoint including DTOs and service skeleton | The frontend needs an endpoint to create lobbies |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 3] | [Brief description of the task] | [Why this contribution is relevant] |
 ---
 
 ## Contributions Week 2 - [Begin Date] to [End Date]
