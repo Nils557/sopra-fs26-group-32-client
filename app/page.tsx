@@ -27,25 +27,30 @@ const Login: React.FC = () => {
       setUserId(String(user.id));
       setUsername(String(user.username));
       router.push("/home");
-} catch (error: unknown) {
-      // the error is now normally unknown
-      // check if it is an error with a response
-      const err = error as 
-      { response?: { 
-        status?: number;
-        data?: { message?: string } } };
+    } catch (error: unknown) {
 
-      console.error("Status:", err.response?.status);
-      console.error("Body:", err.response?.data);
-      
-      if (err.response?.status === 409) {
-        setErrorMsg("Username already taken");
-      } else if (err.response?.status) {
-        setErrorMsg(`Server error: ${err.response.status}`);
-      } else {
-        setErrorMsg("Could not connect to server");
+      setErrorMsg(null); 
+
+      let status: number | null = null;
+
+      if (error instanceof Error) {
+        // Extracts status code from message like "(409: {...})"
+        const match = error.message.match(/\((\d{3}):/);
+        if (match) {
+          status = parseInt(match[1], 10);
+        }
       }
-    }
+
+      //console.log("Caught error:", error);
+
+      if (status === 409) {
+        setErrorMsg("Username already taken.");
+      } else if (status !== null) {
+        setErrorMsg(`Server error: ${status}`);
+      } else {
+        setErrorMsg("Could not connect to server.");
+      }
+    } 
   };
 
   return (
