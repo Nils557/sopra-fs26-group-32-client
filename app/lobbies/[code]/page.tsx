@@ -2,11 +2,15 @@
 
 import styles from "@/styles/page.module.css";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useParams } from "next/navigation";
 
 const WaitingRoom: React.FC = () => {
   const { value: username } = useLocalStorage<string>("username", "");
   const avatarInitials = typeof username === "string" ? username.substring(0, 2).toUpperCase() : "";
-  const lobbyCode = "CODE-HERE"; //hardcoded for now
+  const params = useParams();
+  const lobbyCode = params.code as string;
+  const { value: maxPlayersStr } = useLocalStorage<string>("maxPlayers", "0");
+  const maxPlayers = Number(maxPlayersStr);
 
   return (
     <main className={styles.fullPageContainer}>
@@ -26,7 +30,7 @@ const WaitingRoom: React.FC = () => {
           </h1>
 
           <div className={styles.scoringBox}>
-            <p className={styles.scoringTitle}>Players</p>
+          <p className={styles.scoringTitle}>Players (1/{maxPlayers})</p>
 
             <div className={styles.settingRow}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
