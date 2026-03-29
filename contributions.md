@@ -45,7 +45,7 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@scthisko]** | 29.03.26   | [76677dc](https://github.com/Nils557/sopra-fs26-group-32-server/commit/76677dc) | Implemented POST /lobbies endpoint including DTOs and service skeleton | The frontend needs an endpoint to create lobbies |
 |                 | 29.03.26   | [890c0e3](https://github.com/Nils557/sopra-fs26-group-32-server/commit/890c0e3) | Implemented unique lobby code generation | A unique code is needed so players can find and join the correct lobby |
-|                    | [date]   | [Link to Commit 3] | [Brief description of the task] | [Why this contribution is relevant] |
+|                 | 29.03.26   | [c930fc5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c930fc5) | Stored lobby configuration in database including validation | Lobby data must persist so players can join and the game can start |
 ---
 
 ## Contributions Week 2 - [Begin Date] to [End Date]
