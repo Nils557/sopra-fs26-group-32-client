@@ -25,11 +25,21 @@ const Login: React.FC = () => {
 } catch (error: unknown) {
       // the error is now normally unknown
       // check if it is an error with a response
-      const err = error as { response?: { data?: { message?: string } } };
+      const err = error as 
+      { response?: { 
+        status?: number;
+        data?: { message?: string } } };
+
+      console.error("Status:", err.response?.status);
+      console.error("Body:", err.response?.data);
       
-      const message = err.response?.data?.message || "Username already taken";
-      setErrorMsg(message);
-      console.error(error);
+      if (err.response?.status === 409) {
+        setErrorMsg("Username already taken");
+      } else if (err.response?.status) {
+        setErrorMsg(`Server error: ${err.response.status}`);
+      } else {
+        setErrorMsg("Could not connect to server");
+      }
     }
   };
 
