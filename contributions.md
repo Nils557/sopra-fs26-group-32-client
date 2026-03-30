@@ -49,7 +49,7 @@ reason).
 |                 | 29.03.26   | [c930fc5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c930fc5) | Stored lobby configuration in database including validation | Lobby data must persist so players can join and the game can start |
 ---
 
-## Contributions Week 2 - [Begin Date] to [End Date]
+## Contributions Week 2 - 30.3.26 to 5.4.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
