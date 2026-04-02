@@ -15,8 +15,28 @@ const Home: React.FC = () => {
           setErrorMsg("Please enter a lobby code.");
           return;
         }
+
+        try {
         router.push(`/lobbies/${lobbyCode.trim()}`);
-      };
+      } catch (error: unknown) {
+        setErrorMsg(null);
+        let status: number | null = null;
+
+        if (error instanceof Error) {
+        const match = error.message.match(/\((\d{3}):/);
+        if (match) {
+          status = parseInt(match[1], 10);
+        }
+      }
+      if (status === 409) {
+        setErrorMsg("The game has already started.");
+      } else if (status !== null) {
+      setErrorMsg(`Server error: ${status}`);
+      } else {
+      setErrorMsg("Could not connect to server.");
+      }
+    };
+  }
 
       return (
         <main className={styles.fullPageContainer}>
