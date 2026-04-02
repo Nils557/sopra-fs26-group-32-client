@@ -28,12 +28,16 @@ const Home: React.FC = () => {
           status = parseInt(match[1], 10);
         }
       }
-      if (status === 409) {
-        setErrorMsg("The game has already started.");
+        if (status === 404) { //zum richtige statuscode ändere wenns backend implementiert isch
+        setErrorMsg("Lobby not found.");
+      } else if (status === 409) { //zum richtige statuscode ändere wenns backend implementiert isch
+        setErrorMsg("Lobby is full.");
+      } else if (status === 403) { //zum richtige statuscode ändere wenns backend implementiert isch
+        setErrorMsg("Game has already started.");
       } else if (status !== null) {
-      setErrorMsg(`Server error: ${status}`);
+        setErrorMsg(`Server error: ${status}`);
       } else {
-      setErrorMsg("Could not connect to server.");
+        setErrorMsg("Could not connect to server.");
       }
     };
   }
