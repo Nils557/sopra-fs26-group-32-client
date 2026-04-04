@@ -5,15 +5,22 @@ import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useWebSocket } from '../hooks/useWebSocket';
 
-export function LobbyPage() {
+/**
+ * LobbyPage is now a private component (no 'export').
+ * Next.js 'page.tsx' files only allow 'export default' and specific metadata exports.
+ */
+function LobbyPage() {
   const [messages, setMessages] = useState<string[]>([]);
 
+  // Wrap the callback in useCallback to prevent the WebSocket from 
+  // reconnecting every time the component renders.
   const handleWebSocketMessage = useCallback((data: { content: string }) => {
     setMessages((prev) => [...prev, data.content]);
   }, []);
   
   // Listen to a specific lobby topic
-  const { sendMessage } = useWebSocket('/topic/lobby/1', handleWebSocketMessage);
+  // We pass the expected data type { content: string } to the generic hook
+  const { sendMessage } = useWebSocket<{ content: string }>('/topic/lobby/1', handleWebSocketMessage);
 
   const handleAction = () => {
     sendMessage('/app/lobby/1/join', { userId: '123' });
@@ -48,7 +55,7 @@ const Home: React.FC = () => {
       // Attempt to navigate to the lobby
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
-      // Error handling logic
+      // Error handling logic for navigation/server status
       let status: number | null = null;
       if (error instanceof Error) {
         const match = error.message.match(/\((\d{3}):/);
@@ -65,6 +72,7 @@ const Home: React.FC = () => {
 
   return (
     <main className={styles.fullPageContainer}>
+      {/* Keeping LobbyPage inside Home ensures the WebSocket starts on the landing page */}
       <LobbyPage />
 
       <div className={styles.cornerLogo}>
