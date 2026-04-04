@@ -246,3 +246,31 @@
   color: #ef4444;
   margin-right: 8px;
 }
+/* Waiting Room */
+.playerAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f4941b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
+.hostBadge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+}
+
+.disabledButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

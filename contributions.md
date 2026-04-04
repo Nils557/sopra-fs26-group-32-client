@@ -42,13 +42,30 @@ reason).
 | **[@faiaz18]** | 28.03.26  | [069345a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/069345aac942cf163d44cedb9ba7250cdfc40d99) | Implemented automatic user deletion on disconnect | Players who leave should not persist in the system |
 |                    | 28.03.26   | [9d495ae](https://github.com/Nils557/sopra-fs26-group-32-server/commit/9d495aecb41ba30ce4b669490c8c91f7c290b9e7) | Created Lobby entity with status field | The game needs to track active lobbies and their state |
 | **[@Bleronn4]** | 29.03.26   | [e1e0f81](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e1e0f81) | created the Home Page and the Lobby Creation Page| The Player needs to have the option to host or join, if he hosts, he should be able to choose game parameters |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | 29.03.2026   | [b2e2193](https://github.com/Nils557/sopra-fs26-group-32-client/commit/b2e21935a1a9c487d3682f8a8e7691fc549854c8) | [created waiting room and rerouting] | [The host should be able to wait for other players in a waiting room] |
+|                    | 29.03.2026   | [4bc5298](https://github.com/Nils557/sopra-fs26-group-32-client/commit/4bc5298c425d8a2db770cbbc669e1cf9db37876b) | [created the lobby code display in the waiting room ] | [The Host has to see the code to share with his friends] |
 | **[@scthisko]** | 29.03.26   | [76677dc](https://github.com/Nils557/sopra-fs26-group-32-server/commit/76677dc) | Implemented POST /lobbies endpoint including DTOs and service skeleton | The frontend needs an endpoint to create lobbies |
 |                 | 29.03.26   | [890c0e3](https://github.com/Nils557/sopra-fs26-group-32-server/commit/890c0e3) | Implemented unique lobby code generation | A unique code is needed so players can find and join the correct lobby |
 |                 | 29.03.26   | [c930fc5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c930fc5) | Stored lobby configuration in database including validation | Lobby data must persist so players can join and the game can start |
 ---
 
-## Contributions Week 2 - [Begin Date] to [End Date]
+## Contributions Week 2 - 30.3.26 to 5.4.26
+
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **[@Nils557]** | 02.04.2026   | [e533114](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e533114fb54a32df7d1b3de18ad7f8c34c46810c) | show error message when joining a full lobby | information for users |
+|                    | 02.04.2026   | [190a0e6](https://github.com/Nils557/sopra-fs26-group-32-client/commit/190a0e6405bb1f7351ff2fafe37ac545587d076d) | [error message for game has already started and invalid lobbyname] | The player needs to know why he can't join |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+
+---
+
+## Contributions Week 3 - 13.4.26 to 19.4.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
@@ -63,7 +80,7 @@ reason).
 
 ---
 
-## Contributions Week 3 - [Begin Date] to [End Date]
+## Contributions Week 4 - 20.4.26 to 26.4.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
@@ -78,7 +95,7 @@ reason).
 
 ---
 
-## Contributions Week 4 - [Begin Date] to [End Date]
+## Contributions Week 5 - 27.4.26 to 3.5.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
@@ -93,22 +110,7 @@ reason).
 
 ---
 
-## Contributions Week 5 - [Begin Date] to [End Date]
-
-| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
-| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-
----
-
-## Contributions Week 6 - [Begin Date] to [End Date]
+## Contributions Week 6 - 4.5.26 to 10.5.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |

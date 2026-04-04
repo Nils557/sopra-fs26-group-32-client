@@ -3,15 +3,30 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
+import { useApi } from "@/hooks/useApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const CreateLobby: React.FC = () => {
   const router = useRouter();
 
-  const [rounds, setRounds] = useState(5);
-  const [maxPlayers, setMaxPlayers] = useState(6);
+  const [rounds, setRounds] = useState(4);
+  const [maxPlayers, setMaxPlayers] = useState(5);
+  const apiService = useApi();
+  const { value: userId } = useLocalStorage<string>("userId", "");
+  const { set: setMaxPlayersStorage } = useLocalStorage<string>("maxPlayers", "");
 
-  const handleCreation = () => {
-    console.log("Creating lobby with:", { rounds, maxPlayers }); // ich mach de call morn
+  const handleCreation = async () => {
+    try {
+      const response = await apiService.post<{ lobbyCode: string }>("/lobbies", {
+        hostUserId: Number(userId),
+        maxPlayers: maxPlayers,
+        totalRounds: rounds,
+      });
+      setMaxPlayersStorage(String(maxPlayers));
+      router.push(`/lobbies/${response.lobbyCode}`);
+    } catch (error) {
+      console.error("Failed to create lobby:", error);
+    }
   };
 
   return (

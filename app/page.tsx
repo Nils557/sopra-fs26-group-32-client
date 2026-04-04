@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import styles from "@/styles/page.module.css";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const Login: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
+  const { set: setUserId } = useLocalStorage<string>("userId", "");
+  const { set: setUsername } = useLocalStorage<string>("username", "");
   
   // State of error message
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -20,27 +23,34 @@ const Login: React.FC = () => {
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     try {
-      await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      const user = await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      setUserId(String(user.id));
+      setUsername(String(user.username));
       router.push("/home");
-} catch (error: unknown) {
-      // the error is now normally unknown
-      // check if it is an error with a response
-      const err = error as 
-      { response?: { 
-        status?: number;
-        data?: { message?: string } } };
+    } catch (error: unknown) {
 
-      console.error("Status:", err.response?.status);
-      console.error("Body:", err.response?.data);
-      
-      if (err.response?.status === 409) {
-        setErrorMsg("Username already taken");
-      } else if (err.response?.status) {
-        setErrorMsg(`Server error: ${err.response.status}`);
-      } else {
-        setErrorMsg("Could not connect to server");
+      setErrorMsg(null); 
+
+      let status: number | null = null;
+
+      if (error instanceof Error) {
+        // Extracts status code from message like "(409: {...})"
+        const match = error.message.match(/\((\d{3}):/);
+        if (match) {
+          status = parseInt(match[1], 10);
+        }
       }
-    }
+
+      //console.log("Caught error:", error);
+
+      if (status === 409) {
+        setErrorMsg("Username already taken.");
+      } else if (status !== null) {
+        setErrorMsg(`Server error: ${status}`);
+      } else {
+        setErrorMsg("Could not connect to server.");
+      }
+    } 
   };
 
   return (

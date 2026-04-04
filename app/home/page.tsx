@@ -1,13 +1,14 @@
 "use client";
 
-import {useState} from "react";
-import {useRouter} from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useWebSocket } from '../hooks/useWebSocket';
 
 export function LobbyPage() {
   const [messages, setMessages] = useState<string[]>([]);
 
+  // Listen to a specific lobby topic
   const { sendMessage } = useWebSocket('/topic/lobby/1', (data) => {
     setMessages((prev) => [...prev, data.content]);
   });
@@ -17,10 +18,12 @@ export function LobbyPage() {
   };
 
   return (
-    <div>
-      <h1>Live Lobby</h1>
-      <button onClick={handleAction}>Join Lobby</button>
-      <ul>
+    <div style={{ padding: '10px', border: '1px solid #444', marginBottom: '20px', borderRadius: '8px' }}>
+      <h1 style={{ fontSize: '18px' }}>Live Lobby Connection</h1>
+      <button onClick={handleAction} className={styles.joinButton} style={{ padding: '5px 10px' }}>
+        Test Join Signal
+      </button>
+      <ul style={{ marginTop: '10px' }}>
         {messages.map((m, i) => <li key={i}>{m}</li>)}
       </ul>
     </div>
@@ -33,60 +36,78 @@ const Home: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleJoin = () => {
-      setErrorMsg(null);
-      if (!lobbyCode.trim()) {
-        setErrorMsg("Please enter a lobby code.");
-        return;
-      }
-      router.push(`/lobbies/${lobbyCode.trim()}`);
-    };
+    setErrorMsg(null);
+    if (!lobbyCode.trim()) {
+      setErrorMsg("Please enter a lobby code.");
+      return;
+    }
 
-    return (
-      <main className={styles.fullPageContainer}>
-        <LobbyPage /> 
-        <div className={styles.cornerLogo}>
-          Geo<span>Guess</span>
-        </div>
-        <div>WebSocket is active</div>
-  
-        <div className={styles.centerWrapper}>
-          <div className={styles.heroText}>
-            <h1 className={styles.hugeTitle}>Welcome back.</h1>
-            <p className={styles.hugeSubtitle}>Create a lobby or join with a code.</p>
-          </div>
-  
-          <div className={styles.loginCard}>
-            <button
-              className={styles.createButton}
-              onClick={() => router.push("/lobbies/create")}
-            >
-              + Create Lobby
-            </button>
-  
-            <div className={styles.divider}>
-              <span>or join with a code</span>
-            </div>
-  
-            <div className={styles.joinRow}>
-              <input
-                className={styles.largeInput}
-                placeholder="Enter lobby code..."
-                value={lobbyCode}
-                onChange={(e) => setLobbyCode(e.target.value)}
-              />
-              <button className={styles.joinButton} onClick={handleJoin}>
-                Join
-              </button>
-            </div>
-  
-            {errorMsg && (
-              <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "8px", textAlign: "left" }}>
-                {errorMsg}
-              </p>
-            )}
-          </div>
-        </div>
-      </main>
-    );
+    try {
+      // Attempt to navigate to the lobby
+      router.push(`/lobbies/${lobbyCode.trim()}`);
+    } catch (error: unknown) {
+      // Error handling logic
+      let status: number | null = null;
+      if (error instanceof Error) {
+        const match = error.message.match(/\((\d{3}):/);
+        if (match) status = parseInt(match[1], 10);
+      }
+
+      if (status === 404) setErrorMsg("Lobby not found.");
+      else if (status === 409) setErrorMsg("Lobby is full.");
+      else if (status === 403) setErrorMsg("Game has already started.");
+      else if (status !== null) setErrorMsg(`Server error: ${status}`);
+      else setErrorMsg("Could not connect to server.");
+    }
   };
-  export default Home;  
+
+  return (
+    <main className={styles.fullPageContainer}>
+      <LobbyPage />
+
+      <div className={styles.cornerLogo}>
+        Geo<span>Guess</span>
+      </div>
+
+      <div className={styles.centerWrapper}>
+        <div className={styles.heroText}>
+          <h1 className={styles.hugeTitle}>Welcome back.</h1>
+          <p className={styles.hugeSubtitle}>Create a lobby or join with a code.</p>
+        </div>
+
+        <div className={styles.loginCard}>
+          <button
+            className={styles.createButton}
+            onClick={() => router.push("/lobbies/create")}
+          >
+            + Create Lobby
+          </button>
+
+          <div className={styles.divider}>
+            <span>or join with a code</span>
+          </div>
+
+          <div className={styles.joinRow}>
+            <input
+              className={styles.largeInput}
+              placeholder="Enter lobby code..."
+              value={lobbyCode}
+              onChange={(e) => setLobbyCode(e.target.value)}
+            />
+            <button className={styles.joinButton} onClick={handleJoin}>
+              Join
+            </button>
+          </div>
+
+          {errorMsg && (
+            <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "8px", textAlign: "left" }}>
+              {errorMsg}
+            </p>
+          )}
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Home;
