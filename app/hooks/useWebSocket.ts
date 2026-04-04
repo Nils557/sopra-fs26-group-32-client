@@ -1,8 +1,9 @@
+
 import { useEffect, useRef } from 'react';
-import { Client } from '@stomp/stompjs';
+import { Client, IMessage } from '@stomp/stompjs'; // Added IMessage for better typing
 import { getWsDomain } from '../utils/environment';
 
-export const useWebSocket = (topic: string, onMessage: (msg: any) => void) => {
+export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => {
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
@@ -17,12 +18,10 @@ export const useWebSocket = (topic: string, onMessage: (msg: any) => void) => {
         userId: userId,
       },
       onConnect: () => {
-        stompClient.subscribe(topic, (message) => {
-          onMessage(JSON.parse(message.body));
+        stompClient.subscribe(topic, (message: IMessage) => {
+          onMessage(JSON.parse(message.body) as T);
         });
       },
-      onStompError: () => {},
-      onWebSocketClose: () => {}
     });
 
     stompClient.activate();
@@ -33,10 +32,10 @@ export const useWebSocket = (topic: string, onMessage: (msg: any) => void) => {
         stompClient.deactivate();
       }
     };
-  }, [topic]);
+  }, [topic, onMessage]); 
 
   return {
-    sendMessage: (destination: string, body: any) => {
+    sendMessage: (destination: string, body: unknown) => {
       if (client.current?.connected) {
         client.current.publish({
           destination,

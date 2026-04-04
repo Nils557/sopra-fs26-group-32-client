@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useWebSocket } from '../hooks/useWebSocket';
@@ -8,10 +8,12 @@ import { useWebSocket } from '../hooks/useWebSocket';
 export function LobbyPage() {
   const [messages, setMessages] = useState<string[]>([]);
 
-  // Listen to a specific lobby topic
-  const { sendMessage } = useWebSocket('/topic/lobby/1', (data) => {
+  const handleWebSocketMessage = useCallback((data: { content: string }) => {
     setMessages((prev) => [...prev, data.content]);
-  });
+  }, []);
+  
+  // Listen to a specific lobby topic
+  const { sendMessage } = useWebSocket('/topic/lobby/1', handleWebSocketMessage);
 
   const handleAction = () => {
     sendMessage('/app/lobby/1/join', { userId: '123' });
