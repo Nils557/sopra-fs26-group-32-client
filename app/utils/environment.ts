@@ -9,7 +9,9 @@
 
 const isLocalhost = () => 
   typeof window !== "undefined" && 
-  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  (window.location.hostname === "localhost" || 
+   window.location.hostname === "127.0.0.1" || 
+   window.location.hostname === "");
 
 const dev = {
   url: "http://localhost:8080",
@@ -17,14 +19,13 @@ const dev = {
 };
 
 const prod = {
+  // ⚠️ Double check that 'fs26' is correct for your current deployment!
   url: "https://sopra-fs26-group-32-server.oa.r.appspot.com",
   ws: "wss://sopra-fs26-group-32-server.oa.r.appspot.com/ws" 
 };
 
 export const getDomain = () => (isLocalhost() ? dev.url : prod.url);
-export const getWsDomain = () => {
-  return "ws://localhost:8080/ws"; 
-};;
+export const getWsDomain = () => (isLocalhost() ? dev.ws : prod.ws);
 
 export function isProduction(): boolean {
   return !isLocalhost();
