@@ -6,6 +6,7 @@
   import useLocalStorage from "@/hooks/useLocalStorage";
   import { useParams } from "next/navigation";
   import { useWebSocket } from "@/hooks/useWebSocket";
+  import { useApi } from "@/hooks/useApi";
 
   interface Player {
     id: number;
@@ -24,6 +25,8 @@
     const maxPlayers = Number(maxPlayersStr);
     const [hostLeft, setHostLeft] = useState(false);
     const [players, setPlayers] = useState<Player[]>([]);
+    const apiService = useApi();
+    const { value: playerId } = useLocalStorage<string>("playerId", "");
 
     const handleWsMessage = useCallback((msg: string) => {
       if (msg === "HOST_DISCONNECTED") {
@@ -39,6 +42,16 @@
     }, []);
     
     useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
+
+    //wenn backend DELETE /lobbies macht chömmer das use
+    //const handleLeave = async () => {
+    //  try {
+     //     await apiService.delete(`/lobbies/${lobbyCode}/players/${playerId}`);
+      //    router.push("/home");
+      //} catch (error) {
+     //    console.error("Failed to leave lobby:", error);
+     // }
+   // };
 
     return (
       <main className={styles.fullPageContainer}>
@@ -87,7 +100,7 @@
                 </div>
               )}
             </div>
-            
+
             <button
               className={`${styles.createButton} ${styles.disabledButton}`}
               disabled
@@ -95,6 +108,11 @@
               Start Game
             </button>
 
+            {/* wenn backend DELETE/lobbies macht, chömmer das use
+            <button className={styles.largeButton} onClick={handleLeave}>
+            Leave Lobby
+            </button>
+            */}
           </div>
         </div>
       </main>

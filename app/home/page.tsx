@@ -47,6 +47,7 @@ const Home: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
   const { value: userId } = useLocalStorage<string>("userId", "");
+  const { set: setPlayerId } = useLocalStorage<string>("playerId", "");
 
   const handleJoin = async () => {
     setErrorMsg(null);
@@ -56,9 +57,10 @@ const Home: React.FC = () => {
     }
 
     try {
-      await apiService.post(`/lobbies/${lobbyCode.trim()}/players`, {
+      const player = await apiService.post<{ id: number }>(`/lobbies/${lobbyCode.trim()}/players`, {
         userId: Number(userId),
       });
+      setPlayerId(String(player.id));
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
       // Error handling logic for navigation/server status
@@ -103,17 +105,17 @@ const Home: React.FC = () => {
             <span>or join with a code</span>
           </div>
 
-          <div className={styles.joinRow}>
+          <form className={styles.joinRow} onSubmit={(e) => {e.preventDefault(); handleJoin(); }}>
             <input
               className={styles.largeInput}
               placeholder="Enter lobby code..."
               value={lobbyCode}
               onChange={(e) => setLobbyCode(e.target.value)}
             />
-            <button className={styles.joinButton} onClick={handleJoin}>
+            <button type="submit" className={styles.joinButton}>
               Join
             </button>
-          </div>
+          </form>
 
           {errorMsg && (
             <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "8px", textAlign: "left" }}>
