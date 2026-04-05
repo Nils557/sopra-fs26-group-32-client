@@ -22,6 +22,9 @@ const CreateLobby: React.FC = () => {
         maxPlayers: maxPlayers,
         totalRounds: rounds,
       });
+      await apiService.post(`/lobbies/${response.lobbyCode}/players`, {
+        userId: Number(userId),
+      });
       setMaxPlayersStorage(String(maxPlayers));
       router.push(`/lobbies/${response.lobbyCode}`);
     } catch (error) {

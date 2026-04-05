@@ -1,19 +1,12 @@
   "use client";
 
-  import { useCallback, useState } from "react";
+  import { useCallback, useState, useEffect } from "react";
   import { useRouter } from "next/navigation";
   import styles from "@/styles/page.module.css";
   import useLocalStorage from "@/hooks/useLocalStorage";
   import { useParams } from "next/navigation";
   import { useWebSocket } from "@/hooks/useWebSocket";
   import { useApi } from "@/hooks/useApi";
-
-  interface Player {
-    id: number;
-    username: string;
-    totalScore: number;
-    connected: boolean;
-  }
 
   const WaitingRoom: React.FC = () => {
     const router = useRouter();
@@ -24,9 +17,21 @@
     const { value: maxPlayersStr } = useLocalStorage<string>("maxPlayers", "0");
     const maxPlayers = Number(maxPlayersStr);
     const [hostLeft, setHostLeft] = useState(false);
-    const [players, setPlayers] = useState<Player[]>([]);
+    const [players, setPlayers] = useState<string[]>([]);
     const apiService = useApi();
     const { value: playerId } = useLocalStorage<string>("playerId", "");
+
+    useEffect(() => {
+      const fetchPlayers = async () => {
+          try {
+              const playerList = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
+              setPlayers(playerList);
+          } catch (error) {
+              console.error("Failed to fetch players:", error);
+          }
+      };
+        fetchPlayers();
+    }, [lobbyCode, apiService]);
 
     const handleWsMessage = useCallback((msg: string) => {
       if (msg === "HOST_DISCONNECTED") {
@@ -37,11 +42,11 @@
 
     useWebSocket<string>("/topic/lobby/updates", handleWsMessage);
     
-    const handlePlayersUpdate = useCallback((playerList: Player[]) => {
+    const handlePlayersUpdate = useCallback((playerList: string[]) => {
       setPlayers(playerList);
     }, []);
     
-    useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
+    useWebSocket<string[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
     //wenn backend DELETE /lobbies macht chömmer das use
     //const handleLeave = async () => {
@@ -80,24 +85,24 @@
               <p className={styles.scoringTitle}>Players ({players.length > 0 ? players.length : 1}/ {maxPlayers})</p>
 
               {players.length > 0 ? (
-                players.map((player) => (
-                  <div className={styles.settingRow} key={player.id}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <div className={styles.playerAvatar}>
-                        {player.username.substring(0, 2).toUpperCase()}
+                  players.map((playerName, index) => (
+                      <div className={styles.settingRow} key={index}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                              <div className={styles.playerAvatar}>
+                                  {playerName.substring(0, 2).toUpperCase()}
+                              </div>
+                              <span className={styles.settingLabel}>{playerName}</span>
+                          </div>
                       </div>
-                      <span className={styles.settingLabel}>{player.username}</span>
-                    </div>
-                  </div>
-                ))
+                  ))
               ) : (
-                <div className={styles.settingRow}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div className={styles.playerAvatar}>{avatarInitials}</div>
-                    <span className={styles.settingLabel}>{username}</span>
+                  <div className={styles.settingRow}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <div className={styles.playerAvatar}>{avatarInitials}</div>
+                          <span className={styles.settingLabel}>{username}</span>
+                      </div>
+                      <div className={styles.hostBadge}>HOST</div>
                   </div>
-                  <div className={styles.hostBadge}>HOST</div>
-                </div>
               )}
             </div>
 
