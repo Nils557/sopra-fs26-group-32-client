@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useWebSocket } from '../hooks/useWebSocket';
+import { useApi } from "@/hooks/useApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 /**
  * LobbyPage is now a private component (no 'export').
@@ -43,8 +45,10 @@ const Home: React.FC = () => {
   const router = useRouter();
   const [lobbyCode, setLobbyCode] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const apiService = useApi();
+  const { value: userId } = useLocalStorage<string>("userId", "");
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     setErrorMsg(null);
     if (!lobbyCode.trim()) {
       setErrorMsg("Please enter a lobby code.");
@@ -52,14 +56,16 @@ const Home: React.FC = () => {
     }
 
     try {
-      // Attempt to navigate to the lobby
+      await apiService.post(`/lobbies/${lobbyCode.trim()}/players`, {
+        userId: Number(userId),
+      });
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
       // Error handling logic for navigation/server status
       let status: number | null = null;
       if (error instanceof Error) {
         const match = error.message.match(/\((\d{3}):/);
-        if (match) status = parseInt(match[1], 10);
+        status = match ? parseInt(match[1], 10) : null;
       }
 
       if (status === 404) setErrorMsg("Lobby not found.");
