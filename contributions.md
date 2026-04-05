@@ -58,8 +58,8 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@faiaz18]** | 05.04.2026   | [901d60b](https://github.com/Nils557/sopra-fs26-group-32-server/commit/901d60b5b6e3b8479f67106908aa98a9aef7d5e6) | Implemented host disconnection logic | Game/Lobby needs to get closed when the host leaves |
 |                    | 05.04.2026   | [86ee73e](https://github.com/Nils557/sopra-fs26-group-32-server/commit/86ee73eb6079f81a8f292b6130be829f10bf9411) | Blocked the joins to an already started lobby | Noone should be able to join an ongoing game |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@scthisko]** | 05.04.2026  | [a521f91](https://github.com/Nils557/sopra-fs26-group-32-server/commit/a521f91) | Fixed join lobby endpoint status code to 201 CREATED — endpoint was already implemented by teammate | REST spec requires 201 for resource creation |
+|                    | 05.04.2026   | [8e8f561](https://github.com/Nils557/sopra-fs26-group-32-server/commit/8e8f561) | Validated lobby code, capacity and game status on join | Players must be blocked from joining full, started or non-existent lobbies |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
