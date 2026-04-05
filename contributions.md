@@ -56,8 +56,8 @@ reason).
 | **[@Nils557]** | 02.04.2026   | [e533114](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e533114fb54a32df7d1b3de18ad7f8c34c46810c) | show error message when joining a full lobby | information for users |
 |                    | 02.04.2026   | [190a0e6](https://github.com/Nils557/sopra-fs26-group-32-client/commit/190a0e6405bb1f7351ff2fafe37ac545587d076d) | [error message for game has already started and invalid lobbyname] | The player needs to know why he can't join |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@faiaz18]** | 05.04.2026   | [901d60b](https://github.com/Nils557/sopra-fs26-group-32-server/commit/901d60b5b6e3b8479f67106908aa98a9aef7d5e6) | Implemented host disconnection logic | Game/Lobby needs to get closed when the host leaves |
+|                    | 05.04.2026   | [86ee73e](https://github.com/Nils557/sopra-fs26-group-32-server/commit/86ee73eb6079f81a8f292b6130be829f10bf9411) | Blocked the joins to an already started lobby | Noone should be able to join an ongoing game |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
