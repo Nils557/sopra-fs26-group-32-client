@@ -7,6 +7,13 @@
   import { useParams } from "next/navigation";
   import { useWebSocket } from "@/hooks/useWebSocket";
 
+  interface Player {
+    id: number;
+    username: string;
+    totalScore: number;
+    connected: boolean;
+  }
+
   const WaitingRoom: React.FC = () => {
     const router = useRouter();
     const { value: username } = useLocalStorage<string>("username", "");
@@ -16,6 +23,7 @@
     const { value: maxPlayersStr } = useLocalStorage<string>("maxPlayers", "0");
     const maxPlayers = Number(maxPlayersStr);
     const [hostLeft, setHostLeft] = useState(false);
+    const [players, setPlayers] = useState<Player[]>([]);
 
     const handleWsMessage = useCallback((msg: string) => {
       if (msg === "HOST_DISCONNECTED") {
@@ -25,6 +33,12 @@
     }, [router]);
 
     useWebSocket<string>("/topic/lobby/updates", handleWsMessage);
+    
+    const handlePlayersUpdate = useCallback((playerList: Player[]) => {
+      setPlayers(playerList);
+    }, []);
+    
+    useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
     return (
       <main className={styles.fullPageContainer}>
@@ -50,17 +64,30 @@
             )}
 
             <div className={styles.scoringBox}>
-              <p className={styles.scoringTitle}>Players (1/{maxPlayers})</p>
+              <p className={styles.scoringTitle}>Players ({players.length > 0 ? players.length : 1}/ {maxPlayers})</p>
 
-              <div className={styles.settingRow}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div className={styles.playerAvatar}>{avatarInitials}</div>
-                  <span className={styles.settingLabel}>{username}</span>
+              {players.length > 0 ? (
+                players.map((player) => (
+                  <div className={styles.settingRow} key={player.id}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div className={styles.playerAvatar}>
+                        {player.username.substring(0, 2).toUpperCase()}
+                      </div>
+                      <span className={styles.settingLabel}>{player.username}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.settingRow}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div className={styles.playerAvatar}>{avatarInitials}</div>
+                    <span className={styles.settingLabel}>{username}</span>
+                  </div>
+                  <div className={styles.hostBadge}>HOST</div>
                 </div>
-                <div className={styles.hostBadge}>HOST</div>
-              </div>
+              )}
             </div>
-
+            
             <button
               className={`${styles.createButton} ${styles.disabledButton}`}
               disabled
