@@ -30,7 +30,7 @@ reason).
 
 ---
 
-## Contributions Week 1 - 21.3.26 to 24.4.26
+## Contributions Week 1 - 23.3.26 to 29.3.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
