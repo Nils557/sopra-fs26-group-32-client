@@ -7,7 +7,7 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem("id");
+    const userId = localStorage.getItem("userId"); //isch Id gsi statt userId
     const wsUrl = getWsDomain();
 
     if (!userId || userId === "undefined") return;
