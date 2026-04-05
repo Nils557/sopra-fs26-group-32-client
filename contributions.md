@@ -66,7 +66,7 @@ reason).
 |                    | 04.04.2026   | [f753aaa](https://github.com/Nils557/sopra-fs26-group-32-server/commit/f753aaa7c7aaab2336003e4b6c5f8ae4ac4b0c35),[48fe494](https://github.com/Nils557/sopra-fs26-group-32-server/commit/48fe494e26da354f1b2dcdd1ccd0e59852b01b34) | Remove disconnected players from lobby | To prevent "ghost" users in a lobby |
 | **[@Bleronn4]** | 05.04.2026   | [78511b4](https://github.com/Nils557/sopra-fs26-group-32-client/commit/78511b42815fbdbf5a0e461e048904d7ab3251f5) | Implemented redirection of the users to the waiting room | the player needs to be in the waiting room to wait for the other players |
 |                    | 05.04.2026   | [3530114](https://github.com/Nils557/sopra-fs26-group-32-client/commit/35301145cb47109f0421559435cf3c4ad9c6de9f) | Implemeted real time players list in the waiting room | the players should see who is in the lobby |
-|                    | 05.04.2026   | []() | task | why |
+|                    | 05.04.2026   | [98cd62d](https://github.com/Nils557/sopra-fs26-group-32-client/commit/98cd62d9fec629057ce3946b5a8e925a24aa886e) | implemented leave lobby button | the player should be able to leave the lobby before the game starts |
 
 ---
 
