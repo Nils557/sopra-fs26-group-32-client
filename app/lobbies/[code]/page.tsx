@@ -40,7 +40,7 @@
       }
     }, [router]);
 
-    useWebSocket<string>("/topic/lobby/${lobbyCode}/updates", handleWsMessage);
+    useWebSocket<string>("/topic/lobby/updates", handleWsMessage);
     
     const handlePlayersUpdate = useCallback((playerList: string[]) => {
       setPlayers(playerList);
