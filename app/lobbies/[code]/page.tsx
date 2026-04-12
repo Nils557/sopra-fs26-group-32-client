@@ -45,17 +45,8 @@
     const handlePlayersUpdate = useCallback((playerList: string[]) => {
       setPlayers(playerList);
     }, []);
-
-    const handleWsConnect = useCallback(async () => {
-      try {
-        const playerList = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
-        setPlayers(playerList);
-      } catch (error) {
-        console.error("Failed to re-fetch players on WS connect:", error);
-      }
-    }, [lobbyCode, apiService]);
     
-    useWebSocket<string[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate, handleWsConnect);
+    useWebSocket<string[]>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
     //wenn backend DELETE /lobbies macht chömmer das use
     //const handleLeave = async () => {

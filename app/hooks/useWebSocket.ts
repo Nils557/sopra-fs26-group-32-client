@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Client, IMessage } from '@stomp/stompjs'; // Added IMessage for better typing
 import { getWsDomain } from '../utils/environment';
 
-export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void, onConnect?: () => void) => {
+export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => {
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void, onC
         stompClient.subscribe(topic, (message: IMessage) => {
           onMessage(JSON.parse(message.body) as T);
         });
-        if (onConnect) onConnect();
       },
     });
 
@@ -33,7 +32,7 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void, onC
         stompClient.deactivate();
       }
     };
-  }, [topic, onMessage, onConnect]); 
+  }, [topic, onMessage]); 
 
   return {
     sendMessage: (destination: string, body: unknown) => {
