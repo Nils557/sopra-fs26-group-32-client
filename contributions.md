@@ -76,7 +76,10 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@scthisko]**    | 11.04.2026 | [87128c8](https://github.com/Nils557/sopra-fs26-group-32-server/commit/87128c8) | Validated player count, updated lobby status and broadcast game start | Game can only start with enough players and all clients must be notified via WebSocket |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@Nils557]** | [14.04.2026]   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) | [If there are less than 2 players the Start Game button should be disabled] | [Players should not start the game alone] |
+| **[@Nils557]** | [14.04.2026]   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) |If there are less than 2 players the Start Game button should be disabled | Players should not start the game alone |
+|                    | 14.04.2026   | [fd7de63](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fd7de63450fe824c88d7a833c0aea4de46425408) | Implemented game screen with picture/skeleton of the city and implemented the websocket subscription for images | To play the game you need webpage to play it on |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
