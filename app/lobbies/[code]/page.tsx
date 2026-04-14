@@ -105,13 +105,19 @@
                   </div>
               )}
             </div>
-
-            <button
+            {players.length < 2 ?
+            (<button
               className={`${styles.createButton} ${styles.disabledButton}`}
               disabled
             >
               Start Game
-            </button>
+            </button>):
+            (<button
+              className={`${styles.createButton}`}
+              
+            >
+              Start Game
+            </button>)}
 
             {/* wenn backend DELETE/lobbies macht, chömmer das use
             <button className={styles.largeButton} onClick={handleLeave}>
