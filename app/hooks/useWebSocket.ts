@@ -17,6 +17,9 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
       connectHeaders: {
         userId: userId,
       },
+      heartbeatIncoming: 1000,
+      heartbeatOutgoing: 1000,
+      reconnectDelay: 2000,
       onConnect: () => {
         stompClient.subscribe(topic, (message: IMessage) => {
           try {
