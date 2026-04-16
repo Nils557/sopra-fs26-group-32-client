@@ -1,36 +1,10 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
-import { useWebSocket } from '../hooks/useWebSocket';
 import { useApi } from "@/hooks/useApi";
 import useSessionStorage from "@/hooks/useSessionStorage";
-
-function LobbyPage() {
-  const [messages, setMessages] = useState<string[]>([]);
-
-  const handleWebSocketMessage = useCallback((data: { content: string }) => {
-    setMessages((prev) => [...prev, data.content]);
-  }, []);
-
-  const { sendMessage } = useWebSocket<{ content: string }>('/topic/lobby/1', handleWebSocketMessage);
-  const handleAction = () => {
-    sendMessage('/app/lobby/1/join', { userId: '123' });
-  };
-
-  return (
-    <div style={{ padding: '10px', border: '1px solid #444', marginBottom: '20px', borderRadius: '8px' }}>
-      <h1 style={{ fontSize: '18px' }}>Live Lobby Connection</h1>
-      <button onClick={handleAction} className={styles.joinButton} style={{ padding: '5px 10px' }}>
-        Test Join Signal
-      </button>
-      <ul style={{ marginTop: '10px' }}>
-        {messages.map((m, i) => <li key={i}>{m}</li>)}
-      </ul>
-    </div>
-  );
-}
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -38,7 +12,6 @@ const Home: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
-  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
 
   const handleJoin = async () => {
     setErrorMsg(null);
@@ -48,10 +21,9 @@ const Home: React.FC = () => {
     }
 
     try {
-      const player = await apiService.post<{ id: number }>(`/lobbies/${lobbyCode.trim()}/players`, {
+      await apiService.post(`/lobbies/${lobbyCode.trim()}/players`, {
         userId: Number(userId),
       });
-      setPlayerId(String(player.id));
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
       let status: number | null = null;
@@ -70,7 +42,6 @@ const Home: React.FC = () => {
 
   return (
     <main className={styles.fullPageContainer}>
-      <LobbyPage />
       <div className={styles.cornerLogo}>
         Geo<span>Guess</span>
       </div>
@@ -93,7 +64,13 @@ const Home: React.FC = () => {
             <span>or join with a code</span>
           </div>
 
-          <form className={styles.joinRow} onSubmit={(e) => { e.preventDefault(); handleJoin(); }}>
+          <form
+            className={styles.joinRow}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleJoin();
+            }}
+          >
             <input
               className={styles.largeInput}
               placeholder="Enter lobby code..."
@@ -106,7 +83,14 @@ const Home: React.FC = () => {
           </form>
 
           {errorMsg && (
-            <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "8px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "#ff4d4f",
+                fontSize: "14px",
+                marginTop: "8px",
+                textAlign: "left",
+              }}
+            >
               {errorMsg}
             </p>
           )}
