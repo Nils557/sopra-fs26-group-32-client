@@ -1,51 +1,29 @@
-import { useEffect, useRef } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import { getWsDomain } from '../utils/environment';
+import { useEffect, useRef } from "react";
+import { useWSContext } from "@/contexts/WebSocketContext";
 
-export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => {
-  const client = useRef<Client | null>(null);
+/**
+ * Subscribes to a STOMP topic using the shared singleton connection.
+ * One STOMP connection is reused for the entire app — no per-call reconnects.
+ *
+ * The callback is kept in a ref so updating it between renders
+ * does not trigger a re-subscription (no reconnect storms).
+ */
+export function useWebSocket<T>(
+  topic: string,
+  onMessage: (msg: T) => void
+) {
+  const { subscribe, unsubscribe } = useWSContext();
+
+  // Stable ID per hook instance — does not change between renders
+  const subId = useRef(Math.random().toString(36).slice(2)).current;
+
+  // Always-current callback — avoids stale closures without re-subscribing
+  const cbRef = useRef(onMessage);
+  cbRef.current = onMessage;
 
   useEffect(() => {
-    const userId = sessionStorage.getItem('userId')?.replace(/"/g, '');
-    const wsUrl = getWsDomain();
-    if (!userId || userId === 'undefined') return;
-
-    const stompClient = new Client({
-      webSocketFactory: () => new SockJS(wsUrl),
-      connectHeaders: {
-        userId: userId,
-      },
-      reconnectDelay: 2000,
-      onConnect: () => {
-        stompClient.subscribe(topic, (message: IMessage) => {
-          try {
-            onMessage(JSON.parse(message.body) as T);
-          } catch {
-            onMessage(message.body as unknown as T);
-          }
-        });
-      },
-    });
-
-    stompClient.activate();
-    client.current = stompClient;
-
-    return () => {
-      if (stompClient) {
-        stompClient.deactivate();
-      }
-    };
-  }, [topic, onMessage]);
-
-  return {
-    sendMessage: (destination: string, body: unknown) => {
-      if (client.current?.connected) {
-        client.current.publish({
-          destination,
-          body: JSON.stringify(body),
-        });
-      }
-    },
-  };
-};
+    subscribe(topic, subId, (msg) => cbRef.current(msg as T));
+    return () => unsubscribe(topic, subId);
+    // topic and subId are stable; subscribe/unsubscribe are useCallback-stable
+  }, [topic, subId, subscribe, unsubscribe]);
+}

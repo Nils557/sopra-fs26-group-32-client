@@ -2,10 +2,12 @@
 
 import { useApi } from "@/hooks/useApi";
 import { useRouter } from "next/navigation";
+import { useWSContext } from "@/contexts/WebSocketContext";
 
 const LogoutButton: React.FC = () => {
   const apiService = useApi();
   const router = useRouter();
+  const { disconnect } = useWSContext();
 
   const handleLogout = async (): Promise<void> => {
     const rawUserId = sessionStorage.getItem("userId")?.replace(/"/g, "");
@@ -16,11 +18,14 @@ const LogoutButton: React.FC = () => {
         console.error("Error during logout:", error);
       }
     }
+    disconnect(); // close WebSocket before clearing session
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("playerId");
     sessionStorage.removeItem("maxPlayers");
+    sessionStorage.removeItem("isHost");
+    sessionStorage.removeItem("hostUsername");
     router.push("/");
   };
 

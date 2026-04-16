@@ -6,6 +6,13 @@ import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
 import useSessionStorage from "@/hooks/useSessionStorage";
 
+interface Player {
+  id: number;
+  username: string;
+  totalScore: number;
+  connected: boolean;
+}
+
 const CreateLobby: React.FC = () => {
   const router = useRouter();
 
@@ -13,20 +20,28 @@ const CreateLobby: React.FC = () => {
   const [maxPlayers, setMaxPlayers] = useState(5);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
+  const { value: username } = useSessionStorage<string>("username", "");
   const { set: setMaxPlayersStorage } = useSessionStorage<string>("maxPlayers", "");
+  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
+  const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
+  const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
 
   const handleCreation = async () => {
     try {
-      const response = await apiService.post<{ lobbyCode: string }>("/lobbies", {
+      const lobby = await apiService.post<{ lobbyCode: string }>("/lobbies", {
         hostUserId: Number(userId),
         maxPlayers: maxPlayers,
         totalRounds: rounds,
       });
-      await apiService.post(`/lobbies/${response.lobbyCode}/players`, {
-        userId: Number(userId),
-      });
+      const player = await apiService.post<Player>(
+        `/lobbies/${lobby.lobbyCode}/players`,
+        { userId: Number(userId) }
+      );
+      setPlayerId(String(player.id));
       setMaxPlayersStorage(String(maxPlayers));
-      router.push(`/lobbies/${response.lobbyCode}`);
+      setIsHost("true");
+      setHostUsername(username);
+      router.push(`/lobbies/${lobby.lobbyCode}`);
     } catch (error) {
       console.error("Failed to create lobby:", error);
     }

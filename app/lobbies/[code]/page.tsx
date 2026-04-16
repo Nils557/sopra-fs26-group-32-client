@@ -1,67 +1,140 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
-import { useParams } from "next/navigation";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useApi } from "@/hooks/useApi";
 
-interface LobbyInfo {
+// Backend returns the lobby object — only fields we actually use
+interface Lobby {
   maxPlayers: number;
-  hostUsername: string;
+  totalRounds?: number;
+  status?: string;
+}
+
+// Payload pushed on /topic/lobby/{code}/start
+interface LobbyStart {
+  lobbyCode: string;
+  status: string;
+  currentRound: unknown;
 }
 
 const WaitingRoom: React.FC = () => {
   const router = useRouter();
-  const { value: username } = useSessionStorage<string>("username", "");
   const params = useParams();
   const lobbyCode = params.code as string;
-  const [hostLeft, setHostLeft] = useState(false);
+
+  const { value: userId } = useSessionStorage<string>("userId", "");
+  const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
+  const { value: hostUsername } = useSessionStorage<string>("hostUsername", "");
+  const isHost = isHostStored === "true";
+
+  // Backend returns string[] (list of usernames)
   const [players, setPlayers] = useState<string[]>([]);
-  const [lobbyInfo, setLobbyInfo] = useState<LobbyInfo | null>(null);
+  const [lobby, setLobby] = useState<Lobby | null>(null);
+  const [hostLeft, setHostLeft] = useState(false);
+  const [starting, setStarting] = useState(false);
   const apiService = useApi();
 
+  // Fetch initial state on mount
   useEffect(() => {
-    const fetchLobbyData = async () => {
+    if (!lobbyCode) return;
+    const fetchData = async () => {
       try {
-        const [playerList, lobby] = await Promise.all([
+        const [playerList, lobbyData] = await Promise.all([
           apiService.get<string[]>(`/lobbies/${lobbyCode}/players`),
-          apiService.get<LobbyInfo>(`/lobbies/${lobbyCode}`),
+          apiService.get<Lobby>(`/lobbies/${lobbyCode}`),
         ]);
         setPlayers(playerList);
-        setLobbyInfo(lobby);
-      } catch (error) {
-        console.error("Failed to fetch lobby data:", error);
+        setLobby(lobbyData);
+      } catch (err) {
+        console.error("Failed to load lobby data:", err);
       }
     };
-    fetchLobbyData();
+    fetchData();
   }, [lobbyCode, apiService]);
 
-  const handleWsMessage = useCallback(
-    (msg: string) => {
-      if (msg === "HOST_DISCONNECTED") {
-        setHostLeft(true);
-        setTimeout(() => router.push("/home"), 3000);
-      }
+  // S4: Real-time player list updates
+  // Backend REST returns string[], but WebSocket may push Player[] objects — normalise both
+  const handlePlayersUpdate = useCallback((data: unknown) => {
+    if (!Array.isArray(data)) return;
+    if (data.length === 0) { setPlayers([]); return; }
+    if (typeof data[0] === "string") {
+      setPlayers(data as string[]);
+    } else if (typeof data[0] === "object" && data[0] !== null && "username" in data[0]) {
+      setPlayers((data as { username: string }[]).map((p) => p.username));
+    }
+  }, []);
+  useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
+
+  // S5: All players (including non-host) are redirected when game starts
+  const handleGameStart = useCallback(
+    (_data: LobbyStart) => {
+      router.push(`/game/${lobbyCode}`);
+    },
+    [router, lobbyCode]
+  );
+  useWebSocket<LobbyStart>(`/topic/lobby/${lobbyCode}/start`, handleGameStart);
+
+  // S3: Host disconnected via WebSocket event
+  const handleDisconnect = useCallback(
+    (_reason: string) => {
+      setHostLeft(true);
+      setTimeout(() => router.push("/home"), 3000);
     },
     [router]
   );
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
-  useWebSocket<string>("/topic/lobby/updates", handleWsMessage);
+  // S3: Polling fallback — backend may not send the disconnect event reliably.
+  // Every 4 seconds, check if the host is still in the player list.
+  // If not (or lobby is gone), trigger the same redirect.
+  useEffect(() => {
+    if (!lobbyCode || isHost) return; // host doesn't need to watch for themselves leaving
+    let cancelled = false;
 
-  const handlePlayersUpdate = useCallback((playerList: string[]) => {
-    setPlayers(playerList);
-  }, []);
+    const poll = setInterval(async () => {
+      if (cancelled) return;
+      try {
+        const current = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
+        const normalised = current.map((p) =>
+          typeof p === "string" ? p : (p as { username: string }).username
+        );
+        if (hostUsername && !normalised.includes(hostUsername)) {
+          cancelled = true;
+          setHostLeft(true);
+          setTimeout(() => router.push("/home"), 3000);
+        }
+      } catch {
+        // 404 or other error means the lobby is gone
+        cancelled = true;
+        setHostLeft(true);
+        setTimeout(() => router.push("/home"), 3000);
+      }
+    }, 4000);
 
-  useWebSocket<string[]>(
-    `/topic/lobby/${lobbyCode}/players`,
-    handlePlayersUpdate
-  );
+    return () => {
+      cancelled = true;
+      clearInterval(poll);
+    };
+  }, [lobbyCode, isHost, hostUsername, apiService, router]);
 
-  const maxPlayers = lobbyInfo?.maxPlayers ?? 0;
-  const hostUsername = lobbyInfo?.hostUsername ?? "";
+  // S5: Only host calls this — triggers the /start WebSocket event for everyone else
+  const handleStartGame = async () => {
+    if (!isHost || players.length < 2 || starting) return;
+    setStarting(true);
+    try {
+      await apiService.post(`/lobbies/${lobbyCode}/start`, {
+        hostUserId: Number(userId),
+      });
+      router.push(`/game/${lobbyCode}`);
+    } catch (err) {
+      console.error("Failed to start game:", err);
+      setStarting(false);
+    }
+  };
 
   return (
     <main className={styles.fullPageContainer}>
@@ -90,24 +163,18 @@ const WaitingRoom: React.FC = () => {
           </h1>
 
           {hostLeft && (
-            <p
-              style={{
-                color: "#ff4d4f",
-                textAlign: "center",
-                marginBottom: "12px",
-              }}
-            >
+            <p style={{ color: "#ff4d4f", textAlign: "center", marginBottom: "12px" }}>
               The host has disconnected. Redirecting to home...
             </p>
           )}
 
           <div className={styles.scoringBox}>
             <p className={styles.scoringTitle}>
-              Players ({players.length} / {maxPlayers})
+              Players ({players.length} / {lobby?.maxPlayers ?? "?"})
             </p>
 
-            {players.map((playerName, index) => (
-              <div className={styles.settingRow} key={index}>
+            {players.map((playerName) => (
+              <div className={styles.settingRow} key={playerName}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                   <div className={styles.playerAvatar}>
                     {playerName.substring(0, 2).toUpperCase()}
@@ -121,12 +188,27 @@ const WaitingRoom: React.FC = () => {
             ))}
           </div>
 
-          {players.length < 2 ? (
-            <button className={`${styles.createButton} ${styles.disabledButton}`} disabled>
-              Start Game
+          {isHost ? (
+            <button
+              className={`${styles.createButton} ${
+                players.length < 2 || starting ? styles.disabledButton : ""
+              }`}
+              disabled={players.length < 2 || starting}
+              onClick={handleStartGame}
+            >
+              {starting ? "Starting..." : "Start Game"}
             </button>
           ) : (
-            <button className={`${styles.createButton}`}>Start Game</button>
+            <p
+              style={{
+                color: "#6b7280",
+                textAlign: "center",
+                fontSize: "14px",
+                marginTop: "8px",
+              }}
+            >
+              Waiting for host to start the game...
+            </p>
           )}
         </div>
       </div>

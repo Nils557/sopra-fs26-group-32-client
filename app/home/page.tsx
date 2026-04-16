@@ -6,12 +6,22 @@ import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
 import useSessionStorage from "@/hooks/useSessionStorage";
 
+interface Player {
+  id: number;
+  username: string;
+  totalScore: number;
+  connected: boolean;
+}
+
 const Home: React.FC = () => {
   const router = useRouter();
   const [lobbyCode, setLobbyCode] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
+  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
+  const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
+  const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
 
   const handleJoin = async () => {
     setErrorMsg(null);
@@ -21,9 +31,17 @@ const Home: React.FC = () => {
     }
 
     try {
-      await apiService.post(`/lobbies/${lobbyCode.trim()}/players`, {
-        userId: Number(userId),
-      });
+      const player = await apiService.post<Player>(
+        `/lobbies/${lobbyCode.trim()}/players`,
+        { userId: Number(userId) }
+      );
+      setPlayerId(String(player.id));
+      setIsHost("false");
+      // Get the player list to find the host (host is always first — they created the lobby)
+      const existingPlayers = await apiService.get<string[]>(
+        `/lobbies/${lobbyCode.trim()}/players`
+      );
+      if (existingPlayers.length > 0) setHostUsername(existingPlayers[0]);
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
       let status: number | null = null;

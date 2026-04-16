@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { App as AntdApp, ConfigProvider, theme } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
-import LogoutButton from "@/components/LogoutButton";
+import ClientProviders from "@/components/ClientProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <LogoutButton />
         <ConfigProvider
           theme={{
             algorithm: theme.defaultAlgorithm,
@@ -59,7 +58,9 @@ export default function RootLayout({
           }}
         >
           <AntdRegistry>
-            <AntdApp>{children}</AntdApp>
+            <AntdApp>
+              <ClientProviders>{children}</ClientProviders>
+            </AntdApp>
           </AntdRegistry>
         </ConfigProvider>
       </body>
