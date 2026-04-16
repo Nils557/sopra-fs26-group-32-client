@@ -6,19 +6,15 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId")?.replace(/"/g, "");
+    const userId = sessionStorage.getItem('userId')?.replace(/"/g, '');
     const wsUrl = getWsDomain();
-
-    if (!userId || userId === "undefined") return;
+    if (!userId || userId === 'undefined') return;
 
     const stompClient = new Client({
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      webSocketFactory: () => new (require('sockjs-client'))(wsUrl),
+      brokerURL: wsUrl,
       connectHeaders: {
         userId: userId,
       },
-      heartbeatIncoming: 1000,
-      heartbeatOutgoing: 1000,
       reconnectDelay: 2000,
       onConnect: () => {
         stompClient.subscribe(topic, (message: IMessage) => {
