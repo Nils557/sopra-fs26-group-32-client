@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import { getWsDomain } from '../utils/environment';
 
 export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => {
@@ -11,7 +12,7 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
     if (!userId || userId === 'undefined') return;
 
     const stompClient = new Client({
-      brokerURL: wsUrl,
+      webSocketFactory: () => new SockJS(wsUrl),
       connectHeaders: {
         userId: userId,
       },

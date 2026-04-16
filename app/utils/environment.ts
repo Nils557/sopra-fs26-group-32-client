@@ -15,12 +15,12 @@ const isLocalhost = () =>
 
 const dev = {
   url: "http://localhost:8080",
-  ws: "ws://localhost:8080/ws",
+  ws: "http://localhost:8080/ws",
 };
 
 const prod = {
   url: "https://sopra-fs26-group-32-server.oa.r.appspot.com",
-  ws: "wss://sopra-fs26-group-32-server.oa.r.appspot.com/ws",
+  ws: "https://sopra-fs26-group-32-server.oa.r.appspot.com/ws",
 };
 
 export const getDomain = () => (isLocalhost() ? dev.url : prod.url);
