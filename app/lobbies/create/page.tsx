@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSessionStorage from "@/hooks/useSessionStorage";
 
 const CreateLobby: React.FC = () => {
   const router = useRouter();
@@ -12,8 +12,8 @@ const CreateLobby: React.FC = () => {
   const [rounds, setRounds] = useState(4);
   const [maxPlayers, setMaxPlayers] = useState(5);
   const apiService = useApi();
-  const { value: userId } = useLocalStorage<string>("userId", "");
-  const { set: setMaxPlayersStorage } = useLocalStorage<string>("maxPlayers", "");
+  const { value: userId } = useSessionStorage<string>("userId", "");
+  const { set: setMaxPlayersStorage } = useSessionStorage<string>("maxPlayers", "");
 
   const handleCreation = async () => {
     try {
@@ -50,7 +50,13 @@ const CreateLobby: React.FC = () => {
           <h1 className={styles.hugeTitle}>Lobby settings</h1>
         </div>
 
-        <form className={styles.loginCard} onSubmit={(e) => {e.preventDefault(); handleCreation();}}>
+        <form
+          className={styles.loginCard}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCreation();
+          }}
+        >
           <div className={styles.settingRow}>
             <label className={styles.settingLabel}>Rounds</label>
             <div className={styles.sliderGroup}>

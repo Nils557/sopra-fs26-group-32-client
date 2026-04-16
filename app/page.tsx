@@ -1,47 +1,41 @@
 "use client";
 
-import { useState } from "react"; 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import styles from "@/styles/page.module.css";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSessionStorage from "@/hooks/useSessionStorage";
 
 const Login: React.FC = () => {
   const router = useRouter();
   const apiService = useApi();
-  const { set: setUserId } = useLocalStorage<string>("userId", "");
-  const { set: setUsername } = useLocalStorage<string>("username", "");
-  
-  // State of error message
+  const { set: setUserId } = useSessionStorage<string>("userId", "");
+  const { set: setUsername } = useSessionStorage<string>("username", "");
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMsg(null); // delete error if tried again
-    
+    setErrorMsg(null);
+
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     try {
-      const user = await apiService.post<User>("/users", { username: name }); //username is passed, not name
+      const user = await apiService.post<User>("/users", { username: name });
       setUserId(String(user.id));
       setUsername(String(user.username));
       router.push("/home");
     } catch (error: unknown) {
-
-      setErrorMsg(null); 
+      setErrorMsg(null);
 
       let status: number | null = null;
-
       if (error instanceof Error) {
-        // Extracts status code from message like "(409: {...})"
         const match = error.message.match(/\((\d{3}):/);
         if (match) {
           status = parseInt(match[1], 10);
         }
       }
-
-      //console.log("Caught error:", error);
 
       if (status === 409) {
         setErrorMsg("Username already taken.");
@@ -50,7 +44,7 @@ const Login: React.FC = () => {
       } else {
         setErrorMsg("Could not connect to server.");
       }
-    } 
+    }
   };
 
   return (
@@ -73,9 +67,16 @@ const Login: React.FC = () => {
               required
               autoFocus
             />
-            
+
             {errorMsg && (
-              <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "-10px", textAlign: "left" }}>
+              <p
+                style={{
+                  color: "#ff4d4f",
+                  fontSize: "14px",
+                  marginTop: "-10px",
+                  textAlign: "left",
+                }}
+              >
                 {errorMsg}
               </p>
             )}

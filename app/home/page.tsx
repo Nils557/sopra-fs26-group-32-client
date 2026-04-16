@@ -5,25 +5,16 @@ import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useApi } from "@/hooks/useApi";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSessionStorage from "@/hooks/useSessionStorage";
 
-/**
- * LobbyPage is now a private component (no 'export').
- * Next.js 'page.tsx' files only allow 'export default' and specific metadata exports.
- */
 function LobbyPage() {
   const [messages, setMessages] = useState<string[]>([]);
 
-  // Wrap the callback in useCallback to prevent the WebSocket from 
-  // reconnecting every time the component renders.
   const handleWebSocketMessage = useCallback((data: { content: string }) => {
     setMessages((prev) => [...prev, data.content]);
   }, []);
-  
-  // Listen to a specific lobby topic
-  // We pass the expected data type { content: string } to the generic hook
-  const { sendMessage } = useWebSocket<{ content: string }>('/topic/lobby/1', handleWebSocketMessage);
 
+  const { sendMessage } = useWebSocket<{ content: string }>('/topic/lobby/1', handleWebSocketMessage);
   const handleAction = () => {
     sendMessage('/app/lobby/1/join', { userId: '123' });
   };
@@ -46,8 +37,8 @@ const Home: React.FC = () => {
   const [lobbyCode, setLobbyCode] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
-  const { value: userId } = useLocalStorage<string>("userId", "");
-  const { set: setPlayerId } = useLocalStorage<string>("playerId", "");
+  const { value: userId } = useSessionStorage<string>("userId", "");
+  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
 
   const handleJoin = async () => {
     setErrorMsg(null);
@@ -63,7 +54,6 @@ const Home: React.FC = () => {
       setPlayerId(String(player.id));
       router.push(`/lobbies/${lobbyCode.trim()}`);
     } catch (error: unknown) {
-      // Error handling logic for navigation/server status
       let status: number | null = null;
       if (error instanceof Error) {
         const match = error.message.match(/\((\d{3}):/);
@@ -80,9 +70,7 @@ const Home: React.FC = () => {
 
   return (
     <main className={styles.fullPageContainer}>
-      {/* Keeping LobbyPage inside Home ensures the WebSocket starts on the landing page */}
       <LobbyPage />
-
       <div className={styles.cornerLogo}>
         Geo<span>Guess</span>
       </div>
@@ -105,7 +93,7 @@ const Home: React.FC = () => {
             <span>or join with a code</span>
           </div>
 
-          <form className={styles.joinRow} onSubmit={(e) => {e.preventDefault(); handleJoin(); }}>
+          <form className={styles.joinRow} onSubmit={(e) => { e.preventDefault(); handleJoin(); }}>
             <input
               className={styles.largeInput}
               placeholder="Enter lobby code..."

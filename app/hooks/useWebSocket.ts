@@ -1,15 +1,13 @@
-
 import { useEffect, useRef } from 'react';
-import { Client, IMessage } from '@stomp/stompjs'; // Added IMessage for better typing
+import { Client, IMessage } from '@stomp/stompjs';
 import { getWsDomain } from '../utils/environment';
 
 export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => {
   const client = useRef<Client | null>(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); //isch Id gsi statt userId
+    const userId = sessionStorage.getItem("userId")?.replace(/"/g, "");
     const wsUrl = getWsDomain();
-
     if (!userId || userId === "undefined") return;
 
     const stompClient = new Client({
@@ -19,7 +17,11 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
       },
       onConnect: () => {
         stompClient.subscribe(topic, (message: IMessage) => {
-          onMessage(JSON.parse(message.body) as T);
+          try {
+            onMessage(JSON.parse(message.body) as T);
+          } catch {
+            onMessage(message.body as unknown as T);
+          }
         });
       },
     });
@@ -32,7 +34,7 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
         stompClient.deactivate();
       }
     };
-  }, [topic, onMessage]); 
+  }, [topic, onMessage]);
 
   return {
     sendMessage: (destination: string, body: unknown) => {
@@ -42,6 +44,6 @@ export const useWebSocket = <T,>(topic: string, onMessage: (msg: T) => void) => 
           body: JSON.stringify(body),
         });
       }
-    }
+    },
   };
 };
