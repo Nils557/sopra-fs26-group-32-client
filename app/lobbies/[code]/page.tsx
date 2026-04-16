@@ -88,11 +88,10 @@ const WaitingRoom: React.FC = () => {
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
-  // S3: Polling fallback — backend may not send the disconnect event reliably.
-  // Every 4 seconds, check if the host is still in the player list.
-  // If not (or lobby is gone), trigger the same redirect.
+  // Polling fallback — every 4s refresh the player list for everyone, and
+  // detect host departure for non-hosts (catches missed WebSocket messages on GCP).
   useEffect(() => {
-    if (!lobbyCode || isHost) return; // host doesn't need to watch for themselves leaving
+    if (!lobbyCode) return;
     let cancelled = false;
 
     const poll = setInterval(async () => {
@@ -102,16 +101,19 @@ const WaitingRoom: React.FC = () => {
         const normalised = current.map((p) =>
           typeof p === "string" ? p : (p as { username: string }).username
         );
-        if (hostUsername && !normalised.includes(hostUsername)) {
+        setPlayers(normalised);
+        if (!isHost && hostUsername && !normalised.includes(hostUsername)) {
           cancelled = true;
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
         }
       } catch {
-        // 404 or other error means the lobby is gone
-        cancelled = true;
-        setHostLeft(true);
-        setTimeout(() => router.push("/home"), 3000);
+        // 404 means lobby is gone — redirect non-host players
+        if (!isHost) {
+          cancelled = true;
+          setHostLeft(true);
+          setTimeout(() => router.push("/home"), 3000);
+        }
       }
     }, 4000);
 

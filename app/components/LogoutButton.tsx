@@ -9,16 +9,10 @@ const LogoutButton: React.FC = () => {
   const router = useRouter();
   const { disconnect } = useWSContext();
 
-  const handleLogout = async (): Promise<void> => {
+  const handleLogout = (): void => {
     const rawUserId = sessionStorage.getItem("userId")?.replace(/"/g, "");
-    if (rawUserId) {
-      try {
-        await apiService.delete(`/users/${rawUserId}`);
-      } catch (error) {
-        console.error("Error during logout:", error);
-      }
-    }
-    disconnect(); // close WebSocket before clearing session
+    // Close WebSocket first — this triggers the backend disconnect event immediately
+    disconnect();
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("token");
@@ -27,6 +21,10 @@ const LogoutButton: React.FC = () => {
     sessionStorage.removeItem("isHost");
     sessionStorage.removeItem("hostUsername");
     router.push("/");
+    // Fire-and-forget REST cleanup — don't block the redirect on this
+    if (rawUserId) {
+      apiService.delete(`/users/${rawUserId}`).catch(() => {});
+    }
   };
 
   return (
