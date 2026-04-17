@@ -51,13 +51,6 @@ const CreateLobby: React.FC = () => {
         Geo<span>Guess</span>
       </div>
 
-      <button
-        className={styles.backButton}
-        onClick={() => router.push("/home")}
-      >
-        ← Back
-      </button>
-
       <div className={styles.centerWrapper}>
         <div className={styles.heroText}>
           <h1 className={styles.hugeTitle}>Lobby settings</h1>

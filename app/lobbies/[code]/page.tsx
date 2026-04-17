@@ -33,7 +33,6 @@ const WaitingRoom: React.FC = () => {
   const [lobby, setLobby] = useState<Lobby | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const [starting, setStarting] = useState(false);
-  const [leaving, setLeaving] = useState(false);
   const apiService = useApi();
 
   useEffect(() => {
@@ -75,8 +74,9 @@ const WaitingRoom: React.FC = () => {
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
-  // Polling fallback — every 4s refresh the player list. Also detects host departure
-  // for non-hosts when WebSocket messages are missed.
+  // Polling fallback — every 4s refresh the player list in case a WS broadcast
+  // was missed. Host-departure detection is handled exclusively by the WS
+  // /disconnect topic; a single failed fetch is not enough to declare the host gone.
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
@@ -86,17 +86,8 @@ const WaitingRoom: React.FC = () => {
       try {
         const current = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
         setPlayers(current);
-        if (!isHost && hostUsername && !current.includes(hostUsername)) {
-          cancelled = true;
-          setHostLeft(true);
-          setTimeout(() => router.push("/home"), 3000);
-        }
-      } catch {
-        if (!isHost) {
-          cancelled = true;
-          setHostLeft(true);
-          setTimeout(() => router.push("/home"), 3000);
-        }
+      } catch (err) {
+        console.warn("Polling roster refresh failed:", err);
       }
     }, 4000);
 
@@ -104,7 +95,7 @@ const WaitingRoom: React.FC = () => {
       cancelled = true;
       clearInterval(poll);
     };
-  }, [lobbyCode, isHost, hostUsername, apiService, router]);
+  }, [lobbyCode, apiService]);
 
   const handleStartGame = async () => {
     if (!isHost || players.length < 2 || starting) return;
@@ -120,34 +111,11 @@ const WaitingRoom: React.FC = () => {
     }
   };
 
-  const handleLeave = async () => {
-    if (leaving) return;
-    setLeaving(true);
-    try {
-      await apiService.delete(`/lobbies/${lobbyCode}/players/${userId}`);
-    } catch (err) {
-      console.error("Failed to leave lobby:", err);
-    } finally {
-      sessionStorage.removeItem("isHost");
-      sessionStorage.removeItem("hostUsername");
-      sessionStorage.removeItem("maxPlayers");
-      router.push("/home");
-    }
-  };
-
   return (
     <main className={styles.fullPageContainer}>
       <div className={styles.cornerLogo}>
         Geo<span>Guess</span>
       </div>
-
-      <button
-        className={styles.backButton}
-        onClick={handleLeave}
-        disabled={leaving}
-      >
-        {leaving ? "Leaving..." : "← Leave lobby"}
-      </button>
 
       <div className={styles.centerWrapper}>
         <div className={styles.loginCard}>
