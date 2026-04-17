@@ -24,12 +24,12 @@ const LogoutButton: React.FC = () => {
 
   const handleLogout = async (): Promise<void> => {
     setBusy(true);
-    disconnect();
     try {
       await apiService.delete(`/users/${userId}`);
     } catch (error) {
       console.error("Failed to delete user on logout:", error);
     } finally {
+      disconnect();
       sessionStorage.clear();
       setUserId("");
       setBusy(false);

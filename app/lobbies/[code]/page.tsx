@@ -11,6 +11,7 @@ interface Lobby {
   maxPlayers: number;
   totalRounds?: number;
   status?: string;
+  hostUsername?: string;
 }
 
 interface LobbyStart {
@@ -26,7 +27,6 @@ const WaitingRoom: React.FC = () => {
 
   const { value: userId } = useSessionStorage<string>("userId", "");
   const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
-  const { value: hostUsername } = useSessionStorage<string>("hostUsername", "");
   const isHost = isHostStored === "true";
 
   const [players, setPlayers] = useState<string[]>([]);
@@ -95,10 +95,11 @@ const WaitingRoom: React.FC = () => {
 
   const handleDisconnect = useCallback(
     (_reason: string) => {
+      if (isHost) return;
       setHostLeft(true);
       setTimeout(() => router.push("/home"), 3000);
     },
-    [router]
+    [router, isHost]
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
@@ -192,7 +193,7 @@ const WaitingRoom: React.FC = () => {
                   </div>
                   <span className={styles.settingLabel}>{playerName}</span>
                 </div>
-                {playerName === hostUsername && (
+                {lobby?.hostUsername && playerName === lobby.hostUsername && (
                   <div className={styles.hostBadge}>HOST</div>
                 )}
               </div>
