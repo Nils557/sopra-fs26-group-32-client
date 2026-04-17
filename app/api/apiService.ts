@@ -112,13 +112,17 @@ export class ApiService {
   /**
    * DELETE request.
    * @param endpoint - The API endpoint (e.g. "/users/123").
+   * @param options.keepalive - If true, the browser keeps the request in flight
+   *   across page navigation (required for logout-before-redirect flows, since a
+   *   cancelled fetch surfaces as "net::ERR_FAILED" / spurious CORS errors).
    * @returns JSON data of type T.
    */
-  public async delete<T>(endpoint: string): Promise<T> {
+  public async delete<T>(endpoint: string, options?: { keepalive?: boolean }): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const res = await fetch(url, {
       method: "DELETE",
       headers: this.defaultHeaders,
+      keepalive: options?.keepalive,
     });
     return this.processResponse<T>(
       res,

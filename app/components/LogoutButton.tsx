@@ -9,9 +9,19 @@ const LogoutButton: React.FC = () => {
   const router = useRouter();
   const { disconnect } = useWSContext();
 
-  const handleLogout = (): void => {
+  const handleLogout = async (): Promise<void> => {
     const rawUserId = sessionStorage.getItem("userId")?.replace(/"/g, "");
-    // Close WebSocket first — this triggers the backend disconnect event immediately
+    // Delete the user FIRST so the server actually sees the request. Previously this
+    // was fire-and-forget after router.push(), which caused the in-flight fetch to
+    // be cancelled by navigation and surface as a spurious CORS / net::ERR_FAILED.
+    // keepalive ensures the request is not aborted if the user closes the tab.
+    if (rawUserId) {
+      try {
+        await apiService.delete(`/users/${rawUserId}`, { keepalive: true });
+      } catch (err) {
+        console.error("Logout delete failed:", err);
+      }
+    }
     disconnect();
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("username");
@@ -21,10 +31,6 @@ const LogoutButton: React.FC = () => {
     sessionStorage.removeItem("isHost");
     sessionStorage.removeItem("hostUsername");
     router.push("/");
-    // Fire-and-forget REST cleanup — don't block the redirect on this
-    if (rawUserId) {
-      apiService.delete(`/users/${rawUserId}`).catch(() => {});
-    }
   };
 
   return (
