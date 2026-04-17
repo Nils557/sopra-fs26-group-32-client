@@ -131,9 +131,12 @@ const WaitingRoom: React.FC = () => {
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
         }
-      } catch {
-        // 404 means lobby is gone — redirect non-host players
-        if (!isHost) {
+      } catch (err) {
+        // Only redirect on an actual 404 (lobby was deleted). Transient 401s/500s
+        // from cold starts or DB hiccups must NOT surface as "host disconnected"
+        // to the other players.
+        const status = (err as { status?: number })?.status;
+        if (status === 404 && !isHost) {
           cancelled = true;
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
