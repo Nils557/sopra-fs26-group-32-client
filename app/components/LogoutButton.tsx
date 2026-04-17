@@ -32,6 +32,7 @@ const LogoutButton: React.FC = () => {
     } finally {
       sessionStorage.clear();
       setUserId("");
+      setBusy(false);
       router.push("/");
     }
   };

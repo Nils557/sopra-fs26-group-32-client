@@ -35,9 +35,15 @@ const Home: React.FC = () => {
       await apiService.post(`/lobbies/${code}/players`, {
         userId: Number(userId),
       });
-      const lobby = await apiService.get<LobbyInfo>(`/lobbies/${code}`);
+      // Metadata lookup is best-effort — the waiting room re-fetches it on mount
+      try {
+        const lobby = await apiService.get<LobbyInfo>(`/lobbies/${code}`);
+        setHostUsername(lobby.hostUsername ?? "");
+      } catch (metaErr) {
+        console.warn("Could not pre-fetch host username:", metaErr);
+        setHostUsername("");
+      }
       setIsHost("false");
-      setHostUsername(lobby.hostUsername ?? "");
       router.push(`/lobbies/${code}`);
     } catch (error: unknown) {
       const status = (error as ApplicationError)?.status ?? null;

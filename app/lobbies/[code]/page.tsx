@@ -37,19 +37,30 @@ const WaitingRoom: React.FC = () => {
 
   useEffect(() => {
     if (!lobbyCode) return;
-    const fetchData = async () => {
+    let cancelled = false;
+
+    const fetchData = async (attempt: number) => {
       try {
         const [playerList, lobbyData] = await Promise.all([
           apiService.get<string[]>(`/lobbies/${lobbyCode}/players`),
           apiService.get<Lobby>(`/lobbies/${lobbyCode}`),
         ]);
+        if (cancelled) return;
         setPlayers(playerList);
         setLobby(lobbyData);
       } catch (err) {
-        console.error("Failed to load lobby data:", err);
+        if (cancelled) return;
+        console.warn(`Initial lobby fetch attempt ${attempt} failed:`, err);
+        if (attempt < 3) {
+          setTimeout(() => fetchData(attempt + 1), 500 * attempt);
+        }
       }
     };
-    fetchData();
+    fetchData(1);
+
+    return () => {
+      cancelled = true;
+    };
   }, [lobbyCode, apiService]);
 
   const handlePlayersUpdate = useCallback((data: unknown) => {
