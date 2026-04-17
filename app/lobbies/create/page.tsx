@@ -4,13 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
+import { ApplicationError } from "@/types/error";
 import useSessionStorage from "@/hooks/useSessionStorage";
 
-interface Player {
-  id: number;
-  username: string;
-  totalScore: number;
-  connected: boolean;
+interface LobbyCreateResponse {
+  lobbyCode: string;
 }
 
 const CreateLobby: React.FC = () => {
@@ -18,32 +16,32 @@ const CreateLobby: React.FC = () => {
 
   const [rounds, setRounds] = useState(4);
   const [maxPlayers, setMaxPlayers] = useState(5);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
   const { value: username } = useSessionStorage<string>("username", "");
   const { set: setMaxPlayersStorage } = useSessionStorage<string>("maxPlayers", "");
-  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
   const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
   const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
 
   const handleCreation = async () => {
+    setErrorMsg(null);
     try {
-      const lobby = await apiService.post<{ lobbyCode: string }>("/lobbies", {
+      const lobby = await apiService.post<LobbyCreateResponse>("/lobbies", {
         hostUserId: Number(userId),
         maxPlayers: maxPlayers,
         totalRounds: rounds,
       });
-      const player = await apiService.post<Player>(
-        `/lobbies/${lobby.lobbyCode}/players`,
-        { userId: Number(userId) }
-      );
-      setPlayerId(String(player.id));
       setMaxPlayersStorage(String(maxPlayers));
       setIsHost("true");
       setHostUsername(username);
       router.push(`/lobbies/${lobby.lobbyCode}`);
-    } catch (error) {
-      console.error("Failed to create lobby:", error);
+    } catch (error: unknown) {
+      const status = (error as ApplicationError)?.status ?? null;
+      if (status === 400) setErrorMsg("Invalid lobby settings.");
+      else if (status === 404) setErrorMsg("Your user account was not found.");
+      else if (status !== null) setErrorMsg(`Server error: ${status}`);
+      else setErrorMsg("Could not connect to server.");
     }
   };
 
@@ -119,6 +117,19 @@ const CreateLobby: React.FC = () => {
               <span className={styles.dotRed}>●</span> Otherwise — zero points
             </p>
           </div>
+
+          {errorMsg && (
+            <p
+              style={{
+                color: "#ff4d4f",
+                fontSize: "14px",
+                marginTop: "-10px",
+                textAlign: "left",
+              }}
+            >
+              {errorMsg}
+            </p>
+          )}
 
           <button type="submit" className={styles.createButton}>
             Create Lobby

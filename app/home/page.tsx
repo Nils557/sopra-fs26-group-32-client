@@ -4,13 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
+import { ApplicationError } from "@/types/error";
 import useSessionStorage from "@/hooks/useSessionStorage";
 
-interface Player {
-  id: number;
-  username: string;
-  totalScore: number;
-  connected: boolean;
+interface LobbyInfo {
+  hostUsername: string;
 }
 
 const Home: React.FC = () => {
@@ -19,7 +17,6 @@ const Home: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
-  const { set: setPlayerId } = useSessionStorage<string>("playerId", "");
   const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
   const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
 
@@ -30,26 +27,17 @@ const Home: React.FC = () => {
       return;
     }
 
+    const code = lobbyCode.trim();
     try {
-      const player = await apiService.post<Player>(
-        `/lobbies/${lobbyCode.trim()}/players`,
-        { userId: Number(userId) }
-      );
-      setPlayerId(String(player.id));
+      await apiService.post(`/lobbies/${code}/players`, {
+        userId: Number(userId),
+      });
+      const lobby = await apiService.get<LobbyInfo>(`/lobbies/${code}`);
       setIsHost("false");
-      // Get the player list to find the host (host is always first — they created the lobby)
-      const existingPlayers = await apiService.get<string[]>(
-        `/lobbies/${lobbyCode.trim()}/players`
-      );
-      if (existingPlayers.length > 0) setHostUsername(existingPlayers[0]);
-      router.push(`/lobbies/${lobbyCode.trim()}`);
+      setHostUsername(lobby.hostUsername ?? "");
+      router.push(`/lobbies/${code}`);
     } catch (error: unknown) {
-      let status: number | null = null;
-      if (error instanceof Error) {
-        const match = error.message.match(/\((\d{3}):/);
-        status = match ? parseInt(match[1], 10) : null;
-      }
-
+      const status = (error as ApplicationError)?.status ?? null;
       if (status === 404) setErrorMsg("Lobby not found.");
       else if (status === 409) setErrorMsg("Lobby is full.");
       else if (status === 403) setErrorMsg("Game has already started.");
