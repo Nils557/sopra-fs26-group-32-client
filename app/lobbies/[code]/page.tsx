@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
@@ -35,28 +35,45 @@ const WaitingRoom: React.FC = () => {
   const [starting, setStarting] = useState(false);
   const apiService = useApi();
 
+  const lobbyRef = useRef<Lobby | null>(null);
+  useEffect(() => {
+    lobbyRef.current = lobby;
+  }, [lobby]);
+
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
 
-    const fetchData = async (attempt: number) => {
+    const fetchPlayers = async (attempt: number) => {
       try {
-        const [playerList, lobbyData] = await Promise.all([
-          apiService.get<string[]>(`/lobbies/${lobbyCode}/players`),
-          apiService.get<Lobby>(`/lobbies/${lobbyCode}`),
-        ]);
+        const playerList = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
         if (cancelled) return;
         setPlayers(playerList);
+      } catch (err) {
+        if (cancelled) return;
+        console.warn(`Initial players fetch attempt ${attempt} failed:`, err);
+        if (attempt < 3) {
+          setTimeout(() => fetchPlayers(attempt + 1), 500 * attempt);
+        }
+      }
+    };
+
+    const fetchLobby = async (attempt: number) => {
+      try {
+        const lobbyData = await apiService.get<Lobby>(`/lobbies/${lobbyCode}`);
+        if (cancelled) return;
         setLobby(lobbyData);
       } catch (err) {
         if (cancelled) return;
         console.warn(`Initial lobby fetch attempt ${attempt} failed:`, err);
         if (attempt < 3) {
-          setTimeout(() => fetchData(attempt + 1), 500 * attempt);
+          setTimeout(() => fetchLobby(attempt + 1), 500 * attempt);
         }
       }
     };
-    fetchData(1);
+
+    fetchPlayers(1);
+    fetchLobby(1);
 
     return () => {
       cancelled = true;
@@ -88,6 +105,7 @@ const WaitingRoom: React.FC = () => {
   // Polling fallback — every 4s refresh the player list in case a WS broadcast
   // was missed. Host-departure detection is handled exclusively by the WS
   // /disconnect topic; a single failed fetch is not enough to declare the host gone.
+  // Also backfills lobby metadata if the initial fetch didn't land.
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
@@ -99,6 +117,13 @@ const WaitingRoom: React.FC = () => {
         setPlayers(current);
       } catch (err) {
         console.warn("Polling roster refresh failed:", err);
+      }
+      if (cancelled || lobbyRef.current) return;
+      try {
+        const data = await apiService.get<Lobby>(`/lobbies/${lobbyCode}`);
+        if (!cancelled) setLobby(data);
+      } catch {
+        // still no luck — next poll tick will retry
       }
     }, 4000);
 
