@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
+import { ApplicationError } from "@/types/error";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
 
@@ -27,15 +28,7 @@ const Login: React.FC = () => {
       setUsername(String(user.username));
       router.push("/home");
     } catch (error: unknown) {
-      setErrorMsg(null);
-
-      let status: number | null = null;
-      if (error instanceof Error) {
-        const match = error.message.match(/\((\d{3}):/);
-        if (match) {
-          status = parseInt(match[1], 10);
-        }
-      }
+      const status = (error as ApplicationError)?.status ?? null;
 
       if (status === 409) {
         setErrorMsg("Username already taken.");

@@ -1,49 +1,46 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/useApi";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useWSContext } from "@/contexts/WebSocketContext";
+import styles from "./LogoutButton.module.css";
 
 const LogoutButton: React.FC = () => {
   const apiService = useApi();
   const router = useRouter();
+  const pathname = usePathname();
   const { disconnect } = useWSContext();
+  const [userId, setUserId] = useState<string>("");
+  const [busy, setBusy] = useState(false);
 
-  const handleLogout = (): void => {
-    const rawUserId = sessionStorage.getItem("userId")?.replace(/"/g, "");
-    // Close WebSocket first — this triggers the backend disconnect event immediately
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = sessionStorage.getItem("userId");
+    setUserId(stored ? stored.replace(/"/g, "") : "");
+  }, [pathname]);
+
+  if (!userId) return null;
+
+  const handleLogout = async (): Promise<void> => {
+    setBusy(true);
     disconnect();
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("playerId");
-    sessionStorage.removeItem("maxPlayers");
-    sessionStorage.removeItem("isHost");
-    sessionStorage.removeItem("hostUsername");
-    router.push("/");
-    // Fire-and-forget REST cleanup — don't block the redirect on this
-    if (rawUserId) {
-      apiService.delete(`/users/${rawUserId}`).catch(() => {});
+    try {
+      await apiService.delete(`/users/${userId}`);
+    } catch (error) {
+      console.error("Failed to delete user on logout:", error);
+    } finally {
+      sessionStorage.clear();
+      setUserId("");
+      router.push("/");
     }
   };
 
   return (
     <button
       onClick={handleLogout}
-      style={{
-        position: "fixed",
-        bottom: "30px",
-        right: "30px",
-        background: "#ef4444",
-        color: "#fff",
-        border: "none",
-        borderRadius: "10px",
-        padding: "12px 24px",
-        fontSize: "15px",
-        fontWeight: 700,
-        cursor: "pointer",
-        zIndex: 9999,
-      }}
+      disabled={busy}
+      className={styles.logoutButton}
     >
       Logout
     </button>
