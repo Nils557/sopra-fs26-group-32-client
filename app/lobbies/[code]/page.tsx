@@ -7,14 +7,12 @@ import useSessionStorage from "@/hooks/useSessionStorage";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useApi } from "@/hooks/useApi";
 
-// Backend returns the lobby object — only fields we actually use
 interface Lobby {
   maxPlayers: number;
   totalRounds?: number;
   status?: string;
 }
 
-// Payload pushed on /topic/lobby/{code}/start
 interface LobbyStart {
   lobbyCode: string;
   status: string;
@@ -31,14 +29,13 @@ const WaitingRoom: React.FC = () => {
   const { value: hostUsername } = useSessionStorage<string>("hostUsername", "");
   const isHost = isHostStored === "true";
 
-  // Backend returns string[] (list of usernames)
   const [players, setPlayers] = useState<string[]>([]);
   const [lobby, setLobby] = useState<Lobby | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const [starting, setStarting] = useState(false);
+  const [leaving, setLeaving] = useState(false);
   const apiService = useApi();
 
-  // Fetch initial state on mount
   useEffect(() => {
     if (!lobbyCode) return;
     const fetchData = async () => {
@@ -56,20 +53,11 @@ const WaitingRoom: React.FC = () => {
     fetchData();
   }, [lobbyCode, apiService]);
 
-  // S4: Real-time player list updates
-  // Backend REST returns string[], but WebSocket may push Player[] objects — normalise both
   const handlePlayersUpdate = useCallback((data: unknown) => {
-    if (!Array.isArray(data)) return;
-    if (data.length === 0) { setPlayers([]); return; }
-    if (typeof data[0] === "string") {
-      setPlayers(data as string[]);
-    } else if (typeof data[0] === "object" && data[0] !== null && "username" in data[0]) {
-      setPlayers((data as { username: string }[]).map((p) => p.username));
-    }
+    if (Array.isArray(data)) setPlayers(data as string[]);
   }, []);
   useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
-  // S5: All players (including non-host) are redirected when game starts
   const handleGameStart = useCallback(
     (_data: LobbyStart) => {
       router.push(`/game/${lobbyCode}`);
@@ -78,7 +66,6 @@ const WaitingRoom: React.FC = () => {
   );
   useWebSocket<LobbyStart>(`/topic/lobby/${lobbyCode}/start`, handleGameStart);
 
-  // S3: Host disconnected via WebSocket event
   const handleDisconnect = useCallback(
     (_reason: string) => {
       setHostLeft(true);
@@ -88,8 +75,8 @@ const WaitingRoom: React.FC = () => {
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
-  // Polling fallback — every 4s refresh the player list for everyone, and
-  // detect host departure for non-hosts (catches missed WebSocket messages on GCP).
+  // Polling fallback — every 4s refresh the player list. Also detects host departure
+  // for non-hosts when WebSocket messages are missed.
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
@@ -98,17 +85,13 @@ const WaitingRoom: React.FC = () => {
       if (cancelled) return;
       try {
         const current = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
-        const normalised = current.map((p) =>
-          typeof p === "string" ? p : (p as { username: string }).username
-        );
-        setPlayers(normalised);
-        if (!isHost && hostUsername && !normalised.includes(hostUsername)) {
+        setPlayers(current);
+        if (!isHost && hostUsername && !current.includes(hostUsername)) {
           cancelled = true;
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
         }
       } catch {
-        // 404 means lobby is gone — redirect non-host players
         if (!isHost) {
           cancelled = true;
           setHostLeft(true);
@@ -123,7 +106,6 @@ const WaitingRoom: React.FC = () => {
     };
   }, [lobbyCode, isHost, hostUsername, apiService, router]);
 
-  // S5: Only host calls this — triggers the /start WebSocket event for everyone else
   const handleStartGame = async () => {
     if (!isHost || players.length < 2 || starting) return;
     setStarting(true);
@@ -138,11 +120,34 @@ const WaitingRoom: React.FC = () => {
     }
   };
 
+  const handleLeave = async () => {
+    if (leaving) return;
+    setLeaving(true);
+    try {
+      await apiService.delete(`/lobbies/${lobbyCode}/players/${userId}`);
+    } catch (err) {
+      console.error("Failed to leave lobby:", err);
+    } finally {
+      sessionStorage.removeItem("isHost");
+      sessionStorage.removeItem("hostUsername");
+      sessionStorage.removeItem("maxPlayers");
+      router.push("/home");
+    }
+  };
+
   return (
     <main className={styles.fullPageContainer}>
       <div className={styles.cornerLogo}>
         Geo<span>Guess</span>
       </div>
+
+      <button
+        className={styles.backButton}
+        onClick={handleLeave}
+        disabled={leaving}
+      >
+        {leaving ? "Leaving..." : "← Leave lobby"}
+      </button>
 
       <div className={styles.centerWrapper}>
         <div className={styles.loginCard}>

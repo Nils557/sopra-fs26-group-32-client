@@ -15,12 +15,14 @@ const Home: React.FC = () => {
   const router = useRouter();
   const [lobbyCode, setLobbyCode] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [joining, setJoining] = useState(false);
   const apiService = useApi();
   const { value: userId } = useSessionStorage<string>("userId", "");
   const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
   const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
 
   const handleJoin = async () => {
+    if (joining) return;
     setErrorMsg(null);
     if (!lobbyCode.trim()) {
       setErrorMsg("Please enter a lobby code.");
@@ -28,6 +30,7 @@ const Home: React.FC = () => {
     }
 
     const code = lobbyCode.trim();
+    setJoining(true);
     try {
       await apiService.post(`/lobbies/${code}/players`, {
         userId: Number(userId),
@@ -43,6 +46,7 @@ const Home: React.FC = () => {
       else if (status === 403) setErrorMsg("Game has already started.");
       else if (status !== null) setErrorMsg(`Server error: ${status}`);
       else setErrorMsg("Could not connect to server.");
+      setJoining(false);
     }
   };
 
@@ -83,8 +87,8 @@ const Home: React.FC = () => {
               value={lobbyCode}
               onChange={(e) => setLobbyCode(e.target.value)}
             />
-            <button type="submit" className={styles.joinButton}>
-              Join
+            <button type="submit" className={styles.joinButton} disabled={joining}>
+              {joining ? "Joining..." : "Join"}
             </button>
           </form>
 
