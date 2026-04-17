@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
@@ -21,41 +21,14 @@ const GameRound: React.FC = () => {
   const lobbyCode = params.code as string;
 
   const { value: username } = useSessionStorage<string>("username", "");
-  const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
-  const isHost = isHostStored === "true";
 
   const [round, setRound] = useState<RoundData | null>(null);
-  const [hostLeft, setHostLeft] = useState(false);
-  const [leaverNotice, setLeaverNotice] = useState<string | null>(null);
-  const playersRef = useRef<string[]>([]);
-  const hideLeaverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
   }, []);
 
   useWebSocket<RoundData>(`/topic/game/${lobbyCode}/image`, handleRoundUpdate);
-
-  // Keep track of the live player list so we can surface mid-game leavers.
-  // Backend broadcasts string[] on /topic/lobby/{code}/players after each removal.
-  const handlePlayersUpdate = useCallback((data: unknown) => {
-    if (!Array.isArray(data)) return;
-    const next = data
-      .map((p) => (typeof p === "string" ? p : (p as { username?: string }).username))
-      .filter((n): n is string => typeof n === "string");
-    const prev = playersRef.current;
-    if (prev.length > 0) {
-      const gone = prev.filter((n) => !next.includes(n) && n !== username);
-      if (gone.length > 0) {
-        setLeaverNotice(`${gone.join(", ")} left the game`);
-        if (hideLeaverTimer.current) clearTimeout(hideLeaverTimer.current);
-        hideLeaverTimer.current = setTimeout(() => setLeaverNotice(null), 4000);
-      }
-    }
-    playersRef.current = next;
-  }, [username]);
-
-  useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
   const handleGameOver = useCallback(
     (msg: string) => {
@@ -67,17 +40,6 @@ const GameRound: React.FC = () => {
   );
 
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
-
-  // Host disconnect during a round: backend broadcasts HOST_DISCONNECTED on the
-  // lobby topic. Non-hosts are kicked to /home; the host (who is the one leaving)
-  // handles their own navigation.
-  const handleDisconnect = useCallback(() => {
-    if (isHost) return;
-    setHostLeft(true);
-    setTimeout(() => router.push("/home"), 3000);
-  }, [router, isHost]);
-
-  useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
   return (
     <main className={styles.fullPageContainer}>
@@ -97,46 +59,6 @@ const GameRound: React.FC = () => {
           }}
         >
           Round {round.roundNumber} / {round.totalRounds}
-        </div>
-      )}
-
-      {hostLeft && (
-        <div
-          style={{
-            position: "absolute",
-            top: "30px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            color: "#ff4d4f",
-            fontSize: "15px",
-            fontWeight: 700,
-            background: "#151c2c",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            border: "1px solid #1e2940",
-          }}
-        >
-          The host has disconnected. Redirecting to home...
-        </div>
-      )}
-
-      {leaverNotice && !hostLeft && (
-        <div
-          style={{
-            position: "absolute",
-            top: "30px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            color: "#f4941b",
-            fontSize: "14px",
-            fontWeight: 600,
-            background: "#151c2c",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            border: "1px solid #1e2940",
-          }}
-        >
-          {leaverNotice}
         </div>
       )}
 

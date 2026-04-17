@@ -38,46 +38,22 @@ const WaitingRoom: React.FC = () => {
   const [starting, setStarting] = useState(false);
   const apiService = useApi();
 
-  // Fetch initial state on mount. Retry on transient failures — cold-start of the
-  // App Engine backend occasionally surfaces as a 401 on the first request.
+  // Fetch initial state on mount
   useEffect(() => {
     if (!lobbyCode) return;
-    let cancelled = false;
-
-    const fetchWithRetry = async <T,>(
-      path: string,
-      attempts = 4,
-    ): Promise<T | null> => {
-      for (let i = 0; i < attempts; i++) {
-        if (cancelled) return null;
-        try {
-          return await apiService.get<T>(path);
-        } catch (err) {
-          if (i === attempts - 1) throw err;
-          await new Promise((r) => setTimeout(r, 400 * (i + 1)));
-        }
-      }
-      return null;
-    };
-
     const fetchData = async () => {
       try {
         const [playerList, lobbyData] = await Promise.all([
-          fetchWithRetry<string[]>(`/lobbies/${lobbyCode}/players`),
-          fetchWithRetry<Lobby>(`/lobbies/${lobbyCode}`),
+          apiService.get<string[]>(`/lobbies/${lobbyCode}/players`),
+          apiService.get<Lobby>(`/lobbies/${lobbyCode}`),
         ]);
-        if (cancelled) return;
-        if (playerList) setPlayers(playerList);
-        if (lobbyData) setLobby(lobbyData);
+        setPlayers(playerList);
+        setLobby(lobbyData);
       } catch (err) {
         console.error("Failed to load lobby data:", err);
       }
     };
     fetchData();
-
-    return () => {
-      cancelled = true;
-    };
   }, [lobbyCode, apiService]);
 
   // S4: Real-time player list updates
@@ -131,12 +107,9 @@ const WaitingRoom: React.FC = () => {
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
         }
-      } catch (err) {
-        // Only redirect on an actual 404 (lobby was deleted). Transient 401s/500s
-        // from cold starts or DB hiccups must NOT surface as "host disconnected"
-        // to the other players.
-        const status = (err as { status?: number })?.status;
-        if (status === 404 && !isHost) {
+      } catch {
+        // 404 means lobby is gone — redirect non-host players
+        if (!isHost) {
           cancelled = true;
           setHostLeft(true);
           setTimeout(() => router.push("/home"), 3000);
@@ -199,7 +172,7 @@ const WaitingRoom: React.FC = () => {
 
           <div className={styles.scoringBox}>
             <p className={styles.scoringTitle}>
-              Players ({players.length} / {lobby?.maxPlayers ?? "…"})
+              Players ({players.length} / {lobby?.maxPlayers ?? "?"})
             </p>
 
             {players.map((playerName) => (
