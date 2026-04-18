@@ -84,8 +84,9 @@ reason).
 | **[@faiaz18]** | 16.04.2026   | [dcc1541](https://github.com/Nils557/sopra-fs26-group-32-server/commit/dcc15417f6af7ee1a2422b50c3ea0088808e6854) | Implemented PostgreSQL for Backend | So  that backend doesnt shut down after thir player joins |
 |                    | 17.04.2026   | [71d3aff](https://github.com/Nils557/sopra-fs26-group-32-client/commit/71d3aff96da1714e3c17dc8493bb65186646f389) | Fixed Bug regarding Lobby display (of Players) | Such that players see actual Players in Lobby |
 |                    | 16.04.2026-18.04.2026   | Just look at the history | Dis ca. 55 Commits for fixing Bugs | Players can now play without Bugs |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@vanix-dm]** | [18.04.2026]   | [6a3142b](https://github.com/Nils557/sopra-fs26-group-32-server/commit/6a3142bbfc19367594f34f8e7c6c6838da57c083) | Integrated Mapillary API connection | To get the street-images for the game |
+|                    | [18.04.2026]   | [608c24a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/608c24ad6943898bffa3ad0a62a58aeedc0d587a) | Implemented the image sequence generation logic | To minimize API calls, many Images are requested in one call |
+|                    | [18.04.2026]   | [c3e3e84](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c3e3e84479287430fd4312eb42832dc285e4e1a1) | Created location dataset and random location selection | To get an image of a random location, otherwise the core idea of the game would be violated |
 
 ---
 
