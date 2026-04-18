@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef} from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
@@ -21,9 +21,13 @@ const GameRound: React.FC = () => {
   const lobbyCode = params.code as string;
 
   const { value: username } = useSessionStorage<string>("username", "");
-
+  
+  const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
+  const isHost = isHostStored === "true";
+  
   const [round, setRound] = useState<RoundData | null>(null);
-
+  const [hostLeft, setHostLeft] = useState(false);
+  const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
   }, []);
@@ -41,11 +45,35 @@ const GameRound: React.FC = () => {
 
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
 
+  const handleDisconnect = useCallback(
+    (_reason: string) => {
+      if (isHost) return;
+      setHostLeft(true);
+      disconnectTimerRef.current = setTimeout(() => router.push("/home"), 3000);
+    },
+    [router, isHost]
+  );
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect)
+
+  useEffect(() => {
+    return () => {
+      if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
+    };
+  }, []);
+
   return (
     <main className={styles.fullPageContainer}>
       <div className={styles.cornerLogo}>
         Geo<span>Guess</span>
       </div>
+
+      {hostLeft && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
+          <p style={{ color: "#ff4d4f", fontSize: "20px", fontWeight: 700 }}>
+            The host has disconnected. Redirecting to home...
+          </p>
+        </div>
+      )}
 
       {round && (
         <div
