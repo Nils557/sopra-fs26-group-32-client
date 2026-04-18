@@ -35,6 +35,11 @@ const WaitingRoom: React.FC = () => {
   const [starting, setStarting] = useState(false);
   const apiService = useApi();
 
+  const lobbyRef = useRef<Lobby | null>(null);
+  useEffect(() => {
+    lobbyRef.current = lobby;
+  }, [lobby]);
+
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
@@ -80,27 +85,13 @@ const WaitingRoom: React.FC = () => {
   }, []);
   useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
-  const redirectedRef = useRef(false);
-  const redirectToGame = useCallback(() => {
-    if (redirectedRef.current) return;
-    redirectedRef.current = true;
-    router.push(`/game/${lobbyCode}`);
-  }, [router, lobbyCode]);
-
   const handleGameStart = useCallback(
     (_data: LobbyStart) => {
-      redirectToGame();
+      router.push(`/game/${lobbyCode}`);
     },
-    [redirectToGame]
+    [router, lobbyCode]
   );
   useWebSocket<LobbyStart>(`/topic/lobby/${lobbyCode}/start`, handleGameStart);
-
-  // Polling/REST fallback: if the WS /start frame was missed because the STOMP
-  // client hadn't finished its handshake yet, we still redirect as soon as the
-  // next lobby fetch reports status=INGAME.
-  useEffect(() => {
-    if (lobby?.status === "INGAME") redirectToGame();
-  }, [lobby?.status, redirectToGame]);
 
   const handleDisconnect = useCallback(
     (_reason: string) => {
@@ -112,10 +103,10 @@ const WaitingRoom: React.FC = () => {
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
-  // Polling fallback — every 4s refresh the player list AND the lobby state
-  // in case a WS broadcast was missed (e.g. STOMP still connecting when host
-  // pressed Start). Host-departure detection is handled exclusively by the WS
+  // Polling fallback — every 4s refresh the player list in case a WS broadcast
+  // was missed. Host-departure detection is handled exclusively by the WS
   // /disconnect topic; a single failed fetch is not enough to declare the host gone.
+  // Also backfills lobby metadata if the initial fetch didn't land.
   useEffect(() => {
     if (!lobbyCode) return;
     let cancelled = false;
@@ -128,12 +119,12 @@ const WaitingRoom: React.FC = () => {
       } catch (err) {
         console.warn("Polling roster refresh failed:", err);
       }
-      if (cancelled) return;
+      if (cancelled || lobbyRef.current) return;
       try {
         const data = await apiService.get<Lobby>(`/lobbies/${lobbyCode}`);
         if (!cancelled) setLobby(data);
       } catch {
-        // next poll tick will retry
+        // still no luck — next poll tick will retry
       }
     }, 4000);
 
@@ -150,7 +141,7 @@ const WaitingRoom: React.FC = () => {
       await apiService.post(`/lobbies/${lobbyCode}/start`, {
         hostUserId: Number(userId),
       });
-      redirectToGame();
+      router.push(`/game/${lobbyCode}`);
     } catch (err) {
       console.error("Failed to start game:", err);
       setStarting(false);
