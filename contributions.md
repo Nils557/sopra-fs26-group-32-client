@@ -81,8 +81,9 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@faiaz18]** | 16.04.2026   | [dcc1541](https://github.com/Nils557/sopra-fs26-group-32-server/commit/dcc15417f6af7ee1a2422b50c3ea0088808e6854) | Implemented PostgreSQL for Backend | So  that backend doesnt shut down after thir player joins |
+|                    | 17.04.2026   | [71d3aff](https://github.com/Nils557/sopra-fs26-group-32-client/commit/71d3aff96da1714e3c17dc8493bb65186646f389) | Fixed Bug regarding Lobby display (of Players) | Such that players see actual Players in Lobby |
+|                    | 16.04.2026-18.04.2026   | Just look at the history | Dis ca. 55 Commits for fixing Bugs | Players can now play without Bugs |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
