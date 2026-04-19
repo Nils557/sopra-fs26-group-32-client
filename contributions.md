@@ -75,7 +75,7 @@ reason).
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@scthisko]**    | 11.04.2026 | [87128c8](https://github.com/Nils557/sopra-fs26-group-32-server/commit/87128c8) | Validated player count, updated lobby status and broadcast game start | Game can only start with enough players and all clients must be notified via WebSocket |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                    | 19.04.2026 | [32325eb](https://github.com/Nils557/sopra-fs26-group-32-server/commit/32325eb) | Implemented image broadcast on timer and round lifecycle with stop | All players must see the same images at the same time every 9 seconds via WebSocket |
 | **[@Nils557]** | 14.04.2026   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) |If there are less than 2 players the Start Game button should be disabled | Players should not start the game alone |
 |                    | 14.04.2026   | [fd7de63](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fd7de63450fe824c88d7a833c0aea4de46425408) | Implemented game screen with picture/skeleton of the city and implemented the websocket subscription for images | To play the game you need webpage to play it on |
 |                    | 19.04.2026   | [e286043](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e286043a3c4e9c3916f96b583415a013ec939d1a) | Fixed the Docker build | Docker didn't work in the frontend until now |
