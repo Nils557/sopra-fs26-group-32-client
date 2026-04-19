@@ -87,7 +87,7 @@ reason).
 |                    | 18.04.2026   | [c3e3e84](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c3e3e84479287430fd4312eb42832dc285e4e1a1) | Created location dataset and random location selection | To get an image of a random location, otherwise the core idea of the game would be violated |
 | **[@Bleronn4]** | 18.04.2026   | [fafa1e8](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fafa1e86ebfaee6ab1d46f811d170875d3d19511) | Implemented Host Disconnect Kick | If the Host disconnects all the other players should be sent back to the home screen |
 |                    | 18.04.2026   | [d43cb5e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d43cb5ee7d63a067019f131abc166ec102e52a9b) | implemented Image countdown in game | the players should be able to see how much time they have left |
-|                    | 18.04.2026   | []() |  |  |
+|                    | 18.04.2026   | [0601b0b](https://github.com/Nils557/sopra-fs26-group-32-client/commit/0601b0b9abda4494829304b19b31dc0a06ab396e) | added a smooth transition in the image reveal | the image reveal should not fell jarring |
 
 ---
 
