@@ -25,10 +25,12 @@ RUN npm config set cache /app/.npm-cache --global
 USER 3301
 # Set container working directory to /app
 WORKDIR /app
-# Copy node modules and app
+# Copy node modules and built Next.js app
 COPY --chown=node:node --from=build /app/node_modules /app/node_modules
-COPY --chown=node:node --from=build /app/build build
-# Expose port for serve
+COPY --chown=node:node --from=build /app/.next .next
+COPY --chown=node:node --from=build /app/public public
+COPY --chown=node:node --from=build /app/package.json package.json
+# Expose port for Next.js
 EXPOSE 3000
 # Start app
-CMD [ "npx", "serve", "-s", "build" ]
+CMD [ "node_modules/.bin/next", "start" ]
