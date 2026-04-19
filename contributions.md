@@ -85,6 +85,9 @@ reason).
 | **[@vanix-dm]** | 18.04.2026   | [6a3142b](https://github.com/Nils557/sopra-fs26-group-32-server/commit/6a3142bbfc19367594f34f8e7c6c6838da57c083) | Integrated Mapillary API connection | To get the street-images for the game |
 |                    | 18.04.2026   | [608c24a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/608c24ad6943898bffa3ad0a62a58aeedc0d587a) | Implemented the image sequence generation logic | To minimize API calls, many Images are requested in one call |
 |                    | 18.04.2026   | [c3e3e84](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c3e3e84479287430fd4312eb42832dc285e4e1a1) | Created location dataset and random location selection | To get an image of a random location, otherwise the core idea of the game would be violated |
+| **[@Bleronn4]** | 18.04.2026   | [fafa1e8](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fafa1e86ebfaee6ab1d46f811d170875d3d19511) | Implemented Host Disconnect Kick | If the Host disconnects all the other players should be sent back to the home screen |
+|                    | 18.04.2026   | [d43cb5e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d43cb5ee7d63a067019f131abc166ec102e52a9b) | implemented Image countdown in game | the players should be able to see how much time they have left |
+|                    | 18.04.2026   | []() |  |  |
 
 ---
 

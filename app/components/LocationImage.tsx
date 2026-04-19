@@ -29,7 +29,7 @@
           {!loaded && (
             <Skeleton.Image
               active
-              style={{ width: "100%", height: "100%" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1 }}
             />
           )}
           <img
@@ -40,7 +40,8 @@
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              display: loaded ? "block" : "none",
+              opacity: loaded ? 1 : 0,
+              transition: "opacity 0.4s ease",
             }}
           />
         </div>
