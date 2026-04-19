@@ -78,9 +78,6 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@Nils557]** | [14.04.2026]   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) |If there are less than 2 players the Start Game button should be disabled | Players should not start the game alone |
 |                    | 14.04.2026   | [fd7de63](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fd7de63450fe824c88d7a833c0aea4de46425408) | Implemented game screen with picture/skeleton of the city and implemented the websocket subscription for images | To play the game you need webpage to play it on |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@faiaz18]** | 16.04.2026   | [dcc1541](https://github.com/Nils557/sopra-fs26-group-32-server/commit/dcc15417f6af7ee1a2422b50c3ea0088808e6854) | Implemented PostgreSQL for Backend | So  that backend doesnt shut down after thir player joins |
 |                    | 17.04.2026   | [71d3aff](https://github.com/Nils557/sopra-fs26-group-32-client/commit/71d3aff96da1714e3c17dc8493bb65186646f389) | Fixed Bug regarding Lobby display (of Players) | Such that players see actual Players in Lobby |
 |                    | 16.04.2026-18.04.2026   | Just look at the history | Dis ca. 55 Commits for fixing Bugs | Players can now play without Bugs |
