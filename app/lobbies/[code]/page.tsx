@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
@@ -34,11 +34,6 @@ const WaitingRoom: React.FC = () => {
   const [hostLeft, setHostLeft] = useState(false);
   const [starting, setStarting] = useState(false);
   const apiService = useApi();
-
-  const lobbyRef = useRef<Lobby | null>(null);
-  useEffect(() => {
-    lobbyRef.current = lobby;
-  }, [lobby]);
 
   useEffect(() => {
     if (!lobbyCode) return;
@@ -115,14 +110,21 @@ const WaitingRoom: React.FC = () => {
       if (cancelled) return;
       try {
         const current = await apiService.get<string[]>(`/lobbies/${lobbyCode}/players`);
-        setPlayers(current);
+        if (!cancelled) setPlayers(current);
       } catch (err) {
         console.warn("Polling roster refresh failed:", err);
       }
-      if (cancelled || lobbyRef.current) return;
+      if (cancelled) return;
       try {
         const data = await apiService.get<Lobby>(`/lobbies/${lobbyCode}`);
-        if (!cancelled) setLobby(data);
+        if (cancelled) return;
+        setLobby(data);
+        // Safety net: if we missed the /start WS broadcast, the lobby's
+        // INGAME status will catch us up here within ~4s.
+        if (data.status === "INGAME") {
+          clearInterval(poll);
+          router.push(`/game/${lobbyCode}`);
+        }
       } catch {
         // still no luck — next poll tick will retry
       }
@@ -132,7 +134,7 @@ const WaitingRoom: React.FC = () => {
       cancelled = true;
       clearInterval(poll);
     };
-  }, [lobbyCode, apiService]);
+  }, [lobbyCode, apiService, router]);
 
   const handleStartGame = async () => {
     if (!isHost || players.length < 2 || starting) return;
