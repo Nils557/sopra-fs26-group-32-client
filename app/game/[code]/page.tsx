@@ -7,6 +7,9 @@ import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import LocationImage from "@/components/LocationImage";
+import dynamic from "next/dynamic";
+
+const GameMap = dynamic(() => import("@/components/GameMap"), { ssr: false });
 
 interface RoundData {
   imageUrl: string;
@@ -15,16 +18,16 @@ interface RoundData {
   timeLeft: number;
 }
 
-const GameRound: React.FC = () => {
+  const GameRound: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const lobbyCode = params.code as string;
 
   const { value: username } = useSessionStorage<string>("username", "");
-  
+
   const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
   const isHost = isHostStored === "true";
-  
+
   const [round, setRound] = useState<RoundData | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -53,7 +56,7 @@ const GameRound: React.FC = () => {
     },
     [router, isHost]
   );
-  useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect)
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
   useEffect(() => {
     return () => {
@@ -62,45 +65,47 @@ const GameRound: React.FC = () => {
   }, []);
 
   return (
-    <main className={styles.fullPageContainer}>
-      <div className={styles.cornerLogo}>
-        Geo<span>Guess</span>
-      </div>
-
+    <main className={styles.gameLayout}>
       {hostLeft && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems:
+"center", justifyContent: "center", zIndex: 100 }}>
           <p style={{ color: "#ff4d4f", fontSize: "20px", fontWeight: 700 }}>
             The host has disconnected. Redirecting to home...
           </p>
         </div>
       )}
 
+        <div style={{ display: "flex", width: "100%", height: "100%", gap: "24px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", flexShrink: 0, width: "180px" }}>
+            <div className={styles.cornerLogo} style={{ position: "static" }}>
+              Geo<span>Guess</span>
+            </div>
+            <div className={styles.scoringBox}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div className={styles.playerAvatar}>
+                    {username.substring(0, 2).toUpperCase()}
+                  </div>
+                  <span className={styles.settingLabel}>{username}</span>
+                </div>
+                  {round && (
+                  <span style={{ color: "#f4941b", fontWeight: 700, fontSize: "18px" }}>
+                    {round.timeLeft}s
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
       {round && (
-        <div
-          style={{
-            position: "absolute",
-            top: "30px",
-            right: "40px",
-            color: "#6b7280",
-            fontSize: "14px",
-            fontWeight: 700,
-          }}
-        >
+        <div style={{ color: "#6b7280", fontSize: "14px", fontWeight: 700, textAlign: "right" }}>
           Round {round.roundNumber} / {round.totalRounds}
         </div>
       )}
-
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "900px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px",
-        }}
-      >
-        {round ? (
-          <LocationImage imageUrl={round.imageUrl} />
+          <div style={{ flexShrink: 0, position: "relative" }}>
+          {round ? (
+            <LocationImage imageUrl={round.imageUrl} />
         ) : (
           <div
             style={{
@@ -119,20 +124,7 @@ const GameRound: React.FC = () => {
             Wait for the first round...
           </div>
         )}
-
-        <div className={styles.scoringBox}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div className={styles.playerAvatar}>
-                {username.substring(0, 2).toUpperCase()}
-              </div>
-              <span className={styles.settingLabel}>{username}</span>
-            </div>
-            {round && (
-              <span style={{ color: "#f4941b", fontWeight: 700, fontSize: "18px" }}>
-                {round.timeLeft}s
-              </span>
-            )}
+          <GameMap /> 
           </div>
         </div>
       </div>
