@@ -95,8 +95,8 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@Nils557]** | 21.04.26   | [f2a2346](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f2a234690e3c3e2fa2c14494842907fb4db7f41f) | [Implemented a minimap into the game] | [later we add a pointer to guess the city without the map you can't point somewhere] |
+|                    | 21.04.26   | [d054f79](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d054f792ef14ffa2a90ddd1407e5b2b179ad762f) | implemented a pointer to the map, and fixed it to the center | One needs a pointer to guess the city |
 | **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
