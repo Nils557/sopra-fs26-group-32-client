@@ -16,13 +16,36 @@ import L from "leaflet";
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    function ClickHandler() {
-      useMapEvents({ click: (e) => setPin({ lat: e.latlng.lat, lng: e.latlng.lng }) });
+    function ClickHandler({ pin, setPin }: {
+      pin: { lat: number; lng: number } | null;
+      setPin: (p: { lat: number; lng: number }) => void;
+    }) {
+      useMapEvents({ click: (e) => {
+        if (!pin) setPin({ lat: e.latlng.lat, lng: e.latlng.lng });
+      },
+    });
       return null;
     }
 
     function MapController({ expanded, pin }: { expanded: boolean; pin: { lat: number; lng: number } | null }) {
       const map = useMap();
+      useEffect(() => {
+        if (pin) {
+          map.dragging.disable();
+          map.scrollWheelZoom.disable();
+          map.doubleClickZoom.disable();
+          map.touchZoom.disable();
+          map.boxZoom.disable();
+          map.keyboard.disable();
+        } else {
+          map.dragging.enable();
+          map.scrollWheelZoom.enable();
+          map.doubleClickZoom.enable();
+          map.touchZoom.enable();
+          map.boxZoom.enable();
+          map.keyboard.enable();
+        }
+      }, [pin, map]);
       useEffect(() => {
         if (!expanded) {
           const center = pin ? [pin.lat, pin.lng] as [number, number] : [20, 0] as [number, number];
@@ -46,23 +69,40 @@ import L from "leaflet";
           bottom: 10,
           left: 0,
           width: expanded ? "400px" : "200px",
-          height: expanded ? "300px" : "150px",
+          
           transition: "width 0.3s ease, height 0.3s ease",
           borderRadius: "8px",
-          overflow: "hidden",
+          
           border: "2px solid #1e2940",
           zIndex: 10,
         }}
       >
+        <div style={{
+          height: expanded ? "300px" : "150px",
+          transition: "height 0.3s ease",
+          overflow: "hidden",
+          borderRadius: "6px",
+        }}>
         <MapContainer center={[20, 0]} zoom={2} style={{ height: "100%", width: "100%" }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           />
           <MapController expanded={expanded} pin={pin} />
-          <ClickHandler />
+          <ClickHandler pin={pin} setPin={setPin} />
           {pin && <Marker position={[pin.lat, pin.lng]} />}
         </MapContainer>
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "11px",
+            fontWeight: 600,
+            padding: "3px 0",
+            color: pin ? "#4ade80" : "#f4941b",
+          }}>
+          {pin ? "Your guess has been submitted" : "Click on the map to make your guess"}
+        </div>
       </div>
     );
   }
