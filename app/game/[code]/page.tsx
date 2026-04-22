@@ -124,7 +124,7 @@ interface RoundData {
             Wait for the first round...
           </div>
         )}
-          <GameMap imageUrl={round?.imageUrl ?? ""}/> 
+          <GameMap roundNumber={round?.roundNumber ?? 0}/> 
           </div>
         </div>
       </div>
