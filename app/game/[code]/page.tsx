@@ -124,7 +124,7 @@ interface RoundData {
             Wait for the first round...
           </div>
         )}
-          <GameMap /> 
+          <GameMap roundNumber={round?.roundNumber ?? 0}/> 
           </div>
         </div>
       </div>
