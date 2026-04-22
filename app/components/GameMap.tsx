@@ -11,14 +11,14 @@ import L from "leaflet";
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   });
 
-  export default function GameMap({ roundNumber }: { roundNumber: number }) {
+  export default function GameMap({ imageUrl }: { imageUrl: string }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
       setPin(null);
-    }, [roundNumber]);
+    }, [imageUrl]);
 
     function ClickHandler({ pin, setPin }: {
       pin: { lat: number; lng: number } | null;
