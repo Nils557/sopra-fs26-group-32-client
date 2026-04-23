@@ -31,10 +31,12 @@ interface RoundData {
   const isHost = isHostStored === "true";
 
   const [round, setRound] = useState<RoundData | null>(null);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
+    setTimeLeft(data.timeLeft);
   }, []);
 
   const handlePinPlaced = useCallback(
@@ -50,6 +52,11 @@ interface RoundData {
 
   useWebSocket<RoundData>(`/topic/game/${lobbyCode}/image`, handleRoundUpdate);
 
+  const handleTimerUpdate = useCallback((val: number) => {
+    setTimeLeft(val);
+  }, []);
+  useWebSocket<number>(`/topic/lobby/${lobbyCode}/timer`, handleTimerUpdate);
+  
   const handleGameOver = useCallback(
     (msg: string) => {
       if (msg === "GAME_OVER") {
@@ -101,9 +108,9 @@ interface RoundData {
                   </div>
                   <span className={styles.settingLabel}>{username}</span>
                 </div>
-                  {round && (
+                  {timeLeft !== null && (
                   <span style={{ color: "#f4941b", fontWeight: 700, fontSize: "18px" }}>
-                    {round.timeLeft}s
+                    {timeLeft}s
                   </span>
                 )}
               </div>
