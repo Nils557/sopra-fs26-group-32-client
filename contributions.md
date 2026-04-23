@@ -102,7 +102,7 @@ reason).
 | **[@Bleronn4]** | [22.04.2026]   | [fabe0e5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fabe0e5c4f11e16591534507a7a5a397eaf2d8b7) | [Disabled the map interaction after the pin is placed ] | [a player should not be able to change his answer] |
 |                    | [23.04.2026]   | [d305271](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d305271b342c77c0758dd5fab194362077a1294b) | [placing the pin submits the coordinates] | [the server should be able to check the answer] |
 |                    | [23.04.2026]   | [f59e214](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f59e214682f035db21a5fc25d6dbe94188b974b8) | [displays the synchronized round-countdown] | [the players should see how much time they have left] |
-
+|                    | [23.04.2026]   | [f60ff98](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f60ff98781ff336a063da2ffbedda45e0d02a72e) | [handle Round end in the frontend] | [the round should end after the time is up, or if all the players submitted their answers] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
