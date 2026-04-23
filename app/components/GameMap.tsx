@@ -11,7 +11,7 @@ import L from "leaflet";
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   });
 
-  export default function GameMap({ roundNumber, onPinPlaced }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => void }) {
+  export default function GameMap({ roundNumber, onPinPlaced, disabled = false }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => void; disabled?: boolean }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -20,12 +20,13 @@ import L from "leaflet";
       setPin(null);
     }, [roundNumber]);
 
-    function ClickHandler({ pin, setPin }: {
+    function ClickHandler({ pin, setPin, disabled }: {
       pin: { lat: number; lng: number } | null;
       setPin: (p: { lat: number; lng: number }) => void;
+      disabled: boolean;
     }) {
       useMapEvents({ click: (e) => {
-        if (!pin) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin); onPinPlaced?.(newPin); };
+        if (!pin && !disabled) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin); onPinPlaced?.(newPin); };
       },
     });
       return null;
@@ -93,7 +94,7 @@ import L from "leaflet";
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           />
           <MapController expanded={expanded} pin={pin} />
-          <ClickHandler pin={pin} setPin={setPin} />
+          <ClickHandler pin={pin} setPin={setPin} disabled={disabled} />
           {pin && <Marker position={[pin.lat, pin.lng]} />}
         </MapContainer>
         </div>

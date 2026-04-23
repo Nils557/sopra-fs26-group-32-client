@@ -32,15 +32,17 @@ interface RoundData {
 
   const [round, setRound] = useState<RoundData | null>(null);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [roundEnded, setRoundEnded] = useState(false);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const initializedRoundRef = useRef<number | null>(null);
-  
+
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
     if (data.roundNumber !== initializedRoundRef.current) {
       initializedRoundRef.current = data.roundNumber;
       setTimeLeft(data.timeLeft);
+      setRoundEnded(false);
     }
   }, []);
 
@@ -60,6 +62,13 @@ interface RoundData {
   const handleTimerUpdate = useCallback((val: number) => {
     setTimeLeft(val);
   }, []);
+
+  const handleRoundEnd = useCallback(() => {
+    setRoundEnded(true);
+    console.log("Round ended received from server"); // zum gseh obs lauft, will mir no kei summary hend, chund am schluss weg
+  }, []);
+  useWebSocket<string>(`/topic/game/${lobbyCode}/roundEnd`, handleRoundEnd);
+
   useWebSocket<number>(`/topic/game/${lobbyCode}/timer`, handleTimerUpdate);
   
   const handleGameOver = useCallback(
@@ -88,6 +97,10 @@ interface RoundData {
       if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (timeLeft === 0) setRoundEnded(true);
+  }, [timeLeft]);
 
   return (
     <main className={styles.gameLayout}>
@@ -149,7 +162,7 @@ interface RoundData {
             Wait for the first round...
           </div>
         )}
-          <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} /> 
+          <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} disabled={roundEnded}/> 
           </div>
         </div>
       </div>
