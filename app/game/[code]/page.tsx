@@ -85,7 +85,7 @@ interface RoundData {
       setTimeLeft(prev => (prev !== null && prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => clearInterval(interval);
-  }, [round?.roundId]);
+  }, [round?.roundNumber]);
 
   return (
     <main className={styles.gameLayout}>
