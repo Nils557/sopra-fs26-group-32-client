@@ -8,15 +8,17 @@ import useSessionStorage from "@/hooks/useSessionStorage";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import LocationImage from "@/components/LocationImage";
 import dynamic from "next/dynamic";
-
+import { ApiService } from "@/api/apiService";
 const GameMap = dynamic(() => import("@/components/GameMap"), { ssr: false });
 
 interface RoundData {
+  roundId: number;
   imageUrl: string;
   roundNumber: number;
   totalRounds: number;
   timeLeft: number;
 }
+  const apiService = new ApiService();
 
   const GameRound: React.FC = () => {
   const router = useRouter();
@@ -24,7 +26,7 @@ interface RoundData {
   const lobbyCode = params.code as string;
 
   const { value: username } = useSessionStorage<string>("username", "");
-
+  const { value: userId } = useSessionStorage<string>("userId", "");
   const { value: isHostStored } = useSessionStorage<string>("isHost", "false");
   const isHost = isHostStored === "true";
 
@@ -34,6 +36,17 @@ interface RoundData {
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
   }, []);
+
+  const handlePinPlaced = useCallback(
+    async (pin: { lat: number; lng: number }) => {
+      if (!round) return;
+      await apiService.post(
+        `/lobbies/${lobbyCode}/rounds/${round.roundId}/answers`,
+        { playerId: Number(userId), latitude: pin.lat, longitude: pin.lng }
+      );
+    },
+    [round, lobbyCode, userId]
+  );
 
   useWebSocket<RoundData>(`/topic/game/${lobbyCode}/image`, handleRoundUpdate);
 
@@ -124,7 +137,7 @@ interface RoundData {
             Wait for the first round...
           </div>
         )}
-          <GameMap roundNumber={round?.roundNumber ?? 0}/> 
+          <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} /> 
           </div>
         </div>
       </div>

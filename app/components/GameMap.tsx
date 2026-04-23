@@ -11,7 +11,7 @@ import L from "leaflet";
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   });
 
-  export default function GameMap({ roundNumber }: { roundNumber: number }) {
+  export default function GameMap({ roundNumber, onPinPlaced }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => void }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -25,7 +25,7 @@ import L from "leaflet";
       setPin: (p: { lat: number; lng: number }) => void;
     }) {
       useMapEvents({ click: (e) => {
-        if (!pin) setPin({ lat: e.latlng.lat, lng: e.latlng.lng });
+        if (!pin) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin); onPinPlaced?.(newPin); };
       },
     });
       return null;
