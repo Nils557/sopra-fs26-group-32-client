@@ -37,6 +37,7 @@ interface RoundData {
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
+    setTimeLeft(data.timeLeft);
   }, []);
 
   const handlePinPlaced = useCallback(
@@ -51,6 +52,11 @@ interface RoundData {
   );
 
   useWebSocket<RoundData>(`/topic/game/${lobbyCode}/image`, handleRoundUpdate);
+
+  const handleTimerUpdate = useCallback((val: number) => {
+    setTimeLeft(val);
+  }, []);
+  useWebSocket<number>(`/topic/game/${lobbyCode}/timer`, handleTimerUpdate);
   
   const handleGameOver = useCallback(
     (msg: string) => {
@@ -78,15 +84,6 @@ interface RoundData {
       if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
     };
   }, []);
-
-  useEffect(() => {
-    if (!round) return;
-    setTimeLeft(round.timeLeft);
-    const interval = setInterval(() => {
-      setTimeLeft(prev => (prev !== null && prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [round?.roundNumber]);
 
   return (
     <main className={styles.gameLayout}>
