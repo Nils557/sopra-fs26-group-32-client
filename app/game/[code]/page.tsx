@@ -34,9 +34,9 @@ interface RoundData {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
-    setTimeLeft(data.timeLeft);
   }, []);
 
   const handlePinPlaced = useCallback(
@@ -81,6 +81,7 @@ interface RoundData {
 
   useEffect(() => {
     if (!round) return;
+    setTimeLeft(round.timeLeft);
     const interval = setInterval(() => {
       setTimeLeft(prev => (prev !== null && prev > 0 ? prev - 1 : 0));
     }, 1000);
