@@ -34,10 +34,14 @@ interface RoundData {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+  const initializedRoundRef = useRef<number | null>(null);
+  
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
-    setTimeLeft(data.timeLeft);
+    if (data.roundNumber !== initializedRoundRef.current) {
+      initializedRoundRef.current = data.roundNumber;
+      setTimeLeft(data.timeLeft);
+    }
   }, []);
 
   const handlePinPlaced = useCallback(
