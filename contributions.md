@@ -98,7 +98,7 @@ reason).
 | **[@Nils557]** | 21.04.26   | [f2a2346](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f2a234690e3c3e2fa2c14494842907fb4db7f41f) | [Implemented a minimap into the game] | [later we add a pointer to guess the city without the map you can't point somewhere] |
 |                    | 21.04.26   | [d054f79](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d054f792ef14ffa2a90ddd1407e5b2b179ad762f) | implemented a pointer to the map, and fixed it to the center | One needs a pointer to guess the city |
 | **[@scthisko]** | 23.04.2026  | [87a0250](https://github.com/Nils557/sopra-fs26-group-32-server/commit/87a0250) | Implemented 45s round timer with WebSocket broadcast and automatic round end | Players need a synchronized countdown and the round must end automatically when time runs out |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                 | 23.04.2026  | [613a22f](https://github.com/Nils557/sopra-fs26-group-32-server/commit/613a22f) | Implemented early round end when all players have answered | Round should end immediately when all players have placed their pin to avoid unnecessary waiting |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
