@@ -11,37 +11,24 @@ import L from "leaflet";
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   });
 
-  export default function GameMap({ roundNumber, onPinPlaced, disabled = false }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => Promise<void> | void; disabled?: boolean }) {
+  export default function GameMap({ roundNumber, onPinPlaced, disabled = false }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => void; disabled?: boolean }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
-    const [submitError, setSubmitError] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
       setPin(null);
-      setSubmitError(false);
     }, [roundNumber]);
 
     function ClickHandler({ pin, setPin, disabled }: {
       pin: { lat: number; lng: number } | null;
-      setPin: (p: { lat: number; lng: number } | null) => void;
+      setPin: (p: { lat: number; lng: number }) => void;
       disabled: boolean;
     }) {
-      useMapEvents({
-        click: async (e) => {
-          if (pin || disabled) return;
-          const newPin = { lat: e.latlng.lat, lng: e.latlng.lng };
-          setPin(newPin);
-          setSubmitError(false);
-          try {
-            await onPinPlaced?.(newPin);
-          } catch {
-            // POST failed — clear the pin so the player can retry, surface the error.
-            setPin(null);
-            setSubmitError(true);
-          }
-        },
-      });
+      useMapEvents({ click: (e) => {
+        if (!pin && !disabled) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin); onPinPlaced?.(newPin); };
+      },
+    });
       return null;
     }
 
@@ -117,13 +104,9 @@ import L from "leaflet";
             fontSize: "11px",
             fontWeight: 600,
             padding: "3px 0",
-            color: submitError ? "#ff4d4f" : pin ? "#4ade80" : "#f4941b",
+            color: pin ? "#4ade80" : "#f4941b",
           }}>
-          {submitError
-            ? "Guess failed — tap the map to try again"
-            : pin
-              ? "Your guess has been submitted"
-              : "Click on the map to make your guess"}
+          {pin ? "Your guess has been submitted" : "Click on the map to make your guess"}
         </div>
       </div>
     );

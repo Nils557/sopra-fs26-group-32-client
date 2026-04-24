@@ -34,7 +34,6 @@ interface RoundData {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [roundEnded, setRoundEnded] = useState(false);
   const [hostLeft, setHostLeft] = useState(false);
-  const [startFailed, setStartFailed] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const initializedRoundRef = useRef<number | null>(null);
 
@@ -76,12 +75,9 @@ interface RoundData {
     (msg: string) => {
       if (msg === "GAME_OVER") {
         router.push("/home");
-      } else if (msg === "START_FAILED") {
-        setStartFailed(true);
-        setTimeout(() => router.push(`/lobbies/${lobbyCode}`), 2500);
       }
     },
-    [router, lobbyCode]
+    [router]
   );
 
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
@@ -106,24 +102,6 @@ interface RoundData {
     if (timeLeft === 0) setRoundEnded(true);
   }, [timeLeft]);
 
-  // Catchup: if no WS image arrives within 1s of mount (lobby→game subscription
-  // gap, refresh mid-round, reconnect), fall back to GET /rounds/current.
-  // 404 = no active round yet — keep waiting for the WS broadcast.
-  useEffect(() => {
-    if (round) return;
-    const timeout = setTimeout(async () => {
-      try {
-        const data = await apiService.get<RoundData>(
-          `/lobbies/${lobbyCode}/rounds/current`
-        );
-        handleRoundUpdate(data);
-      } catch {
-        // 404 or network error — leave UI in waiting state, WS may still arrive
-      }
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, [round, lobbyCode, handleRoundUpdate]);
-
   return (
     <main className={styles.gameLayout}>
       {hostLeft && (
@@ -131,15 +109,6 @@ interface RoundData {
 "center", justifyContent: "center", zIndex: 100 }}>
           <p style={{ color: "#ff4d4f", fontSize: "20px", fontWeight: 700 }}>
             The host has disconnected. Redirecting to home...
-          </p>
-        </div>
-      )}
-
-      {startFailed && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems:
-"center", justifyContent: "center", zIndex: 100 }}>
-          <p style={{ color: "#ff4d4f", fontSize: "20px", fontWeight: 700, textAlign: "center", padding: "0 24px" }}>
-            Couldn&apos;t load the location. Returning to lobby...
           </p>
         </div>
       )}
