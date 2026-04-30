@@ -11,10 +11,24 @@ import L from "leaflet";
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   });
 
-  export default function GameMap({ roundNumber, onPinPlaced, disabled = false }: { roundNumber: number; onPinPlaced?: (pin: { lat: number; lng: number }) => void; disabled?: boolean }) {
+  export default function GameMap({ roundNumber, onPinPlaced, disabled = false }: { roundNumber: number; onPinPlaced?:
+  (pin: { lat: number; lng: number }) => void; disabled?: boolean }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [isMobileLayout, setIsMobileLayout] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    }, []);
+
+    useEffect(() => {
+      const check = () => setIsMobileLayout(window.innerWidth <= 900);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
 
     useEffect(() => {
       setPin(null);
@@ -26,7 +40,8 @@ import L from "leaflet";
       disabled: boolean;
     }) {
       useMapEvents({ click: (e) => {
-        if (!pin && !disabled) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin); onPinPlaced?.(newPin); };
+        if (!pin && !disabled) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin);
+onPinPlaced?.(newPin); };
       },
     });
       return null;
@@ -62,6 +77,7 @@ import L from "leaflet";
 
     return (
       <div
+        onClick={() => { if (isTouchDevice) setExpanded(prev => !prev); }}
         onMouseEnter={() => {
           if (closeTimer.current) clearTimeout(closeTimer.current);
           setExpanded(true);
@@ -70,20 +86,18 @@ import L from "leaflet";
           closeTimer.current = setTimeout(() => setExpanded(false), 300);
         }}
         style={{
-          position: "absolute",
-          bottom: 10,
-          left: 0,
-          width: expanded ? "400px" : "200px",
-          
+          position: isMobileLayout ? "relative" : "absolute",
+          bottom: isMobileLayout ? "auto" : 10,
+          left: isMobileLayout ? "auto" : 0,
+          width: isMobileLayout ? "100%" : (expanded ? "min(400px, 85vw)" : "min(200px, 45vw)"),
           transition: "width 0.3s ease, height 0.3s ease",
           borderRadius: "8px",
-          
           border: "2px solid #1e2940",
           zIndex: 10,
         }}
       >
         <div style={{
-          height: expanded ? "300px" : "150px",
+          height: isMobileLayout ? "200px" : (expanded ? "min(300px, 64vw)" : "min(150px, 32vw)"),
           transition: "height 0.3s ease",
           overflow: "hidden",
           borderRadius: "6px",

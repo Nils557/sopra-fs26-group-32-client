@@ -25,7 +25,7 @@
 
     return (
       <div>
-        <div style={{ width: "100%", aspectRatio: "16/9", position: "relative" }}> 
+            <div style={{ width: "100%", aspectRatio: "16/9", position: "relative" }}>
           {!loaded && (
             <Skeleton.Image
               active

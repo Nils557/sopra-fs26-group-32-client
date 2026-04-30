@@ -70,7 +70,7 @@ interface RoundData {
   useWebSocket<string>(`/topic/game/${lobbyCode}/roundEnd`, handleRoundEnd);
 
   useWebSocket<number>(`/topic/game/${lobbyCode}/timer`, handleTimerUpdate);
-  
+    
   const handleGameOver = useCallback(
     (msg: string) => {
       if (msg === "GAME_OVER") {
@@ -113,8 +113,8 @@ interface RoundData {
         </div>
       )}
 
-        <div style={{ display: "flex", width: "100%", height: "100%", gap: "24px" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", flexShrink: 0, width: "180px" }}>
+        <div className={styles.gameRow}>
+          <div className={styles.gameSidebar}>
             <div className={styles.cornerLogo} style={{ position: "static" }}>
               Geo<span>Guess</span>
             </div>
@@ -135,37 +135,37 @@ interface RoundData {
             </div>
           </div>
 
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
-      {round && (
-        <div style={{ color: "#6b7280", fontSize: "14px", fontWeight: 700, textAlign: "right" }}>
-          Round {round.roundNumber} / {round.totalRounds}
-        </div>
-      )}
-          <div style={{ flexShrink: 0, position: "relative" }}>
-          {round ? (
-            <LocationImage imageUrl={round.imageUrl} />
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              aspectRatio: "16/9",
-              background: "#151c2c",
-              borderRadius: "16px",
-              border: "1px solid #1e2940",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#6b7280",
-              fontSize: "16px",
-            }}
-          >
-            Wait for the first round...
+          <div className={styles.gameContent}>
+            {round && (
+              <div style={{ color: "#6b7280", fontSize: "14px", fontWeight: 700, textAlign: "right" }}>
+                Round {round.roundNumber} / {round.totalRounds}
+              </div>
+            )}
+            <div className={styles.gameImageWrapper}>
+              {round ? (
+                <LocationImage imageUrl={round.imageUrl} />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    aspectRatio: "16/9",
+                    background: "#151c2c",
+                    borderRadius: "16px",
+                    border: "1px solid #1e2940",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#6b7280",
+                    fontSize: "16px",
+                  }}
+                >
+                  Wait for the first round...
+                </div>
+              )}
+              <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} disabled={roundEnded}/>
+            </div>
           </div>
-        )}
-          <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} disabled={roundEnded}/> 
-          </div>
         </div>
-      </div>
     </main>
   );
 };
