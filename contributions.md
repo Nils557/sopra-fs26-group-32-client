@@ -116,6 +116,7 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@scthisko]** | 01.05.2026 | [cadd60a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/cadd60a) | Broadcast per-player score update via WebSocket after each guess | Players need to see the current rankings in real time after each pin placement |
 |                 | 01.05.2026 | [f3467c5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/f3467c5) | Implemented ScoringService for score calculation | Scoring logic extracted into dedicated service for better separation of concerns and testability |
+|                 | 01.05.2026 | [c621426](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c621426) | Implemented cumulative score aggregation via ScoringService.getStandings | Players need to see their total score across all rounds sorted by descending points |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
