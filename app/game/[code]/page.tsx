@@ -35,6 +35,7 @@ interface RoundData {
   const [roundEnded, setRoundEnded] = useState(false);
   const [hostLeft, setHostLeft] = useState(false);
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasSubmitted = useRef(false);
   const initializedRoundRef = useRef<number | null>(null);
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
@@ -43,12 +44,14 @@ interface RoundData {
       initializedRoundRef.current = data.roundNumber;
       setTimeLeft(data.timeLeft);
       setRoundEnded(false);
+      hasSubmitted.current = false;
     }
   }, []);
 
   const handlePinPlaced = useCallback(
     async (pin: { lat: number; lng: number }) => {
-      if (!round) return;
+      if (!round || hasSubmitted.current) return;
+      hasSubmitted.current = true; 
       await apiService.post(
         `/lobbies/${lobbyCode}/rounds/${round.roundId}/answers`,
         { playerId: Number(userId), latitude: pin.lat, longitude: pin.lng }
