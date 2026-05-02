@@ -17,7 +17,17 @@ interface RoundData {
   roundNumber: number;
   totalRounds: number;
   timeLeft: number;
+  correctCity?: string;
 }
+interface Answer {
+  id: number;
+  latitude: number;
+  longitude: number;
+  scoreResult: "CORRECT_CITY" | "CORRECT_COUNTRY" | "INCORRECT";
+  pointsAwarded: number;
+  submittedAt: string;
+}
+
   const apiService = new ApiService();
 
   const GameRound: React.FC = () => {
@@ -37,6 +47,9 @@ interface RoundData {
   const disconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasSubmitted = useRef(false);
   const initializedRoundRef = useRef<number | null>(null);
+  const [submittedAnswer, setSubmittedAnswer] = useState<Answer | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
@@ -45,6 +58,8 @@ interface RoundData {
       setTimeLeft(data.timeLeft);
       setRoundEnded(false);
       hasSubmitted.current = false;
+      setSubmittedAnswer(null);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     }
   }, []);
 
@@ -52,10 +67,11 @@ interface RoundData {
     async (pin: { lat: number; lng: number }) => {
       if (!round || hasSubmitted.current) return;
       hasSubmitted.current = true; 
-      await apiService.post(
+      const answer = await apiService.post<Answer>(
         `/lobbies/${lobbyCode}/rounds/${round.roundId}/answers`,
         { playerId: Number(userId), latitude: pin.lat, longitude: pin.lng }
       );
+      setSubmittedAnswer(answer);
     },
     [round, lobbyCode, userId]
   );
@@ -68,7 +84,7 @@ interface RoundData {
 
   const handleRoundEnd = useCallback(() => {
     setRoundEnded(true);
-    console.log("Round ended received from server"); // zum gseh obs lauft, will mir no kei summary hend, chund am schluss weg
+    console.log("Round ended received from server");
   }, []);
   useWebSocket<string>(`/topic/game/${lobbyCode}/roundEnd`, handleRoundEnd);
 
@@ -98,12 +114,21 @@ interface RoundData {
   useEffect(() => {
     return () => {
       if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
   }, []);
 
   useEffect(() => {
     if (timeLeft === 0) setRoundEnded(true);
   }, [timeLeft]);
+
+  useEffect(() => {
+    if (roundEnded && submittedAnswer) {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = setTimeout(() => setSubmittedAnswer(null), 3000);
+    }
+  }, [roundEnded, submittedAnswer]);
+  
 
   return (
     <main className={styles.gameLayout}>
@@ -115,6 +140,38 @@ interface RoundData {
           </p>
         </div>
       )}
+      {roundEnded && submittedAnswer && (
+      <div
+        className={`${styles.scoreFeedbackToast} ${
+          submittedAnswer.scoreResult === "CORRECT_CITY"
+            ? styles.scoreFeedbackCorrectCity
+            : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
+            ? styles.scoreFeedbackCorrectCountry
+            : styles.scoreFeedbackIncorrect
+        }`}
+      >
+        <div className={styles.scoreFeedbackLabel}>
+          <span className={
+            submittedAnswer.scoreResult === "CORRECT_CITY"
+              ? styles.dotGreen
+              : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
+              ? styles.dotYellow
+              : styles.dotRed
+          }>●</span>
+          {submittedAnswer.scoreResult === "CORRECT_CITY"
+            ? "Correct City!"
+            : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
+            ? "Correct Country"
+            : "Wrong Location"}
+        </div>
+        {round?.correctCity && (
+          <div className={styles.scoreFeedbackCity}>{round.correctCity}</div>
+        )}
+        <div className={styles.scoreFeedbackPoints}>
+          +{submittedAnswer.pointsAwarded} pts
+        </div>
+      </div>
+    )}
 
         <div className={styles.gameRow}>
           <div className={styles.gameSidebar}>
