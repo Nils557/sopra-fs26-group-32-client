@@ -18,6 +18,7 @@ import L from "leaflet";
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [isMobileLayout, setIsMobileLayout] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const isDragging = useRef(false);
 
     useEffect(() => {
       setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
@@ -47,8 +48,14 @@ onPinPlaced?.(newPin); };
       return null;
     }
 
-    function MapController({ expanded, pin }: { expanded: boolean; pin: { lat: number; lng: number } | null }) {
+      function MapController({ expanded, pin, isDragging }: { expanded: boolean; pin: { lat: number; lng: number } | null;
+      isDragging: React.MutableRefObject<boolean> }) {
       const map = useMap();
+      useEffect(() => {
+        map.on("dragstart", () => { isDragging.current = true; });
+        map.on("dragend", () => { setTimeout(() => { isDragging.current = false; }, 400); });
+        return () => { map.off("dragstart"); map.off("dragend"); };
+      }, [map, isDragging]);
       useEffect(() => {
         if (pin) {
           map.dragging.disable();
@@ -68,9 +75,8 @@ onPinPlaced?.(newPin); };
       }, [pin, map]);
       
       useEffect(() => {
-        if (!expanded) {
-          const center = pin ? [pin.lat, pin.lng] as [number, number] : [20, 0] as [number, number];
-          const id = setTimeout(() => map.setView(center, map.getZoom()), 300);
+        if (!expanded  && pin) {
+          const id = setTimeout(() => map.setView([pin.lat, pin.lng], map.getZoom()), 300);
           return () => clearTimeout(id);
         }
       }, [expanded, map, pin]);
@@ -82,11 +88,15 @@ onPinPlaced?.(newPin); };
       <div
         onClick={() => { if (isTouchDevice) setExpanded(prev => !prev); }}
         onMouseEnter={() => {
+          if (isMobileLayout) return; 
           if (closeTimer.current) clearTimeout(closeTimer.current);
           setExpanded(true);
         }}
         onMouseLeave={() => {
-          closeTimer.current = setTimeout(() => setExpanded(false), 300);
+          if (isMobileLayout) return;
+          closeTimer.current = setTimeout(() => {
+            if (!isDragging.current) setExpanded(false);
+          }, 300);
         }}
         style={{
           position: isMobileLayout ? "relative" : "absolute",
@@ -110,7 +120,7 @@ onPinPlaced?.(newPin); };
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           />
-          <MapController expanded={expanded} pin={pin} />
+          <MapController expanded={expanded} pin={pin} isDragging={isDragging} />
           <ClickHandler pin={pin} setPin={setPin} disabled={disabled} />
           {pin && <Marker position={[pin.lat, pin.lng]} />}
         </MapContainer>
