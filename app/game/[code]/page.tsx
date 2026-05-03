@@ -28,6 +28,13 @@ interface Answer {
   submittedAt: string;
 }
 
+interface Player {
+  id: number;
+  username: string;
+  totalScore: number;
+  connected: boolean;
+}
+
   const apiService = new ApiService();
 
   const GameRound: React.FC = () => {
@@ -49,6 +56,7 @@ interface Answer {
   const initializedRoundRef = useRef<number | null>(null);
   const [submittedAnswer, setSubmittedAnswer] = useState<Answer | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [players, setPlayers] = useState<Player[]>([]);
 
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
@@ -110,7 +118,13 @@ interface Answer {
     [router, isHost]
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
-
+  
+  const handleScoresUpdate = useCallback((data: Player[]) => {
+    setPlayers(data);
+  }, []);
+  
+  useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/scores`, handleScoresUpdate);
+  
   useEffect(() => {
     return () => {
       if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
@@ -121,6 +135,13 @@ interface Answer {
   useEffect(() => {
     if (timeLeft === 0) setRoundEnded(true);
   }, [timeLeft]);
+
+  useEffect(() => {
+    apiService.get<string[]>(`/lobbies/${lobbyCode}/players`)
+      .then(names => setPlayers(names.map(name => ({ id: 0, username: name, totalScore: 0, connected: true }))))
+      .catch(() => {});
+  }, [lobbyCode]);
+  
 
   useEffect(() => {
     if (roundEnded && submittedAnswer) {
@@ -193,6 +214,19 @@ interface Answer {
                 )}
               </div>
             </div>
+            {players.length > 0 && (
+              <div className={styles.scoreboardBox}>
+                {[...players]
+                  .sort((a, b) => b.totalScore - a.totalScore)
+                  .map((player, index) => (
+                    <div key={player.username} className={styles.scoreboardEntry}>
+                      <span className={styles.scoreboardRank}>#{index + 1}</span>
+                      <span className={styles.scoreboardName}>{player.username}</span>
+                      <span className={styles.scoreboardScore}>{player.totalScore}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
 
           <div className={styles.gameContent}>

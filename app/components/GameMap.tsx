@@ -69,11 +69,11 @@ onPinPlaced?.(newPin); };
       useEffect(() => {
         if (!expanded) {
           const center = pin ? [pin.lat, pin.lng] as [number, number] : [20, 0] as [number, number];
-          setTimeout(() => map.setView(center, map.getZoom()), 300);
+          const id = setTimeout(() => map.setView(center, map.getZoom()), 300);
+          return () => clearTimeout(id);
         }
       }, [expanded, map, pin]);
-      return null;
-    }
+      
 
     return (
       <div

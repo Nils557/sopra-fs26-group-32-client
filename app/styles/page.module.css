@@ -421,4 +421,39 @@
     color: #6b7280;
     margin-top: 4px;
   }
+  .scoreboardBox {
+    background: #1a2236;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .scoreboardEntry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+  }
+  
+  .scoreboardRank {
+    color: #6b7280;
+    font-weight: 700;
+    min-width: 20px;
+  }
+  
+  .scoreboardName {
+    color: #fff;
+    font-weight: 600;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .scoreboardScore {
+    color: #f4941b;
+    font-weight: 700;
+  }
   
