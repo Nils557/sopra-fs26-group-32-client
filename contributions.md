@@ -119,8 +119,8 @@ reason).
 |                 | 01.05.2026 | [c621426](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c621426) | Implemented cumulative score aggregation via ScoringService.getStandings | Players need to see their total score across all rounds sorted by descending points |
 | **[@Bleronn4]** | [02.05.2026]   | [3e5c513](https://github.com/Nils557/sopra-fs26-group-32-client/commit/3e5c51350f8ba3c55548f751fb7d2bcc67fe38ac) | [added the feedback after pinplacement] | [the player should see whether he was right and should see how many points he got] |
 |                    | [3.05.2026]   | [594116e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/594116e8aa5e01fad23762fc268263422b4456ff) | [added the Scoreboard in the Gamepage] | [The players should see what their current placement is] |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@faiaz18]** | 03.05.2026   | [78f0526](https://github.com/Nils557/sopra-fs26-group-32-server/commit/78f05260d1c5c9fc1e2bf34b61dd46dbf64737cb) | Added Tests for the backend developement tasks for US 7 to 9 | We need to do this because it's best practice and a requirement of assignment 4. |
+|                    | 03.05   | [93e825d](https://github.com/Nils557/sopra-fs26-group-32-server/commit/93e825d6ce4ee989a56312e27bb6cc102634127b) | Added tests for the two endpoints which still werent tested. | We need to do this because it's best practice and a requirement of assignment 4. |
 
 ---
 
