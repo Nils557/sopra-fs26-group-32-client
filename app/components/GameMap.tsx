@@ -66,6 +66,7 @@ onPinPlaced?.(newPin); };
           map.keyboard.enable();
         }
       }, [pin, map]);
+      
       useEffect(() => {
         if (!expanded) {
           const center = pin ? [pin.lat, pin.lng] as [number, number] : [20, 0] as [number, number];
@@ -73,6 +74,8 @@ onPinPlaced?.(newPin); };
           return () => clearTimeout(id);
         }
       }, [expanded, map, pin]);
+      return null;
+    }
       
 
     return (
