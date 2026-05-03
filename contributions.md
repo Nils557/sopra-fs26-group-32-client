@@ -117,8 +117,8 @@ reason).
 | **[@scthisko]** | 01.05.2026 | [cadd60a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/cadd60a) | Broadcast per-player score update via WebSocket after each guess | Players need to see the current rankings in real time after each pin placement |
 |                 | 01.05.2026 | [f3467c5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/f3467c5) | Implemented ScoringService for score calculation | Scoring logic extracted into dedicated service for better separation of concerns and testability |
 |                 | 01.05.2026 | [c621426](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c621426) | Implemented cumulative score aggregation via ScoringService.getStandings | Players need to see their total score across all rounds sorted by descending points |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **[@Bleronn4]** | [02.05.2026]   | [3e5c513](https://github.com/Nils557/sopra-fs26-group-32-client/commit/3e5c51350f8ba3c55548f751fb7d2bcc67fe38ac) | [added the feedback after pinplacement] | [the player should see whether he was right and should see how many points he got] |
+|                    | [3.05.2026]   | [594116e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/594116e8aa5e01fad23762fc268263422b4456ff) | [added the Scoreboard in the Gamepage] | [The players should see what their current placement is] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
