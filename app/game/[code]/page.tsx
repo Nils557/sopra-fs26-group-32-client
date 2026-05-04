@@ -107,6 +107,12 @@ interface Player {
     [router]
   );
 
+  const handleRoundEndNavigation = useCallback(() => {
+    router.push(`/game/${lobbyCode}/round-summary`);
+  }, [router, lobbyCode]);
+
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/round-end`, handleRoundEndNavigation);
+
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
 
   const handleDisconnect = useCallback(
