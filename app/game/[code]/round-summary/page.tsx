@@ -1,5 +1,33 @@
-  "use client";
+ "use client";
+
+  import { useEffect, useState } from "react";
+  import dynamic from "next/dynamic";
+  import styles from "@/styles/page.module.css";
+
+  const SummaryMap = dynamic(() => import("@/components/SummaryMap"), { ssr: false });
+
+  interface RoundSummaryData {
+    correctCity: string;
+    correctLatitude: number;
+    correctLongitude: number;
+  }
 
   export default function RoundSummary() {
-    return <div>Round Summary</div>;
+    const [data, setData] = useState<RoundSummaryData | null>(null);
+
+    useEffect(() => {
+      const stored = sessionStorage.getItem("roundSummary");
+      if (stored) setData(JSON.parse(stored));
+    }, []);
+
+    if (!data) return null;
+
+    return (
+      <main className={styles.fullPageContainer}>
+        <h1 className={styles.hugeTitle}>{data.correctCity}</h1>
+        <div className={styles.summaryMapWrapper}>
+          <SummaryMap lat={data.correctLatitude} lng={data.correctLongitude} />
+        </div>
+      </main>
+    );
   }

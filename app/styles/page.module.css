@@ -457,3 +457,11 @@
     font-weight: 700;
   }
   
+  .summaryMapWrapper {
+    width: 100%;
+    max-width: 700px;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #1e2940;
+  }

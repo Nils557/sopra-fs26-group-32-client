@@ -35,6 +35,12 @@ interface Player {
   connected: boolean;
 }
 
+interface RoundSummaryData {
+  correctCity: string;
+  correctLatitude: number;
+  correctLongitude: number;
+}
+
   const apiService = new ApiService();
 
   const GameRound: React.FC = () => {
@@ -107,11 +113,12 @@ interface Player {
     [router]
   );
 
-  const handleRoundEndNavigation = useCallback(() => {
+  const handleRoundEndNavigation = useCallback((data: RoundSummaryData) => {
+    sessionStorage.setItem("roundSummary", JSON.stringify(data));
     router.push(`/game/${lobbyCode}/round-summary`);
   }, [router, lobbyCode]);
 
-  useWebSocket<string>(`/topic/lobby/${lobbyCode}/summary`, handleRoundEndNavigation);
+  useWebSocket<RoundSummaryData>(`/topic/lobby/${lobbyCode}/summary`, handleRoundEndNavigation);
 
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
 
