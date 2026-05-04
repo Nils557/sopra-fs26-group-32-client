@@ -56,7 +56,7 @@
       <main className={styles.fullPageContainer}>
         <h1 className={styles.hugeTitle}>{data.correctCity}</h1>
         <div className={styles.summaryContent}>
-          <div>
+          <div className={styles.summaryMapColumn}>
             <div className={styles.summaryMapWrapper}>
               <SummaryMap lat={data.correctLatitude} lng={data.correctLongitude} />
             </div>
