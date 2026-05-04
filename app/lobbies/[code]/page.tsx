@@ -81,7 +81,7 @@ const WaitingRoom: React.FC = () => {
   useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/players`, handlePlayersUpdate);
 
   const handleGameStart = useCallback(
-    (_data: LobbyStart) => {
+    (_: LobbyStart) => {
       router.push(`/game/${lobbyCode}`);
     },
     [router, lobbyCode]
@@ -89,7 +89,7 @@ const WaitingRoom: React.FC = () => {
   useWebSocket<LobbyStart>(`/topic/lobby/${lobbyCode}/start`, handleGameStart);
 
   const handleDisconnect = useCallback(
-    (_reason: string) => {
+    (_: string) => {
       if (isHost) return;
       setHostLeft(true);
       setTimeout(() => router.push("/home"), 3000);
