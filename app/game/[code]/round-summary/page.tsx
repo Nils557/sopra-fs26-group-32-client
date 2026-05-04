@@ -26,20 +26,22 @@
     return (
       <main className={styles.fullPageContainer}>
         <h1 className={styles.hugeTitle}>{data.correctCity}</h1>
+      <div className={styles.summaryContent}>
         <div className={styles.summaryMapWrapper}>
           <SummaryMap lat={data.correctLatitude} lng={data.correctLongitude} />
         </div>
         <div className={styles.scoreboardBox}>
-    {[...data.standings]
-    .sort((a, b) => b.totalScore - a.totalScore)
-    .map((player, index) => (
-        <div key={player.username} className={styles.scoreboardEntry}>
-        <span className={styles.scoreboardRank}>#{index + 1}</span>
-        <span className={styles.scoreboardName}>{player.username}</span>
-        <span className={styles.scoreboardScore}>{player.totalScore}</span>
+          {[...data.standings]
+            .sort((a, b) => b.totalScore - a.totalScore)
+            .map((player, index) => (
+              <div key={player.username} className={styles.scoreboardEntry}>
+                <span className={styles.scoreboardRank}>#{index + 1}</span>
+                <span className={styles.scoreboardName}>{player.username}</span>
+                <span className={styles.scoreboardScore}>{player.totalScore}</span>
+              </div>
+            ))}
         </div>
-    ))}
-</div>
-      </main>
-    );
+      </div>
+    </main>
+  );
   }
