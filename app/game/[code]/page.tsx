@@ -116,7 +116,7 @@ interface Player {
   useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
 
   const handleDisconnect = useCallback(
-    (_: string) => {
+    () => {
       if (isHost) return;
       setHostLeft(true);
       disconnectTimerRef.current = setTimeout(() => router.push("/home"), 3000);
