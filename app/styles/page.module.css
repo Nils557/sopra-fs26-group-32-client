@@ -116,6 +116,25 @@
   background: #d97f15;
 }
 
+.copyButton {
+  background: none;
+  border: 2px solid #2a3a5c;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  cursor: pointer;
+  margin-left: 12px;
+  transition: color 0.2s, border-color 0.2s;
+  vertical-align: middle;
+}
+
+.copyButton:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
 .divider {
   display: flex;
   align-items: center;
@@ -481,6 +500,10 @@
   @media (max-width: 768px) {
     .summaryContent {
       flex-direction: column;
+    }
+    
+    .summaryMapColumn {
+      width: 100%;
     }
 
     .summaryMapWrapper {

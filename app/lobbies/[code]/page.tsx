@@ -174,6 +174,12 @@ const WaitingRoom: React.FC = () => {
             style={{ fontSize: "48px", letterSpacing: "6px" }}
           >
             {lobbyCode}
+              <button
+                onClick={() => navigator.clipboard.writeText(lobbyCode)}
+                className={styles.copyButton}
+              >
+                Copy
+              </button>
           </h1>
 
           {hostLeft && (
