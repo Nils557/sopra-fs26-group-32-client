@@ -39,6 +39,7 @@ interface RoundSummaryData {
   correctCity: string;
   correctLatitude: number;
   correctLongitude: number;
+  standings: { username: string; totalScore: number }[];
 }
 
   const apiService = new ApiService();

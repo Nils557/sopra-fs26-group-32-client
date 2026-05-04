@@ -10,6 +10,7 @@
     correctCity: string;
     correctLatitude: number;
     correctLongitude: number;
+    standings: { username: string; totalScore: number }[];
   }
 
   export default function RoundSummary() {
@@ -28,6 +29,17 @@
         <div className={styles.summaryMapWrapper}>
           <SummaryMap lat={data.correctLatitude} lng={data.correctLongitude} />
         </div>
+        <div className={styles.scoreboardBox}>
+    {[...data.standings]
+    .sort((a, b) => b.totalScore - a.totalScore)
+    .map((player, index) => (
+        <div key={player.username} className={styles.scoreboardEntry}>
+        <span className={styles.scoreboardRank}>#{index + 1}</span>
+        <span className={styles.scoreboardName}>{player.username}</span>
+        <span className={styles.scoreboardScore}>{player.totalScore}</span>
+        </div>
+    ))}
+</div>
       </main>
     );
   }
