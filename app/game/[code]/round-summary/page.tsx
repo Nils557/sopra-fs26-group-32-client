@@ -43,7 +43,7 @@
     const handleGameState = useCallback(
       (msg: string) => {
         if (msg === "NEXT_ROUND") router.push(`/game/${code}`);
-        if (msg === "GAME_END") router.push("/home");
+        if (msg === "GAME_END") router.push(`/game/${code}/final-results`);
       },
       [router, code]
     );
