@@ -136,8 +136,9 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **@Nils557** | [4.5.2026]   | [72bab67](https://github.com/Nils557/sopra-fs26-group-32-client/commit/72bab677598be4c8dc1fb8f61d029c5329ac0542) | Implemented the summary inbetween rounds with map and scoreboard | A player wants to know what the city was. |
 |                    | [6.5.2026]   | [4017eb9](https://github.com/Nils557/sopra-fs26-group-32-client/commit/4017eb9c1d76909d5c7696babd6b81bd74712064) | created and linked the final summary page | Players want to see who won at the end |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| [@vanix-dm] | 07.05.2026 | d61b7f3 | Real-time multiplayer submission status integration | To notify the lobby via WebSockets immediately when a player submits an answer without revealing pin coordinates |
+|                    | 07.05.2026 | ff29d80 | Mid-round client state recovery mechanism | To ensure players who refresh their browser mid-round accurately recover the correct UI state |
+|                    | 07.05.2026 | 3bd33dd | Disconnect handling and application context fixes | To prevent games from hanging indefinitely when a player drops connection and resolve Spring Boot circular dependencies |
 | **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
