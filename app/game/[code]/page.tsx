@@ -41,7 +41,9 @@ interface RoundSummaryData {
   correctLongitude: number;
   standings: { username: string; totalScore: number }[];
 }
-
+interface SubmissionUpdateDTO {
+  playerId: number;
+}
   const apiService = new ApiService();
 
   const GameRound: React.FC = () => {
@@ -64,19 +66,30 @@ interface RoundSummaryData {
   const [submittedAnswer, setSubmittedAnswer] = useState<Answer | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [submittedPlayerIds, setSubmittedPlayerIds] = useState<Set<number>>(new Set());
 
 
   const handleRoundUpdate = useCallback((data: RoundData) => {
     setRound(data);
-    if (data.roundNumber !== initializedRoundRef.current) {
-      initializedRoundRef.current = data.roundNumber;
+    if (data.roundId !== initializedRoundRef.current) {
+      initializedRoundRef.current = data.roundId;
       setTimeLeft(data.timeLeft);
       setRoundEnded(false);
       hasSubmitted.current = false;
       setSubmittedAnswer(null);
+      setSubmittedPlayerIds(new Set());
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      apiService.get<{ submittedPlayerIds: number[] }>(
+        `/lobbies/${lobbyCode}/rounds/${data.roundId}/summary`
+      )
+        .then(summary => {
+          if (summary.submittedPlayerIds?.length) {
+            setSubmittedPlayerIds(new Set(summary.submittedPlayerIds.map(Number)));
+          }
+        })
+        .catch(() => {});
     }
-  }, []);
+  }, [lobbyCode]);
 
   const handlePinPlaced = useCallback(
     async (pin: { lat: number; lng: number }) => {
@@ -138,6 +151,16 @@ interface RoundSummaryData {
   }, []);
   
   useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/scores`, handleScoresUpdate);
+
+  const handleSubmissionUpdate = useCallback((data: SubmissionUpdateDTO) => {
+    setSubmittedPlayerIds(prev => {
+      const next = new Set(prev);
+      next.add(data.playerId);
+      return next;
+    });
+  }, []);
+  
+  useWebSocket<SubmissionUpdateDTO>(`/topic/lobbies/${lobbyCode}/submissions`, handleSubmissionUpdate);
   
   useEffect(() => {
     return () => {
@@ -235,6 +258,10 @@ interface RoundSummaryData {
                   .map((player, index) => (
                     <div key={player.username} className={styles.scoreboardEntry}>
                       <span className={styles.scoreboardRank}>#{index + 1}</span>
+                      <span className={submittedPlayerIds.has(player.id)
+                        ? styles.submissionIndicatorSubmitted
+                        : styles.submissionIndicatorPending
+                      }>●</span>
                       <span className={styles.scoreboardName}>{player.username}</span>
                       <span className={styles.scoreboardScore}>{player.totalScore}</span>
                     </div>
