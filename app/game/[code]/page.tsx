@@ -146,11 +146,11 @@ interface SubmissionUpdateDTO {
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
   
-  const handleScoresUpdate = useCallback((data: Player[]) => {
-    setPlayers(data);
+  const handleScoresUpdate = useCallback((data: { playerId: number; username: string; totalScore: number }[]) => {
+    setPlayers(data.map(p => ({ id: p.playerId, username: p.username, totalScore: p.totalScore, connected: true })));
   }, []);
   
-  useWebSocket<Player[]>(`/topic/lobby/${lobbyCode}/scores`, handleScoresUpdate);
+  useWebSocket<{ playerId: number; username: string; totalScore: number }[]>(`/topic/lobby/${lobbyCode}/scores`, handleScoresUpdate);
 
   const handleSubmissionUpdate = useCallback((data: SubmissionUpdateDTO) => {
     setSubmittedPlayerIds(prev => {
