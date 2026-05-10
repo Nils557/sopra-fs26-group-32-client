@@ -142,4 +142,5 @@ reason).
 | **[@faiaz18]** | 08.05.2026   | [408cea6](https://github.com/Nils557/sopra-fs26-group-32-server/commit/408cea6b73e96e725ca69e544c570c3c76f8a66c) | Added test cases for the backend developement tasks of User Story 10 | So we can be sure that the functionalities of our code are correct |
 |                    | 08.05.2026   | [153b246](https://github.com/Nils557/sopra-fs26-group-32-server/commit/153b246910f2f08cd8492f1a7530772ad5b4771e) | Added test cases for the backend developement tasks of User Story 11 | So we can be sure that the functionalities of our code are correct |
 | **[@scthisko]** | 10.05.2026 | [1d85200](https://github.com/Nils557/sopra-fs26-group-32-server/commit/1d85200) | Implemented ScoringService.getFinalStandings with rank assignment | Players need to see their final ranking with position numbers at the end of the game |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+|                 | 10.05.2026 | [be61c0c](https://github.com/Nils557/sopra-fs26-group-32-server/commit/be61c0c) | Added GET /lobbies/{code}/results endpoint as fallback for final standings | Frontend needs a REST fallback to fetch final results in case the WebSocket game-end event was missed |
+
