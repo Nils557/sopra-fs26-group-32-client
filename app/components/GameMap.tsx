@@ -15,6 +15,7 @@ import L from "leaflet";
   (pin: { lat: number; lng: number }) => void; disabled?: boolean }) {
     const [expanded, setExpanded] = useState(false);
     const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
+    const [submitted, setSubmitted] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [isMobileLayout, setIsMobileLayout] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -33,23 +34,30 @@ import L from "leaflet";
 
     useEffect(() => {
       setPin(null);
+      setSubmitted(false);
     }, [roundNumber]);
 
-    function ClickHandler({ pin, setPin, disabled }: {
-      pin: { lat: number; lng: number } | null;
+    useEffect(() => {
+      if (disabled && pin && !submitted) {
+        setSubmitted(true);
+        onPinPlaced?.(pin);
+      }
+    }, [disabled, pin, submitted, onPinPlaced]);
+
+    function ClickHandler({ setPin, disabled, submitted }: {
       setPin: (p: { lat: number; lng: number }) => void;
       disabled: boolean;
+      submitted: boolean;
     }) {
       useMapEvents({ click: (e) => {
-        if (!pin && !disabled) { const newPin = { lat: e.latlng.lat, lng: e.latlng.lng }; setPin(newPin);
-onPinPlaced?.(newPin); };
+        if (!submitted && !disabled) setPin({ lat: e.latlng.lat, lng: e.latlng.lng });
       },
     });
       return null;
     }
 
-      function MapController({ expanded, pin, isDragging }: { expanded: boolean; pin: { lat: number; lng: number } | null;
-      isDragging: React.MutableRefObject<boolean> }) {
+      function MapController({ expanded, pin, isDragging, submitted }: { expanded: boolean; pin: { lat: number; lng: number } | null;
+      isDragging: React.MutableRefObject<boolean>; submitted:boolean; }) {
       const map = useMap();
       useEffect(() => {
         map.on("dragstart", () => { isDragging.current = true; });
@@ -57,7 +65,7 @@ onPinPlaced?.(newPin); };
         return () => { map.off("dragstart"); map.off("dragend"); };
       }, [map, isDragging]);
       useEffect(() => {
-        if (pin) {
+        if (submitted) {
           map.dragging.disable();
           map.scrollWheelZoom.disable();
           map.doubleClickZoom.disable();
@@ -72,7 +80,7 @@ onPinPlaced?.(newPin); };
           map.boxZoom.enable();
           map.keyboard.enable();
         }
-      }, [pin, map]);
+      }, [submitted, map]);
       
       useEffect(() => {
         if (!expanded  && pin) {
@@ -120,21 +128,37 @@ onPinPlaced?.(newPin); };
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           />
-          <MapController expanded={expanded} pin={pin} isDragging={isDragging} />
-          <ClickHandler pin={pin} setPin={setPin} disabled={disabled} />
+          <MapController expanded={expanded} pin={pin} isDragging={isDragging} submitted={submitted} />
+          <ClickHandler submitted={submitted} setPin={setPin} disabled={disabled} />
           {pin && <Marker position={[pin.lat, pin.lng]} />}
         </MapContainer>
         </div>
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: "11px",
-            fontWeight: 600,
-            padding: "3px 0",
-            color: pin ? "#4ade80" : "#f4941b",
-          }}>
-          {pin ? "Your guess has been submitted" : "Click on the map to make your guess"}
+        <div style={{ textAlign: "center", fontSize: "11px", fontWeight: 600, padding: "3px 0",
+          color: submitted ? "#4ade80" : pin ? "#f4941b" : "#6b7280" }}>
+          {submitted
+            ? "Guess submitted!"
+            : pin
+            ? "Pin placed — move it or submit below"
+            : "Click on the map to place your pin"}
         </div>
+        {pin && !submitted && !disabled && (
+          <button
+            onClick={() => { setSubmitted(true); onPinPlaced?.(pin); }}
+            style={{
+              width: "100%",
+              padding: "6px 0",
+              background: "#f4941b",
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: "13px",
+              border: "none",
+              borderRadius: "0 0 6px 6px",
+              cursor: "pointer",
+            }}
+          >
+            Submit Guess
+          </button>
+        )}
       </div>
     );
   }
