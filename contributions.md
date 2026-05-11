@@ -145,3 +145,21 @@ reason).
 |                 | 10.05.2026 | [be61c0c](https://github.com/Nils557/sopra-fs26-group-32-server/commit/be61c0c) | Added GET /lobbies/{code}/results endpoint as fallback for final standings | Frontend needs a REST fallback to fetch final results in case the WebSocket game-end event was missed |
 | **[@Bleronn4]** | 09.05.2026 | [0502e00](https://github.com/Nils557/sopra-fs26-group-32-client/commit/0502e0085cdc26b8560770f3694e7ba610cea675) | When a SubmissionUpdateDTO (containing the playerId) is received, dynamically change that specific player's background from grey to green. | Players should be able see to whether the others have placed their pin or not |
 |                  | 10.05.2026 | [020ba9a](https://github.com/Nils557/sopra-fs26-group-32-client/commit/020ba9a1bfba45e5a31352daaccf0286f0478bbf) | Created a submit feature on the GameMap, so that players can change their mind before submitting their guess | Players should be able to change their guess before submitting (suggestion from feedback) |
+
+---
+
+## Contributions Week 6 - 4.5.26 to 10.5.26
+
+| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
+| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **@Nils557** | 11.05.2025 | [068f1d5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/068f1d5736a77f241468e31932906e16ecad10c4) | Button to get to the lobby and butto n to get out of the lobby with websoccet disconnect | As a user I need to have a button to get back to the lobby |
+|                    |  |  |  |  |
+| [@vanix-dm] |  |  |  |  |
+|                    |  |  |  |  |
+|                    |  |  |  |  |
+| **[@faiaz18]** |    |  |  |
+|                 |  |  |  |  |
+| **[@scthisko]** |  |  |  |  |
+|                 |  |  |  |  |
+| **[@Bleronn4]** |  |  |  |  |
+|                  |  |  | |  |
