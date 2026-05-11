@@ -6,6 +6,7 @@ import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useApi } from "@/hooks/useApi";
+import { useWSContext } from "@/contexts/WebSocketContext"; 
 
 interface Lobby {
   maxPlayers: number;
@@ -23,6 +24,7 @@ interface LobbyStart {
 const WaitingRoom: React.FC = () => {
   const router = useRouter();
   const params = useParams();
+  const { disconnect } = useWSContext();
   const lobbyCode = params.code as string;
 
   const { value: userId } = useSessionStorage<string>("userId", "");
@@ -230,6 +232,16 @@ const WaitingRoom: React.FC = () => {
               Waiting for host to start the game...
             </p>
           )}
+          <button
+            className={styles.backButton}
+              style={{ position: "static", marginTop: "16px", border: "1px solid #6b7280", borderRadius: "8px", padding: "8px 20px" }}
+            onClick={() => {
+              disconnect();
+              router.push("/home");
+            }}
+            >
+            Return to Home
+         </button>
         </div>
       </div>
     </main>
