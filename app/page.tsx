@@ -10,20 +10,17 @@ import useSessionStorage from "@/hooks/useSessionStorage";
 
 
 const ADJECTIVES = [
-  "Sleepy", "Stinky", "Grumpy", "Sneaky", "Misty",
-  "Rusty", "Cranky", "Dusty", "Spooky", "Gloomy",
-  "Clumsy", "Shady", "Frosty", "Noisy", "Quirky", 
-  "Wobbly", "Squishy", "Goofy", "Cheeky", "Loopy", 
-  "Chunky", "Wacky", "Dopey", "Soggy", "Pudgy"
+  "Sleepy", "Stinky", "Grumpy", "Sneaky",
+  "Rusty", "Dusty", "Spooky",
+  "Clumsy", "Shady", "Noisy", 
+  "Wobbly", "Squishy", "Chunky"
 ];
 
 const ANIMALS = [
-  "Platypus", "Raven", "Blobfish", "Tapir", "Manatee",
-  "Capybara", "Axolotl", "Viper", "Badger", "Crow",
+  "Platypus", "Blobfish", "Tapir",
+  "Capybara", "Axolotl", "Crow", "Ape",
   "Moose", "Otter", "Sloth", "Elk", "Cockroach", 
-  "Wombat", "Tardigrade", "Quokka", "Hagfish", 
-  "Mudskipper", "Warthog", "Narwhal", "Toad", 
-  "Salamander", "Armadillo"
+  "Quokka", "Hagfish", "Toad", "Salamander", "Monkey"
 ];
 
 function generateRandomName(): string {
