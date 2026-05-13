@@ -34,9 +34,9 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@Nils557]** | 24.3.26   | [0c562a1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/0c562a1b93bafe1c4bce200a2a43b1fadba4be35) | Created landingPage | A player needs to start somewhere |
-|                    | 24.3.26   | [412eef1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/412eef1ec9ae4ff31a1a530b869f00479986804f) | implemented handleLogin function | because the server needs to know the playername |
-|                    | 24.3.26   | [f4a9f46](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f4a9f4678273728b9714a18095a4d4f78c7a0473) | added a username taken warning | Because a user can't take an already taken username |
+| **[@Nils557]** | 24.3.26   | [0c562a1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/0c562a1b93bafe1c4bce200a2a43b1fadba4be35) | Created landing page. | A player needs to start somewhere. |
+|                    | 24.3.26   | [412eef1](https://github.com/Nils557/sopra-fs26-group-32-client/commit/412eef1ec9ae4ff31a1a530b869f00479986804f) | Implemented the handleLogin function. | because the server needs to know the player name. |
+|                    | 24.3.26   | [f4a9f46](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f4a9f4678273728b9714a18095a4d4f78c7a0473) | Added a warning when a username has already been taken. | Because a user can't take an already taken username! |
 | **[@vanix-dm]** | 27.03.26   | [5b42379](https://github.com/Nils557/sopra-fs26-group-32-server/commit/5b42379368f0dff7ac2b195e45c0865a30347c70), [aac0771](https://github.com/Nils557/sopra-fs26-group-32-server/commit/aac07714cfc32dbf604a1b2d2e65948a08c376c0) | Aligned User entity and repository with M2 report, removed all unnecessary fields from all files | To ensure that the user has the correct parameters (username, Id, etc) |
 |                    | 27.03.26   | [3c7f844](https://github.com/Nils557/sopra-fs26-group-32-server/commit/3c7f844c1beeca1e29fc4b08fb88424cf637c6fb) | Implemented user creation and validation logic | To ensure that a user can be created only with a valid username (unique and not empty) |
 | **[@faiaz18]** | 28.03.26  | [069345a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/069345aac942cf163d44cedb9ba7250cdfc40d99) | Implemented automatic user deletion on disconnect | Players who leave should not persist in the system |
@@ -53,9 +53,9 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@Nils557]** | 02.04.2026   | [e533114](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e533114fb54a32df7d1b3de18ad7f8c34c46810c) | show error message when joining a full lobby | information for users |
-|                    | 02.04.2026   | [190a0e6](https://github.com/Nils557/sopra-fs26-group-32-client/commit/190a0e6405bb1f7351ff2fafe37ac545587d076d) | [error message for game has already started and invalid lobbyname] | The player needs to know why he can't join |
-|                    | 5.4.26   | [dc313e8](https://github.com/Nils557/sopra-fs26-group-32-client/commit/dc313e84b764b5455560d7c6d116dfae186d959c) | implemented frontend of kicking all users out of the lobby if host disconnects | a player can't start a game without a host |
+| **[@Nils557]** | 02.04.2026   | [e533114](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e533114fb54a32df7d1b3de18ad7f8c34c46810c) | Show error message when joining a full lobby. | Information for users. |
+|                    | 02.04.2026   | [190a0e6](https://github.com/Nils557/sopra-fs26-group-32-client/commit/190a0e6405bb1f7351ff2fafe37ac545587d076d) | Error message: 'Game has already started' or 'Invalid lobby name' | The player needs to know why they can't join. |
+|                    | 5.4.26   | [dc313e8](https://github.com/Nils557/sopra-fs26-group-32-client/commit/dc313e84b764b5455560d7c6d116dfae186d959c) | Implemented frontend for kicking all users out of the lobby if the host disconnects. | A player cannot start a game without a host. |
 | **[@faiaz18]** | 05.04.2026   | [901d60b](https://github.com/Nils557/sopra-fs26-group-32-server/commit/901d60b5b6e3b8479f67106908aa98a9aef7d5e6) | Implemented host disconnection logic | Game/Lobby needs to get closed when the host leaves |
 |                    | 05.04.2026   | [86ee73e](https://github.com/Nils557/sopra-fs26-group-32-server/commit/86ee73eb6079f81a8f292b6130be829f10bf9411) | Blocked the joins to an already started lobby | Noone should be able to join an ongoing game |
 | **[@scthisko]** | 05.04.2026  | [a521f91](https://github.com/Nils557/sopra-fs26-group-32-server/commit/a521f91) | Fixed join lobby endpoint status code to 201 CREATED — endpoint was already implemented by teammate | REST spec requires 201 for resource creation |
@@ -76,9 +76,9 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **[@scthisko]**    | 11.04.2026 | [87128c8](https://github.com/Nils557/sopra-fs26-group-32-server/commit/87128c8) | Validated player count, updated lobby status and broadcast game start | Game can only start with enough players and all clients must be notified via WebSocket |
 |                    | 19.04.2026 | [32325eb](https://github.com/Nils557/sopra-fs26-group-32-server/commit/32325eb) | Implemented image broadcast on timer and round lifecycle with stop | All players must see the same images at the same time every 9 seconds via WebSocket |
-| **[@Nils557]** | 14.04.2026   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) |If there are less than 2 players the Start Game button should be disabled | Players should not start the game alone |
-|                    | 14.04.2026   | [fd7de63](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fd7de63450fe824c88d7a833c0aea4de46425408) | Implemented game screen with picture/skeleton of the city and implemented the websocket subscription for images | To play the game you need webpage to play it on |
-|                    | 19.04.2026   | [e286043](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e286043a3c4e9c3916f96b583415a013ec939d1a) | Fixed the Docker build | Docker didn't work in the frontend until now |
+| **[@Nils557]** | 14.04.2026   | [c1c6780](https://github.com/Nils557/sopra-fs26-group-32-client/commit/c1c67804bb68bab60fb9fa4dfa62003fa4df59a5) | If there are fewer than two players, the 'Start Game' button should be disabled. | Players should not be able to start the game alone. |
+|                    | 14.04.2026   | [fd7de63](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fd7de63450fe824c88d7a833c0aea4de46425408) | Implemented game screen with picture/skeleton of the city and implemented websocket subscription for images. | To play the game, a webpage is required. |
+|                    | 19.04.2026   | [e286043](https://github.com/Nils557/sopra-fs26-group-32-client/commit/e286043a3c4e9c3916f96b583415a013ec939d1a) | Fixed the Docker build. | Docker didn't work in the frontend until now. |
 | **[@faiaz18]** | 16.04.2026   | [dcc1541](https://github.com/Nils557/sopra-fs26-group-32-server/commit/dcc15417f6af7ee1a2422b50c3ea0088808e6854) | Implemented PostgreSQL for Backend | So  that backend doesnt shut down after thir player joins |
 |                    | 17.04.2026   | [71d3aff](https://github.com/Nils557/sopra-fs26-group-32-client/commit/71d3aff96da1714e3c17dc8493bb65186646f389) | Fixed Bug regarding Lobby display (of Players) | Such that players see actual Players in Lobby |
 |                    | 16.04.2026-18.04.2026   | Just look at the history | Dis ca. 55 Commits for fixing Bugs | Players can now play without Bugs |
@@ -95,8 +95,8 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@Nils557]** | 21.04.26   | [f2a2346](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f2a234690e3c3e2fa2c14494842907fb4db7f41f) | [Implemented a minimap into the game] | [later we add a pointer to guess the city without the map you can't point somewhere] |
-|                    | 21.04.26   | [d054f79](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d054f792ef14ffa2a90ddd1407e5b2b179ad762f) | implemented a pointer to the map, and fixed it to the center | One needs a pointer to guess the city |
+| **[@Nils557]** | 21.04.26   | [f2a2346](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f2a234690e3c3e2fa2c14494842907fb4db7f41f) | Implemented a minimap in the game. | Later, we will add a pointer to help you guess the city. Without the map, you can't point to a location. |
+|                    | 21.04.26   | [d054f79](https://github.com/Nils557/sopra-fs26-group-32-client/commit/d054f792ef14ffa2a90ddd1407e5b2b179ad762f) | Implemented a pointer to the map and fixed it to the centre. | One needs a pointer to guess the city. |
 | **[@scthisko]** | 23.04.2026  | [87a0250](https://github.com/Nils557/sopra-fs26-group-32-server/commit/87a0250) | Implemented 45s round timer with WebSocket broadcast and automatic round end | Players need a synchronized countdown and the round must end automatically when time runs out |
 |                 | 23.04.2026  | [613a22f](https://github.com/Nils557/sopra-fs26-group-32-server/commit/613a22f) | Implemented early round end when all players have answered | Round should end immediately when all players have placed their pin to avoid unnecessary waiting |
 | **[@Bleronn4]** | [22.04.2026]   | [fabe0e5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/fabe0e5c4f11e16591534507a7a5a397eaf2d8b7) | [Disabled the map interaction after the pin is placed ] | [a player should not be able to change his answer] |
@@ -114,9 +114,9 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@Nils557]** | 30.4.26   | [f7767a5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f7767a5f53198340eef8c684d0571a28b78798d5) | Implemented mobile version and layout fix on pc | With a tiny screen it was impossible to play  the game. |
-|                    | 2.5.26   | [86ef3a4](https://github.com/Nils557/sopra-fs26-group-32-client/commit/86ef3a450585b8ca7fbf96483d583db2180bd34b) | [if the player places a pin at the moment the counter hits 0 no call is sent and the backend gives 0 points] | if there would be an api call at 0sec the backend could be confused and throw an error |
-|                    | 3.5.26   | [40e9dd0](https://github.com/Nils557/sopra-fs26-group-32-client/commit/40e9dd013280ec1b25904ba6da1a503d5746b2ae) | It was really difficult to use the map | Now it is easier to use the map and to not misplace the pin |
+| **[@Nils557]** | 30.4.26   | [f7767a5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/f7767a5f53198340eef8c684d0571a28b78798d5) | The mobile version and PC layout have been implemented. | With a tiny screen, it was impossible to play the game. |
+|                    | 2.5.26   | [86ef3a4](https://github.com/Nils557/sopra-fs26-group-32-client/commit/86ef3a450585b8ca7fbf96483d583db2180bd34b) | If the player places a pin at the moment the counter hits 0, no call is sent and the backend gives 0 points. | If there were an API call at 0 sec, the backend could be confused and throw an error. |
+|                    | 3.5.26   | [40e9dd0](https://github.com/Nils557/sopra-fs26-group-32-client/commit/40e9dd013280ec1b25904ba6da1a503d5746b2ae) | It was difficult to use the map. | Now it is easier to use the map and not misplace the pin. |
 | **[@scthisko]** | 01.05.2026 | [cadd60a](https://github.com/Nils557/sopra-fs26-group-32-server/commit/cadd60a) | Broadcast per-player score update via WebSocket after each guess | Players need to see the current rankings in real time after each pin placement |
 |                 | 01.05.2026 | [f3467c5](https://github.com/Nils557/sopra-fs26-group-32-server/commit/f3467c5) | Implemented ScoringService for score calculation | Scoring logic extracted into dedicated service for better separation of concerns and testability |
 |                 | 01.05.2026 | [c621426](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c621426) | Implemented cumulative score aggregation via ScoringService.getStandings | Players need to see their total score across all rounds sorted by descending points |
@@ -134,8 +134,8 @@ reason).
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **@Nils557** | [4.5.2026]   | [72bab67](https://github.com/Nils557/sopra-fs26-group-32-client/commit/72bab677598be4c8dc1fb8f61d029c5329ac0542) | Implemented the summary inbetween rounds with map and scoreboard | A player wants to know what the city was. |
-|                    | [6.5.2026]   | [4017eb9](https://github.com/Nils557/sopra-fs26-group-32-client/commit/4017eb9c1d76909d5c7696babd6b81bd74712064) | created and linked the final summary page | Players want to see who won at the end |
+| **@Nils557** | [4.5.2026]   | [72bab67](https://github.com/Nils557/sopra-fs26-group-32-client/commit/72bab677598be4c8dc1fb8f61d029c5329ac0542) | The summary was implemented between rounds with the map and scoreboard. | A player wants to know what the city was. |
+|                    | [6.5.2026]   | [4017eb9](https://github.com/Nils557/sopra-fs26-group-32-client/commit/4017eb9c1d76909d5c7696babd6b81bd74712064) | Created and linked the final summary page. | Players want to see who won in the end. |
 | [@vanix-dm] | 07.05.2026 | [d61b7f3](https://github.com/Nils557/sopra-fs26-group-32-server/commit/d61b7f33400cd47031b9c75d82767fe7ed99c305) | Real-time multiplayer submission status integration | To notify the lobby via WebSockets immediately when a player submits an answer without revealing pin coordinates |
 |                    | 07.05.2026 | [ff29d80](https://github.com/Nils557/sopra-fs26-group-32-server/commit/ff29d8046806f2cbf0e894a7099880ad50857fc0) | Mid-round client state recovery mechanism | To ensure players who refresh their browser mid-round accurately recover the correct UI state |
 |                    | 07.05.2026 | [3bd33dd](https://github.com/Nils557/sopra-fs26-group-32-server/commit/3bd33dde48481546212e8df15e25c0f468523c64) | Disconnect handling and application context fixes | To prevent games from hanging indefinitely when a player drops connection and resolve Spring Boot circular dependencies |
@@ -148,12 +148,12 @@ reason).
 
 ---
 
-## Contributions Week 6 - 4.5.26 to 10.5.26
+## Contributions Week 6 - 11.5.26 to 17.5.26
 
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **@Nils557** | 11.05.2025 | [068f1d5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/068f1d5736a77f241468e31932906e16ecad10c4) | Button to get to the lobby and butto n to get out of the lobby with websoccet disconnect | As a user I need to have a button to get back to the lobby |
-|                    | 13.05.2026 | [20fea0e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/20fea0e306a75fe4f55f1b0fd63fd94148830dd5) | Added a random Name generator | Players dont have to think of a name anymore. The function generates a name from a list of adjectives a list of animals and a random number. |
+| **@Nils557** | 11.05.2025 | [068f1d5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/068f1d5736a77f241468e31932906e16ecad10c4) | Button to get to the lobby and button to leave the lobby with WebSocket disconnect | As a user, I need a button to return to the lobby. |
+|                    | 13.05.2026 | [20fea0e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/20fea0e306a75fe4f55f1b0fd63fd94148830dd5) | Added a random name generator | Players don't have to think of a name anymore. The function generates names from lists of adjectives, animals, and random numbers. |
 | [@vanix-dm] |  |  |  |  |
 |                    |  |  |  |  |
 |                    |  |  |  |  |
