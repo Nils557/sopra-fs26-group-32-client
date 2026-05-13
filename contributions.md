@@ -153,7 +153,7 @@ reason).
 | **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **@Nils557** | 11.05.2025 | [068f1d5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/068f1d5736a77f241468e31932906e16ecad10c4) | Button to get to the lobby and butto n to get out of the lobby with websoccet disconnect | As a user I need to have a button to get back to the lobby |
-|                    |  |  |  |  |
+|                    | 13.05.2026 | [20fea0e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/20fea0e306a75fe4f55f1b0fd63fd94148830dd5) | Added a random Name generator | Players dont have to think of a name anymore. The function generates a name from a list of adjectives a list of animals and a random number. |
 | [@vanix-dm] |  |  |  |  |
 |                    |  |  |  |  |
 |                    |  |  |  |  |
