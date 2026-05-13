@@ -541,3 +541,38 @@
   color: #fff;
   border-color: #fff;
 }
+
+.nameRow {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.nameRow .largeInput {
+  flex: 1;
+  color: #9ca3af;
+}
+
+.largeInput::selection {
+  background: rgba(42, 58, 92, 0.6);
+}
+
+.reloadButton {
+  width: 60px;
+  background: #1e2940;
+  border: 2px solid #2a3a5c;
+  border-radius: 12px;
+  color: #6b7280;
+  font-size: 22px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reloadButton:hover {
+  border-color: #4a7cf7;
+  color: #fff;
+}

@@ -1,12 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { ApplicationError } from "@/types/error";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
+
+
+const ADJECTIVES = [
+  "Sleepy", "Stinky", "Grumpy", "Sneaky", "Misty",
+  "Rusty", "Cranky", "Dusty", "Spooky", "Gloomy",
+  "Clumsy", "Shady", "Frosty", "Noisy", "Quirky", 
+  "Wobbly", "Squishy", "Goofy", "Cheeky", "Loopy", 
+  "Chunky", "Wacky", "Dopey", "Soggy", "Pudgy"
+];
+
+const ANIMALS = [
+  "Platypus", "Raven", "Blobfish", "Tapir", "Manatee",
+  "Capybara", "Axolotl", "Viper", "Badger", "Crow",
+  "Moose", "Otter", "Sloth", "Elk", "Cockroach", 
+  "Wombat", "Tardigrade", "Quokka", "Hagfish", 
+  "Mudskipper", "Warthog", "Narwhal", "Toad", 
+  "Salamander", "Armadillo"
+];
+
+function generateRandomName(): string {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+  const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+  const num = Math.floor(Math.random() * 90) + 10;
+  return `${adj}${animal}${num}`;
+}
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -15,6 +40,12 @@ const Login: React.FC = () => {
   const { set: setUsername } = useSessionStorage<string>("username", "");
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [nameValue, setNameValue] = useState<string>(generateRandomName);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.select();
+  }, []);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,13 +84,26 @@ const Login: React.FC = () => {
         </div>
         <div className={styles.loginCard}>
           <form onSubmit={handleLogin} className={styles.form}>
-            <input
-              name="name"
-              className={styles.largeInput}
-              placeholder="Enter username"
-              required
-              autoFocus
-            />
+              <div className={styles.nameRow}>
+                <input
+                  ref={inputRef}
+                  name="name"
+                  className={styles.largeInput}
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                  onFocus={(e) => e.target.select()}
+                  required
+                  autoFocus
+                />
+              <button
+                type="button"
+                className={styles.reloadButton}
+                onClick={() => setNameValue(generateRandomName())}
+                title="Generate new name"
+              >
+                ↻
+              </button>
+            </div>
 
             {errorMsg && (
               <p
