@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import useSessionStorage from "@/hooks/useSessionStorage";
 import { useWebSocket } from "@/hooks/useWebSocket";
+import { useWSContext } from "@/contexts/WebSocketContext";
 import LocationImage from "@/components/LocationImage";
 import dynamic from "next/dynamic";
 import { ApiService } from "@/api/apiService";
@@ -50,6 +51,7 @@ interface SubmissionUpdateDTO {
   const router = useRouter();
   const params = useParams();
   const lobbyCode = params.code as string;
+  const { disconnect } = useWSContext();
 
   const { value: username } = useSessionStorage<string>("username", "");
   const { value: userId } = useSessionStorage<string>("userId", "");
@@ -140,9 +142,11 @@ interface SubmissionUpdateDTO {
     () => {
       if (isHost) return;
       setHostLeft(true);
+      disconnect();
+      sessionStorage.removeItem("isHost");
       disconnectTimerRef.current = setTimeout(() => router.push("/home"), 3000);
     },
-    [router, isHost]
+    [router, isHost, disconnect]
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
   
