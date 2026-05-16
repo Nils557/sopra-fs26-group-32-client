@@ -576,3 +576,98 @@
   border-color: #4a7cf7;
   color: #fff;
 }
+/* Final Results */
+.winnerSection {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.winnerCrown {
+  font-size: 56px;
+}
+
+.winnerLabel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin: 4px 0;
+}
+
+.winnerNameText {
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 800;
+  color: #f4b940;
+}
+
+.finalResultsCard {
+  background: #151c2c;
+  border-radius: 16px;
+  border: 1px solid #1e2940;
+  padding: 24px;
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rankingsTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.rankingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #1a2236;
+}
+
+.rankingRowWinner {
+  background: rgba(244, 185, 64, 0.08);
+  border: 1px solid rgba(244, 185, 64, 0.3);
+}
+
+.rankBadge {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1e2940;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.rankBadgeGold {
+  background: rgba(244, 185, 64, 0.15);
+  color: #f4b940;
+}
+
+.rankUsername {
+  color: #e8eaf0;
+  font-weight: 600;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rankScore {
+  color: #f4941b;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
