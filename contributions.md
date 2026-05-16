@@ -159,7 +159,7 @@ reason).
 |                    | 16.05.2026 | [bed76cd](https://github.com/Nils557/sopra-fs26-group-32-server/commit/bed76cded2cc1f52d4e80c6a38668c44b2e9b398) | Time-decay score multiplier and ScoringService optimization | To introduce a competitive speed bonus for fast answers while consolidating external API calls to improve server performance |
 | **[@faiaz18]** |    |  |  |
 |                 |  |  |  |  |
-| **[@scthisko]** |  |  |  |  |
-|                 |  |  |  |  |
+| **[@scthisko]** | 16.05.2026 | [ab9e4a8](https://github.com/Nils557/sopra-fs26-group-32-server/commit/ab9e4a8) | Broadcast GAME_END with final standings payload on game-state topic | Frontend needs ranked standings on game end to display the final results screen |
+|                 | 16.05.2026 | [8f3e036](https://github.com/Nils557/sopra-fs26-group-32-server/commit/8f3e036) | Clean up preloadedRounds in-memory state after game-end broadcast | Prevents memory leaks from async preload completing after the last round ends |
 | **[@Bleronn4]** |  |  |  |  |
 |                  |  |  | |  |
