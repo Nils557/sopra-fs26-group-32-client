@@ -94,9 +94,11 @@ const WaitingRoom: React.FC = () => {
     () => {
       if (isHost) return;
       setHostLeft(true);
+      disconnect();
+      sessionStorage.removeItem("isHost");
       setTimeout(() => router.push("/home"), 3000);
     },
-    [router, isHost]
+    [router, isHost, disconnect]
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
 
