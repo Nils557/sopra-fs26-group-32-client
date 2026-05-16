@@ -154,9 +154,9 @@ reason).
 | ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **@Nils557** | 11.05.2025 | [068f1d5](https://github.com/Nils557/sopra-fs26-group-32-client/commit/068f1d5736a77f241468e31932906e16ecad10c4) | Button to get to the lobby and button to leave the lobby with WebSocket disconnect | As a user, I need a button to return to the lobby. |
 |                    | 13.05.2026 | [20fea0e](https://github.com/Nils557/sopra-fs26-group-32-client/commit/20fea0e306a75fe4f55f1b0fd63fd94148830dd5) | Added a random name generator | Players don't have to think of a name anymore. The function generates names from lists of adjectives, animals, and random numbers. |
-| [@vanix-dm] |  |  |  |  |
-|                    |  |  |  |  |
-|                    |  |  |  |  |
+| [@vanix-dm] | 16.05.2026 | [ae8feff](https://github.com/Nils557/sopra-fs26-group-32-server/pull/212/changes/ae8feff93ca0eeabca1b8585d6164a6977c3de08), [c1aa307](https://github.com/Nils557/sopra-fs26-group-32-server/commit/c1aa3074e97da336480f5a345928644f2fb0db5b) | Comprehensive backend bug fixes and database constraint resolutions | To resolve ghost lobby detachments, fix SQL relation errors during user creation, and ensure clean state cleanup |
+|                    | 16.05.2026 | [25bb807](https://github.com/Nils557/sopra-fs26-group-32-server/pull/221/changes/25bb80763c73c3556e1b8e93a70a05cd7c1c58e2) | Scheduled Garbage Collector for stale lobby cleanup | To prevent database bloat by automatically removing inactive ghost lobbies and resetting stuck player statuses |
+|                    | 16.05.2026 | [bed76cd](https://github.com/Nils557/sopra-fs26-group-32-server/commit/bed76cded2cc1f52d4e80c6a38668c44b2e9b398) | Time-decay score multiplier and ScoringService optimization | To introduce a competitive speed bonus for fast answers while consolidating external API calls to improve server performance |
 | **[@faiaz18]** |    |  |  |
 |                 |  |  |  |  |
 | **[@scthisko]** |  |  |  |  |
