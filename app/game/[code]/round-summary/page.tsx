@@ -42,12 +42,14 @@
 
     const handleGameState = useCallback(
       (msg: unknown) => {
-        const event = typeof msg === "string" ? msg : (msg as { event: string }).event;
-        if (event === "NEXT_ROUND") router.push(`/game/${code}`);
-        if (event === "GAME_END") router.push(`/game/${code}/final-results`);
+        if (typeof msg === "string") {
+          if (msg === "NEXT_ROUND") router.push(`/game/${code}`);
+        } else {
+          router.push(`/game/${code}/final-results`);
+        }
       },
       [router, code]
-    );    
+    );
 
     useWebSocket<string>(`/topic/lobby/${code}/game-state`, handleGameState);
 
