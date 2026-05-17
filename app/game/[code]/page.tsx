@@ -106,7 +106,7 @@ interface SubmissionUpdateDTO {
     [round, lobbyCode, userId]
   );
 
-  useWebSocket<RoundData>(`/topic/game/${lobbyCode}/image`, handleRoundUpdate);
+  useWebSocket<RoundData>(`/topic/lobby/${lobbyCode}/image`, handleRoundUpdate);
 
   const handleTimerUpdate = useCallback((val: number) => {
     setTimeLeft(val);
@@ -116,9 +116,9 @@ interface SubmissionUpdateDTO {
     setRoundEnded(true);
     console.log("Round ended received from server");
   }, []);
-  useWebSocket<string>(`/topic/game/${lobbyCode}/roundEnd`, handleRoundEnd);
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/roundEnd`, handleRoundEnd);
 
-  useWebSocket<number>(`/topic/game/${lobbyCode}/timer`, handleTimerUpdate);
+  useWebSocket<number>(`/topic/lobby/${lobbyCode}/timer`, handleTimerUpdate);
     
   const handleGameOver = useCallback(
     (msg: string) => {
@@ -136,7 +136,7 @@ interface SubmissionUpdateDTO {
 
   useWebSocket<RoundSummaryData>(`/topic/lobby/${lobbyCode}/summary`, handleRoundEndNavigation);
 
-  useWebSocket<string>(`/topic/game/${lobbyCode}/status`, handleGameOver);
+  useWebSocket<string>(`/topic/lobby/${lobbyCode}/status`, handleGameOver);
 
   const handleDisconnect = useCallback(
     () => {
