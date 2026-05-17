@@ -41,11 +41,18 @@ export default function FinalResults() {
 
   useEffect(() => {
     api
-      .get<FinalResults>(`/lobbies/${code}/results`)
-      .then((data) => setResults((prev) => prev ?? data))
+      .get<{ rank: number; playerId: number; username: string; totalScore: number }[]>(`/lobbies/${code}/results`)
+      .then((data) => {
+        const normalized: FinalResults = {
+          lobbyCode: code,
+          standings: data.map(s => ({ id: s.playerId, username: s.username, totalScore: s.totalScore, connected: true })),
+        };
+        setResults((prev) => prev ?? normalized);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [api, code]);
+
 
   const handleResults = useCallback((data: FinalResults) => {
     setResults(data);
