@@ -6,6 +6,7 @@
   import dynamic from "next/dynamic";
   import styles from "@/styles/page.module.css";
   import { useWebSocket } from "@/hooks/useWebSocket";
+  import { useApi } from "@/hooks/useApi";
 
   const SummaryMap = dynamic(() => import("@/components/SummaryMap"), { ssr: false });
 
@@ -23,6 +24,7 @@
 
     const [data, setData] = useState<RoundSummaryData | null>(null);
     const [progress, setProgress] = useState(100);
+    const api = useApi();
 
     useEffect(() => {
       const stored = sessionStorage.getItem("roundSummary");
@@ -39,6 +41,15 @@
       }, 50);
       return () => clearInterval(id);
     }, []);
+
+    useEffect(() => {
+      if (progress > 0) return;
+      api.get<{ status: string }>(`/lobbies/${code}`)
+        .then(({ status }) => {
+          router.push(status === "FINISHED" ? `/game/${code}/final-results` : `/game/${code}`);
+        })
+        .catch(() => router.push(`/game/${code}`));
+    }, [progress, api, code, router]);
 
     const handleGameState = useCallback(
       (msg: unknown) => {
