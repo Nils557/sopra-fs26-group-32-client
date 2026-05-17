@@ -212,6 +212,22 @@ const WaitingRoom: React.FC = () => {
             ))}
           </div>
 
+          <div className={styles.scoringBox}>
+            <p className={styles.scoringTitle}>SCORING METHOD</p>
+            <p className={styles.scoringItem}>
+              <span className={styles.dotGreen}>●</span> Correct city — 2000 Points
+            </p>
+            <p className={styles.scoringItem}>
+              <span className={styles.dotYellow}>●</span> Correct country — 1000 - 1999 Points
+            </p>
+            <p className={styles.scoringItem}>
+              <span className={styles.dotRed}>●</span> 1000km radius — 0 - 999 Points
+            </p>
+            <p style={{ color: "#4b5563", fontSize: "12px", marginTop: "8px" }}>
+              Points scale with distance accuracy and time remaining.
+            </p>
+          </div>
+
           {isHost ? (
             <button
               className={`${styles.createButton} ${
