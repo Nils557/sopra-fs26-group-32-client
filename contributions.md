@@ -161,5 +161,5 @@ reason).
 |                    | 17.05.2026   | [958ff27](https://github.com/Nils557/sopra-fs26-group-32-server/commit/958ff272fae9c51d5db080be35c72e53b260cc7f) | Added test cases for the backend developement tasks of User Story 12| So we can be sure that the functionalities of our code are correct |
 | **[@scthisko]** | 16.05.2026 | [ab9e4a8](https://github.com/Nils557/sopra-fs26-group-32-server/commit/ab9e4a8) | Broadcast GAME_END with final standings payload on game-state topic | Frontend needs ranked standings on game end to display the final results screen |
 |                 | 16.05.2026 | [8f3e036](https://github.com/Nils557/sopra-fs26-group-32-server/commit/8f3e036) | Clean up preloadedRounds in-memory state after game-end broadcast | Prevents memory leaks from async preload completing after the last round ends |
-| **[@Bleronn4]** |  |  |  |  |
-|                  |  |  | |  |
+| **[@Bleronn4]** | 16.05.2026 | [b7ade8a](https://github.com/Nils557/sopra-fs26-group-32-client/commit/b7ade8a0be8ef5db8f6209bfc7ef329cc44e1da2) | added the final-results screen | everyone should see the scoreboard at the end of the game |
+|                  | 17.05.2026 | [a584e9a](https://github.com/Nils557/sopra-fs26-group-32-client/commit/a584e9a33b01fdb64e61ace03e4a02d827066583) | added scoring system explanation | every player should know how points are awarded |
