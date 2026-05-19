@@ -21,6 +21,12 @@ export const metadata: Metadata = {
   description: "sopra-fs26-template-client",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{

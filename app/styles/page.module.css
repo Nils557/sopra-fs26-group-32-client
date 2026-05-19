@@ -364,7 +364,8 @@
       overflow-y: auto;
       overflow-x: hidden;
       height: auto;
-      min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
     }
 
     .gameRow {
