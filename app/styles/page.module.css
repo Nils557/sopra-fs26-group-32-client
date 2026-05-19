@@ -349,9 +349,13 @@
     overflow: hidden;
   }
 
-  .gameImageWrapper {
-    position: relative;
-    width: min(100%, calc((100vh - 100px) * 16 / 9));
+    .gameImageWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(100%, calc((100vh - 320px) * 16 / 9));
+    min-width: 0;
+    margin: 0 auto;
   }
 
   @media (max-width: 600px) {
@@ -727,4 +731,9 @@
       font-size: 28px !important;
       letter-spacing: 3px !important;
     }
+  }
+
+  :global(.leaflet-control-attribution) {
+    font-size: 8px !important;
+    opacity: 0.6;
   }
