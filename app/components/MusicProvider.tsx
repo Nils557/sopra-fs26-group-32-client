@@ -71,7 +71,7 @@ useEffect(() => {
     const isMainGamePage = /^\/game\/[^/]+$/.test(pathname);
     if (isMainGamePage && !clicksMutedRef.current) {
         const gong = new Audio("/freesound-gong.mp3");
-        gong.volume = 0.8;
+        gong.volume = 0.4;
         gong.play().catch(() => {});
     }
     const isFinalResults = /^\/game\/[^/]+\/final-results$/.test(pathname);
@@ -103,13 +103,15 @@ useEffect(() => {
     const game = gameAudio.current;
     if (!lobby || !game) return;
 
+    const isFinalResults = /^\/game\/[^/]+\/final-results$/.test(pathname);
+
     if (musicMuted) {
     lobby.pause();
     game.pause();
     } else {
-    if (pathname.startsWith("/game")) {
+    if (pathname.startsWith("/game") && !isFinalResults) {
         game.play().catch(() => {});
-    } else {
+    } else if (!pathname.startsWith("/game")) {
         lobby.play().catch(() => {});
     }
     }
@@ -171,4 +173,3 @@ right: 0,
     )}
     </>
 );
-}
