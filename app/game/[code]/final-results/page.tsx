@@ -108,9 +108,9 @@ export default function FinalResults() {
 
         <button
           className={styles.returnButton}
-          onClick={() => router.push("/home")}
+          onClick={() => router.push(`/lobbies/${code}`)}
         >
-          ← Return to Home
+          ← Return to Lobby
         </button>
       </div>
     </main>

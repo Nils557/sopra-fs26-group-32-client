@@ -303,7 +303,7 @@ interface SubmissionUpdateDTO {
                     fontSize: "16px",
                   }}
                 >
-                  Wait for the first round...
+                  Loading images...
                 </div>
               )}
               <GameMap roundNumber={round?.roundNumber ?? 0} onPinPlaced={handlePinPlaced} disabled={roundEnded}/>
