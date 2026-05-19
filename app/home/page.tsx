@@ -29,7 +29,7 @@ const Home: React.FC = () => {
       return;
     }
 
-    const code = lobbyCode.trim();
+    const code = lobbyCode.trim().toUpperCase();
     setJoining(true);
     try {
       await apiService.post(`/lobbies/${code}/players`, {
