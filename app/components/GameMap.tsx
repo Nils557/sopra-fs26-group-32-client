@@ -60,11 +60,10 @@ import L from "leaflet";
         }
       }, [submitted, map]);
       useEffect(() => {
-        if (pin) {
-          const id = setTimeout(() => map.setView([pin.lat, pin.lng], map.getZoom()), 300);
-          return () => clearTimeout(id);
-        }
-      }, [map, pin]);
+          if (submitted && pin) {
+            map.setView([pin.lat, pin.lng], map.getZoom());
+          }
+        }, [map, submitted, pin]);
       return null;
     }
 
