@@ -56,6 +56,7 @@
         if (typeof msg === "string") {
           if (msg === "NEXT_ROUND") router.push(`/game/${code}`);
         } else {
+          sessionStorage.setItem("finalStandings", JSON.stringify((msg as { standings: unknown[] }).standings));
           router.push(`/game/${code}/final-results`);
         }
       },

@@ -40,26 +40,28 @@ export default function FinalResults() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const stored = sessionStorage.getItem("finalStandings");
+    if (stored) {
+      const data: { rank: number; playerId: number; username: string; totalScore: number }[] = JSON.parse(stored);
+      setResults({
+        lobbyCode: code,
+        standings: data.map(s => ({ id: s.playerId, username: s.username, totalScore: s.totalScore, connected: true })),
+      });
+      setLoading(false);
+      return;
+    }
     api
       .get<{ rank: number; playerId: number; username: string; totalScore: number }[]>(`/lobbies/${code}/results`)
       .then((data) => {
-        const normalized: FinalResults = {
+        setResults({
           lobbyCode: code,
           standings: data.map(s => ({ id: s.playerId, username: s.username, totalScore: s.totalScore, connected: true })),
-        };
-        setResults((prev) => prev ?? normalized);
+        });
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [api, code]);
 
-
-  const handleResults = useCallback((data: FinalResults) => {
-    setResults(data);
-    setLoading(false);
-  }, []);
-
-  useWebSocket<FinalResults>(`/topic/lobby/${code}/results`, handleResults);
 
   const ranked = results ? computeRanks(results.standings) : [];
   const winners = ranked.filter((p) => p.rank === 1);
