@@ -32,9 +32,12 @@
 
       if (isGame) {
         lobby.pause();
-        const gong = new Audio("/freesound-gong.mp3");
-        gong.volume = 0.8;
-        gong.play().catch(() => {});
+        const isMainGamePage = /^\/game\/[^/]+$/.test(pathname);
+        if (isMainGamePage) {
+            const gong = new Audio("/gong.mp3");
+            gong.volume = 0.8;
+            gong.play().catch(() => {});
+        }
         game.play().catch(() => {
         const resume = () => {
             game.play().catch(() => {});
