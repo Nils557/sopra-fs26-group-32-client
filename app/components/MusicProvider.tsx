@@ -32,23 +32,26 @@
 
       if (isGame) {
         lobby.pause();
+        const gong = new Audio("/freesound-gong.mp3");
+        gong.volume = 0.8;
+        gong.play().catch(() => {});
         game.play().catch(() => {
-          const resume = () => {
+        const resume = () => {
             game.play().catch(() => {});
             window.removeEventListener("click", resume);
-          };
-          window.addEventListener("click", resume);
+        };
+        window.addEventListener("click", resume);
         });
-      } else {
+    } else {
         game.pause();
         lobby.play().catch(() => {
-          const resume = () => {
+        const resume = () => {
             lobby.play().catch(() => {});
             window.removeEventListener("click", resume);
-          };
-          window.addEventListener("click", resume);
+        };
+        window.addEventListener("click", resume);
         });
-      }
+    }
     }, [pathname]);
 
     return null;
