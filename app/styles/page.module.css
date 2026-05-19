@@ -679,3 +679,52 @@
   font-size: 15px;
   flex-shrink: 0;
 }
+
+/*Waiting room smartphone*/
+ @media (max-width: 600px) {
+    .fullPageContainer {
+      padding: 16px;
+      justify-content: flex-start;
+      padding-top: 24px;
+    }
+
+    .cornerLogo {
+      display: none;
+    }
+
+    .centerWrapper {
+      max-width: 100%;
+    }
+
+    .loginCard {
+      padding: 20px 16px;
+      border-radius: 12px;
+    }
+
+    .copyButton {
+      font-size: 11px;
+      padding: 3px 8px;
+      margin-left: 8px;
+    }
+
+    .createButton,
+    .backButton {
+      font-size: 16px;
+      padding: 14px;
+    }
+    
+    .copyButton {
+      display: block;
+      margin: 6px auto 12px auto;
+    }
+
+    .backButton {
+      font-size: 13px !important;
+      padding: 6px 14px !important;
+    }
+
+    .hugeTitle {
+      font-size: 28px !important;
+      letter-spacing: 3px !important;
+    }
+  }

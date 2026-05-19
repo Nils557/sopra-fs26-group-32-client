@@ -174,18 +174,12 @@ const WaitingRoom: React.FC = () => {
             Share this code with friends
           </p>
 
-          <h1
-            className={styles.hugeTitle}
-            style={{ fontSize: "48px", letterSpacing: "6px" }}
-          >
+          <h1 className={styles.hugeTitle} style={{ letterSpacing: "6px" }}>
             {lobbyCode}
-              <button
-                onClick={() => navigator.clipboard.writeText(lobbyCode)}
-                className={styles.copyButton}
-              >
-                Copy
-              </button>
           </h1>
+          <button onClick={() => navigator.clipboard.writeText(lobbyCode)} className={styles.copyButton}>
+            Copy
+          </button>
 
           {hostLeft && (
             <p style={{ color: "#ff4d4f", textAlign: "center", marginBottom: "12px" }}>
@@ -199,12 +193,16 @@ const WaitingRoom: React.FC = () => {
             </p>
 
             {players.map((playerName) => (
-              <div className={styles.settingRow} key={playerName}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+               <div className={styles.settingRow} key={playerName}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0, overflow: "hidden"
+              }}>
                   <div className={styles.playerAvatar}>
                     {playerName.substring(0, 2).toUpperCase()}
                   </div>
-                  <span className={styles.settingLabel}>{playerName}</span>
+                  <span className={styles.settingLabel} style={{ overflow: "hidden", textOverflow: "ellipsis",
+              whiteSpace: "nowrap" }}>
+                    {playerName}
+                  </span>
                 </div>
                 {lobby?.hostUsername && playerName === lobby.hostUsername && (
                   <div className={styles.hostBadge}>HOST</div>
