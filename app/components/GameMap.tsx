@@ -77,12 +77,10 @@ import L from "leaflet";
           }
         `}</style>
         <div style={{ height: "200px", overflow: "hidden", borderRadius: "6px" }}>
-          <MapContainer center={[20, 0]} zoom={2} style={{ height: "100%", width: "100%" }}
-    attributionControl={true}>
+          <MapContainer center={[20, 0]} zoom={2} style={{ height: "100%", width: "100%" }} attributionControl={true}>
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-              attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
-    contributors © <a href="https://carto.com/attributions">CARTO</a>'
+              attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors © <a href="https://carto.com/attributions">CARTO</a>'
             />
             <MapController pin={pin} isDragging={isDragging} submitted={submitted} />
             <ClickHandler submitted={submitted} setPin={setPin} disabled={disabled} />

@@ -1,6 +1,6 @@
 .fullPageContainer {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background-color: #0e1117;
   position: relative;
   display: flex;
@@ -353,7 +353,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    width: min(100%, calc((100vh - 320px) * 16 / 9));
+    width: min(100%, calc((100vh - 360px) * 16 / 9));
     min-width: 0;
     margin: 0 auto;
   }
