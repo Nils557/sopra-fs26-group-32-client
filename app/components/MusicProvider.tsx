@@ -34,7 +34,7 @@
         lobby.pause();
         const isMainGamePage = /^\/game\/[^/]+$/.test(pathname);
         if (isMainGamePage) {
-            const gong = new Audio("/gong.mp3");
+            const gong = new Audio("/freesound-gong.mp3");
             gong.volume = 0.8;
             gong.play().catch(() => {});
         }
