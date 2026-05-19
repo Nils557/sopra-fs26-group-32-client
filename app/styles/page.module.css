@@ -372,15 +372,13 @@
 
     .gameSidebar {
       width: 100%;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
       gap: 10px;
     }
 
     .gameSidebar .cornerLogo {
-      position: static;
-      font-size: 22px;
-      flex-shrink: 0;
+      display: none;
     }
 
     .gameSidebar .scoringBox {

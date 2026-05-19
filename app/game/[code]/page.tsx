@@ -242,19 +242,23 @@ interface SubmissionUpdateDTO {
               <div className={styles.cornerLogoCity}>City</div>
             </div>
             <div className={styles.scoringBox}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div className={styles.playerAvatar}>
-                    {username.substring(0, 2).toUpperCase()}
-                  </div>
-                  <span className={styles.settingLabel}>{username}</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div className={styles.playerAvatar}>
+                  {username.substring(0, 2).toUpperCase()}
                 </div>
-                  {timeLeft !== null && (
-                  <span style={{ color: "#f4941b", fontWeight: 700, fontSize: "18px" }}>
+                {timeLeft !== null && (
+                  <span style={{ color: "#f4941b", fontWeight: 700, fontSize: "18px", flexShrink: 0 }}>
                     {timeLeft}s
                   </span>
                 )}
               </div>
+              <span
+                className={styles.settingLabel}
+                style={{ display: "block", marginTop: "10px", overflow: "hidden", textOverflow: "ellipsis",
+            whiteSpace: "nowrap" }}
+              >
+                {username}
+              </span>
             </div>
             {players.length > 0 && (
               <div className={styles.scoreboardBox}>
