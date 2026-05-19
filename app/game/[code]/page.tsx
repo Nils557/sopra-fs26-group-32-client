@@ -238,7 +238,8 @@ interface SubmissionUpdateDTO {
         <div className={styles.gameRow}>
           <div className={styles.gameSidebar}>
             <div className={styles.cornerLogo} style={{ position: "static" }}>
-              Geo<span>Guess</span>
+              <div>Geo<span>Guess</span></div>
+              <div className={styles.cornerLogoCity}>City</div>
             </div>
             <div className={styles.scoringBox}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

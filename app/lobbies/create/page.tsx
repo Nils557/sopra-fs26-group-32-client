@@ -6,6 +6,7 @@ import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
 import { ApplicationError } from "@/types/error";
 import useSessionStorage from "@/hooks/useSessionStorage";
+import { useWSContext } from "@/contexts/WebSocketContext"; 
 
 interface LobbyCreateResponse {
   lobbyCode: string;
@@ -23,6 +24,7 @@ const CreateLobby: React.FC = () => {
   const { set: setMaxPlayersStorage } = useSessionStorage<string>("maxPlayers", "");
   const { set: setIsHost } = useSessionStorage<string>("isHost", "false");
   const { set: setHostUsername } = useSessionStorage<string>("hostUsername", "");
+  const { disconnect } = useWSContext();
 
   const handleCreation = async () => {
     setErrorMsg(null);
@@ -48,9 +50,9 @@ const CreateLobby: React.FC = () => {
   return (
     <main className={styles.fullPageContainer}>
       <div className={styles.cornerLogo}>
-        Geo<span>Guess</span>
+        <div>Geo<span>Guess</span></div>
+        <div className={styles.cornerLogoCity}>City</div>
       </div>
-
       <div className={styles.centerWrapper}>
         <div className={styles.heroText}>
           <h1 className={styles.hugeTitle}>Lobby settings</h1>
@@ -131,6 +133,16 @@ const CreateLobby: React.FC = () => {
             Create Lobby
           </button>
         </form>
+        <button
+            className={styles.backButton}
+              style={{ position: "static", marginTop: "16px", border: "1px solid #6b7280", borderRadius: "8px", padding: "8px 20px" }}
+            onClick={() => {
+              disconnect();
+              router.push("/home");
+            }}
+            >
+            Return to Home
+         </button>
       </div>
     </main>
   );

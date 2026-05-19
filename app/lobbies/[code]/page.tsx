@@ -157,7 +157,8 @@ const WaitingRoom: React.FC = () => {
   return (
     <main className={styles.fullPageContainer}>
       <div className={styles.cornerLogo}>
-        Geo<span>Guess</span>
+        <div>Geo<span>Guess</span></div>
+        <div className={styles.cornerLogoCity}>City</div>
       </div>
 
       <div className={styles.centerWrapper}>
