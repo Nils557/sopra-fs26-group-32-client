@@ -1,392 +1,238 @@
-# Getting Started
+# 🌍 GeoGuess City (Client)
 
-### MacOS, Linux and WSL
+> A real-time multiplayer geography game where players race to identify mystery locations by dropping a pin on an interactive map.
 
-If you are using MacOS, Linux or WSL(Windows-Subsystem-Linux), you can skip
-directly to the
-[installation part](https://github.com/HASEL-UZH/sopra-fs26-template-client?tab=readme-ov-file#installation)
-
-### Windows
-
-If you are using Windows, you first need to install
-WSL(Windows-Subsystem-Linux). You might need to reboot your computer for the
-installation, therefore, save and close all your other work and programs
-
-1. Download the following [powershell script](./windows.ps1)\
-   ![downloadWindowsScript](https://github.com/user-attachments/assets/7372e029-8bed-41e4-80b7-b7079b0856be)
-
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 
 ---
-2. Open a new powershell terminal **with admin privileges** and run the following command and follow the instructions. Make sure that you open the powershell terminal at the path where you have downloaded the powershell script, otherwise the command will not work because it can not find the script. You can list currently accessible files in the powershell terminal with ```dir``` and you can use ```cd``` to navigate between directories
-   ```shell
-   C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File .\windows.ps1
-   ```
----
 
-3. If you experience any issues, try re-running the script a couple of times. If
-   the installation remains unsuccessful, follow this
-   [youtube tutorial](https://youtu.be/GIYOoMDfmkM) or post your question in the
-   OLAT forum
+## Table of Contents
 
----
-4. After successful installation, you can open WSL/Ubuntu. You will need to choose a username and password, although no characters will be shown on the screen when typing the password but the system recognizes your input, no worries :) After these four steps your setup should look similar to this
-![initialUbuntuScreen](https://github.com/user-attachments/assets/ecd4d4c2-1239-4717-87af-a476e425d734)
-
-<br>
-<br>
-<br>
-
-# Installation
-1. Open a new MacOS, Linux or WSL(Windows-Subsystem-Linux) terminal. Make sure you have git installed, you can check that by running
-   ```shell
-   git --version
-   ```
-   The output should be something similar to ```git version X.XX.X```, if not, try to install git in one of the following ways
-   #### MacOS
-   ```shell
-   brew install --formulae git
-   ```
-   #### Linux/WSL
-   ```shell
-   sudo apt-get install git
-   ```
-   If you are not using Ubuntu, you will need to install git with your package manager of choice
----
-
-2. Clone the repository with git using the following command
-   ```shell
-   git clone https://github.com/YOUR_USERNAME/YOUR-CLIENT-REPO
-   ```
+- [Introduction](#introduction)
+- [Technologies](#technologies)
+- [High-Level Components](#high-level-components)
+- [Scoring](#-scoring)
+- [Music & Sound Effects](#-music--sound-effects)
+- [Illustrations](#illustrations)
+- [Launch & Deployment](#launch--deployment)
+- [Roadmap](#-roadmap)
+- [Authors & Acknowledgment](#-authors--acknowledgment)
+- [License](#license)
 
 ---
-3. Navigate to the cloned directory in the terminal, in example with ```cd sopra-fs26-student-client```
----
 
-4. Inside the repository folder (with `ls` you can list files) there is a bash
-   script _setup.sh_ that will install everything you need, according to the
-   system you are using. Run the following command and follow the instructions
-   ```shell
-   source setup.sh
-   ```
+## Introduction
 
-The screenshot below shows an example of how this looks
-![sourceScript](https://github.com/user-attachments/assets/9f804291-85b2-4a49-8da0-c6c95db390f3)
+**GeoGuess City** is a fast-paced, real-time, multiplayer web game that was developed as part of the Software Praktikum course at the University of Zurich. Players are shown street-level images of a mystery city sourced from the Mapillary API, and must place a pin on an interactive world map to guess the location. The game is fully synchronised in real time via WebSocket, so there is no waiting or refreshing. It is fully playable on both mobile and desktop. No app required, just a browser.
 
-
-The installation script _setup.sh_ can take a few minutes, please be patient and
-do not abort the process. If you encounter any issues, please close the terminal
-and open a new one and try to run the command again
-
-<br>
-<br>
-<br>
-
-# Troubleshooting the installation
-
-If the four steps above did not work for you and re-running the setup.sh script
-a couple of times did not help, try running the following steps manually
-
-1. Open a new MacOS, Linux or WSL(Windows-Subsystem-Linux) terminal and navigate
-   to the repository with `cd`. Then ensure that curl is installed
-   ```shell
-   curl --version
-   ```
-   The output should be something similar to `curl X.X.X`, if not, try to
-   install curl in one of the following ways
-   #### MacOS
-   ```shell
-   brew install --formulae curl
-   ```
-   #### Linux/WSL
-   ```shell
-   sudo apt-get install curl
-   ```
-   If you are not using Ubuntu, you will need to install curl with your package
-   manager of choice
+This is the **client repository**. The backend lives [here](https://github.com/Nils557/sopra-fs26-group-32-server).
 
 ---
-2. Download Determinate Nix
-   ```shell
-   curl --proto '=https' --tlsv1.2 -ssf --progress-bar -L https://install.determinate.systems/nix -o install-nix.sh
-   ```
----
 
-3. Install Determinate Nix
-   ```shell
-   sh install-nix.sh install --determinate --no-confirm --verbose
-   ```
+## Technologies
 
----
-4. Install direnv using nix
-   ```shell
-   nix profile install nixpkgs#direnv
-   ```
-   If you encounter a permission error, try running with sudo
-   ```shell
-   sudo nix profile install nixpkgs#direnv
-   ```
----
-
-5. Find out what shell you are using
-   ```shell
-   echo $SHELL
-   ```
+* **[Next.js 15](https://nextjs.org/)** (with Turbopack)  React framework, routing, SSR
+* **[TypeScript](https://www.typescriptlang.org/)**  Type-safe JavaScript
+* **[Ant Design](https://ant.design/)** (antd v6)  UI component library
+* **[Leaflet](https://leafletjs.com/)** + **[OpenStreetMap](https://www.openstreetmap.org/)**  Interactive map for pin placement
+* **[STOMP.js](https://stomp-js.github.io/stomp-websocket/)** over SockJS  Real-time WebSocket communication
+* **[Vercel](https://vercel.com/)**  Frontend hosting and CI/CD
 
 ---
-6. Hook direnv into your shell according to [this guide](https://github.com/direnv/direnv/blob/master/docs/hook.md)
+
+## High-Level Components
+
+The client is structured around four main areas, each corresponding to a stage in the game flow.
+
+### 1. [`WebSocketContext`](app/contexts/WebSocketContext.tsx)
+The central nervous system of the application. This React context (mounted via `ClientProviders`) manages a persistent STOMP connection to the backend via SockJS. It provides a generic `subscribe`/`unsubscribe`/`disconnect` API that screen components use to register listeners on lobby-specific topics (timer, images, player lists, scores and game state). All real-time synchronisation such as starting a game, pushing new images every nine seconds, ending rounds and transitioning between screens flows through here.
+
+### 2. [`GameScreen`](app/game/[code]/page.tsx)
+This is the core gameplay component. It renders the Mapillary street-level image carousel, where a new image of the same location is revealed every nine seconds via WebSocket. It also renders the synchronised countdown timer and the interactive Leaflet map, where players drop their pin. Player indicators turn green when a guess has been submitted.
+
+### 3. [`WaitingRoom`](app/lobbies/[code]/page.tsx)
+Handles both host and player views of the pre-game lobby. The host sees a "Start Game" button that activates once at least two players have joined; regular players see a waiting message. The player list updates in real time as new players join.
+
+### 4. [`RoundSummary`](app/game/[code]/round-summary/page.tsx)
+Shown after each round ends. Displays the correct location on the map and a live scoreboard sorted by total score. Transitions automatically to the next round or the final results screen after a fixed countdown.
+
+> **Session Management:** The player's `userId` and `username` are stored in `sessionStorage` via a `useSessionStorage` hook and read by components across the app.
+
 ---
 
-7. Allow direnv to access the repository
-   ```shell
-   direnv allow
-   ```
+## 📍 Scoring
 
-If all troubleshooting steps above still did not work for you, try the following
-as a **last resort**: Open a new terminal and navigate to the client repository
-with `cd`. Run the command. Close the terminal again and do this for each of the
-six commands above, running each one in its own terminal, one after the other.
+Points are awarded based on how close your pin is to the actual location:
 
-<br>
-<br>
-<br>
+| Accuracy | Points |
+|---|---|
+| Within the correct **city** | 2000 Points ✅ |
+| Within the correct **country** | 1000 - 1999 Points 🟡 |
+| Within **1000km radius** | 0 - 999 Points ❌ |
 
-# Available commands after successful installation
+Pin placement is locked the moment you confirm. No take-backs, choose wisely!
 
-With the installation steps above your system now has all necessary tools for
-developing and running the sopra frontend application. Amongst others, two
-javascript runtimes have been installed for running the app:
+---
 
-- [NodeJS](https://nodejs.org)
-- [Deno](https://deno.com)
+## 🎵 Music & Sound Effects
 
-Runtimes is what your system needs to compile
-[typescript](https://www.typescriptlang.org) code (used in this project) to
-javascript and execute the application. You can use either runtime for this
-project, according to your preference. Both come with an included package
-manager, `npm` for nodejs and `deno` for deno. Thereby, the
-[package.json](./package.json) file defines possible commands that can be
-executed (using either `deno` or `npm`). The following commands are available in
-this repository:
+GeoGuess City features a full audio experience that can be controlled independently for music and sound effects.
 
-1. **Running the development server** - This will start the application in
-   development mode, meaning that changes to the code are instantly visible live
-   on [http://localhost:3000](http://localhost:3000) in the browser
-   ```bash
-   deno task dev
-   ```
-2. **Building a production-ready application** - This will create an optimized
-   production build that is faster and takes up less space. It is a static
-   build, meaning that changes to the code will only be included when the
-   command is run again
-   ```bash
-   deno task build
-   ```
-3. **Running the production application** - This will start the optimized
-   production build and display it on
-   [http://localhost:3000](http://localhost:3000) in the browser. This command
-   can only be run _after_ a production build has been created with the command
-   above and will not preview live code changes
-   ```bash
-   deno task start
-   ```
-4. **Linting the entire codebase** - This command allows to check the entire
-   codebase for mistakes, errors and warnings
-   ```bash
-   deno task lint
-   ```
-5. **Formatting the entire codebase** - This command will ensure that proper
-   indentation, spacing and further styling is applied to the code. This ensures
-   that the code looks uniform and the same across your team members, it is best
-   to run this command _every time before pushing changes to your repository_!
-   ```bash
-   deno task fmt
-   ```
+**Music** plays contextually throughout the game:
+- Lobby music while waiting for players to join
+- In-game music during active rounds
 
-All of the above mentioned commands can also be run using the nodejs runtime by
-substituting `deno task` with `npm run`, i.e
+**Sound Effects** trigger on key game moments:
+- A gong strike at the start of every new round
+- Celebration sound on the final results screen
+- Click sounds on interactive buttons
+
+Both can be toggled independently via the audio controls. Mute the music, keep the effects, or silence everything. Your call. Note: the audio controls are only visible on non-game pages. They are hidden during active rounds, the round summary, and the final results screen.
+
+---
+
+## Illustrations
+
+GeoGuess City follows a linear, guided user flow across seven screens.
+
+#### Landing / Username Entry
+A new player enters a unique username to create a temporary profile. The input is pre-filled with a randomly generated name (adjective + animal + number, e.g. `SleepyCapybara42`) that can be re-rolled with a button. If the username is already taken, an inline error is shown. On success, the player is redirected to the home screen.
+
+<img width="2560" height="1255" alt="landingpage" src="https://github.com/user-attachments/assets/fb5eda87-e503-4f95-88a4-dd222a34e7e1" />
+
+#### Home Screen
+From here, a player can either **create a new lobby** (leading to the lobby configuration screen) or **join an existing one** by entering a lobby code.
+
+<img width="2560" height="1253" alt="homescreen" src="https://github.com/user-attachments/assets/4775a419-714f-4a6c-ae3f-d49b1111cd89" />
+
+#### Lobby Configuration (Host only)
+The host sets the number of rounds (1–10) and the maximum number of players (2–10). After clicking "Create Lobby", a unique lobby code is generated and the host is redirected to the waiting room.
+
+<img width="2560" height="1254" alt="lobbycreation" src="https://github.com/user-attachments/assets/92b88ebc-5df9-40e6-9dd7-f2d49b861b24" />
+
+#### Waiting Room
+The host sees the shareable lobby code and a "Start Game" button (only active with ≥ 2 players). Regular players see a waiting message. The player list updates live via WebSocket as people join.
+
+Host:
+<img width="2543" height="1256" alt="lobby(Host)" src="https://github.com/user-attachments/assets/c82b4325-a92a-44c1-bdeb-8b4421446c95" />
+Normal player:
+<img width="2560" height="1257" alt="lobby (normal player)" src="https://github.com/user-attachments/assets/6b61c99e-1749-43ca-ae7f-eae115b19312" />
+
+#### Game Screen / Round in Progress
+The main game screen shows:
+- A street-level image from Mapillary (a new image of the same location is pushed every 9 seconds)
+- A 45-second countdown timer synchronized across all players
+- Player indicators that turn **green** when a guess has been submitted
+- An interactive Leaflet map where the player drops their pin
+
+Once the pin is placed it is locked in and cannot be changed.
+
+<img width="2560" height="1254" alt="game" src="https://github.com/user-attachments/assets/abba129d-9344-4fb6-b088-54f18de82e71" />
+
+#### Round Summary
+After each round, all players see the correct location on the map and the current leaderboard. The next round starts automatically after a short countdown, or if it was the last round, all players are redirected to the final results screen.
+
+<img width="2560" height="1254" alt="round-summary" src="https://github.com/user-attachments/assets/0ee4d675-f0c4-4f30-aa1e-edbfaa16f8dc" />
+
+#### Final Results
+The final standings screen announces the winner and allows players to return to the lobby. No scores are persisted, each new lobby starts fresh.
+
+<img width="2560" height="1253" alt="final summary" src="https://github.com/user-attachments/assets/19f6343c-08b4-446d-a82d-22a96d56b771" />
+
+---
+
+## Launch & Deployment
+
+### Prerequisites
+
+- Node.js ≥ 18
+- The [backend server](https://github.com/Nils557/sopra-fs26-group-32-server) running locally or accessible at a configured URL
+
+### Local Development
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/Nils557/sopra-fs26-group-32-client.git
+cd sopra-fs26-group-32-client
+
+# 2. Install dependencies
+npm install
+# or use the convenience script:
+source setup.sh
+
+# 3. Configure environment
+# Create a .env.local file in the project root:
+echo "NEXT_PUBLIC_PROD_API_URL=http://localhost:8080" > .env.local
+# Replace with the production URL if connecting to the deployed backend
+
+# 4. Start the development server (Next.js with Turbopack)
 npm run dev
 ```
 
-<br>
-<br>
-<br>
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-# Docker
+### Tests
 
-### Introduction
-This year Docker will be used to ease the process of deployment.\
-Docker is a tool that uses containers as isolated environments, ensuring that the application runs consistently and uniformly across different devices.\
-Everything in this repository is already set up to minimize your effort for deployment.\
-All changes to the main branch will automatically be pushed to dockerhub and optimized for production.
+The frontend does not currently have a dedicated test suite. Client-side logic is covered by the backend integration and REST interface tests in the [server repository](https://github.com/Nils557/sopra-fs26-group-32-server).
 
-### Setup
-1. **One** member of the team should create an account on [dockerhub](https://hub.docker.com/), _incorporating the group number into the account name_, for example, `SoPra_group_XX`.\
-2. This account then creates a repository on dockerhub with the _same name as the group's Github repository name_.\
-3. Finally, the person's account details need to be added as [secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) to the group's repository:
-    - dockerhub_username (the username of the dockerhub account from step 1, for example, `SoPra_group_XX`)
-    - dockerhub_password (a generated PAT([personal access token](https://docs.docker.com/docker-hub/access-tokens/)) of the account with read and write access)
-    - dockerhub_repo_name (the name of the dockerhub repository from step 2)
+### Production Build
 
-### Pull and run
-Once the image is created and has been successfully pushed to dockerhub, the image can be run on any machine.\
-Ensure that [Docker](https://www.docker.com/) is installed on the machine you wish to run the container.\
-First, pull (download) the image with the following command, replacing your username and repository name accordingly.
-
-```docker pull <dockerhub_username>/<dockerhub_repo_name>```
-
-Then, run the image in a container with the following command, again replacing _<dockerhub_username>_ and _<dockerhub_repo_name>_ accordingly.
-
-```docker run -p 3000:3000 <dockerhub_username>/<dockerhub_repo_name>```
-
-<br>
-<br>
-<br>
-
-# Installing additional software by modifying [flake.nix](./flake.nix)
-
-As this project uses Determinate Nix for managing development software,
-installing additional tools you might need is straightforward. You only need to
-adjust the section `nativeBuildInputs = with pkgs;` in the
-[nix flake](./flake.nix) with the package you would like to install. For
-example, if you want to use docker (the [Dockerfile](./Dockerfile) and
-[.dockerignore](./.dockerignore) are already included in this repo) you can
-simply add:
-
-```nix
-nativeBuildInputs = with pkgs;
-  [
-    nodejs
-    git
-    deno
-    watchman
-    docker ### <- added docker here
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    xcodes
-  ]
-  ++ lib.optionals (system == "aarch64-linux") [
-    qemu
-  ];
+```bash
+npm run build
+npm run start
 ```
 
-and add the package path to the `shellHook''` section
+### Deployment & Releases (Vercel)
 
-```nix
-        devShells.default = pkgs.mkShell {
-          inherit nativeBuildInputs;
+The frontend is deployed on [Vercel](https://vercel.com/). Every push to `main` triggers an automatic production deployment — there is no manual release step required. To set up a new environment:
 
-          shellHook = ''
-            export HOST_PROJECT_PATH="$(pwd)"
-            export COMPOSE_PROJECT_NAME=sopra-fs26-template-client
-            
-            export PATH="${pkgs.nodejs}/bin:$PATH"
-            export PATH="${pkgs.git}/bin:$PATH"
-            export PATH="${pkgs.deno}/bin:$PATH"
-            export PATH="${pkgs.watchman}/bin:$PATH"
-            export PATH="${pkgs.docker}/bin:$PATH" ### <- added docker path here
-            
-            ### rest of code ###
-        };
-```
-
-and finally do `direnv reload` in your terminal inside the repository folder. If
-you need a specific version of a package, you can override it in the `overlays`
-section
-
-```nix
-overlays = [
-  (self: super: {
-    nodejs = super.nodejs_23; ### <- changed to nodejs 23
-  })
-];
-```
-
-<br>
-<br>
-<br>
-
-# Miscellaneous
-
-This project uses
-[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
-to automatically optimize and load [Geist](https://vercel.com/font), a new font
-family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out
-[the Next.js GitHub repository](https://github.com/vercel/next.js) - your
-feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
-
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
-for more details.
-
-## Windows users
-
-Please ensure that the repository folder is inside the WSL2 filesystem
-(otherwise, the disk IO performance will be horrible). If you followed the
-tutorial closely, this is already the case. If for whatever reason you deviated
-from the instructions, please take the time now to ensure the repo is on the WSL
-filesystem. You can do this either by
-
-1. _Cloning the repository again with git in a WSL/Ubuntu terminal using the
-   following command and deleting the repository on the windows filesystem_
-   ```shell
-   git clone https://github.com/HASEL-UZH/sopra-fs26-template-client
+1. Connect the repository to Vercel via the Vercel dashboard.
+2. Set the environment variable in the Vercel project settings:
    ```
-2. _Using the Windows explorer to move the repository from the windows
-   filesystem to WSL filesystem_ In the left overview of all folders and drives
-   there should be a new filesystem called Linux (also check in the network
-   tab). Open the Linux drive and open the folder named "home", followed by your
-   username. Copy the whole repository folder from your current location to the
-   Linux folder /home/your-username (note that the folder will initially be
-   empty). Finally, delete the folder from your current location such that you
-   only have the folder inside the Linux filesystem.
-3. _Using the command line in WSL to move the repo_ Open a new Ubuntu / WSL2
-   terminal window. This will automatically open your home folder of the Linux
-   file system. You then need to locate where the repository / folder that you
-   have downloaded resides. You can use the `cp -ar` command to copy the folder
-   from the Windows drive to the Linux filesystem. The command takes the
-   following arguments: cp **source_file** _target_file_. Thus we need to
-   specify **source_file** the folder we want to copy from Windows filesystem
-   and the _target_file_ where to copy the folder to in the Linux filesystem. As
-   visible in this screenshot
-   ![copyFolderToUbuntu](https://github.com/user-attachments/assets/363c2098-beca-48bc-bdff-582b83c96618)
+   NEXT_PUBLIC_PROD_API_URL=https://sopra-fs26-group-32-server.oa.r.appspot.com
+   ```
+3. Vercel will automatically run `npm run build` and deploy the output.
 
-   the repository folder resides under the C drive in /mnt/c/. If your file is
-   not on your C drive, the folder path will be something like /mnt/d/. In the
-   screenshot, the downloaded repository folder is in the Downloads folder of
-   the current user on the C drive, thus the path for **source_file** is
-   `/mnt/c/Users/immol/Downloads`. The terminal in the screenshot is currently
-   in the home directory, indicated by ~ in the path in blue. As we want to copy
-   the folder to the home folder (/home/your-username) we can specify the
-   current directory (.) as the _target_file_, thus the dot at the end of the
-   command. If you happen to not be in the home folder, you can also run the
-   command with explicitly copying to the home folder as such:
-   ```bash
-   cp -ar /mnt/c/your-path /home/your-username
-   ```
-   Else you can run
-   ```bash
-   cp -ar /mnt/c/your-path .
-   ```
-   with . indicating to copy to the current path (in this case your home
-   folder). You can check if the repository was successfully copied over using
-   `ls` to list folders and files, as visible in the screenshot. You can then
-   delete the downloaded folder / repository from the Windows filesystem in the
-   explorer.
+---
+
+## 📋 Roadmap
+
+The following features would be the most impactful additions for new contributors:
+
+1. **Friend System & Private Lobbies**
+   Currently, players share a lobby code manually to play together. A friend system with persistent accounts would let players add each other, see who's online, and launch private lobbies directly no code-sharing needed. This would require persistent user accounts on the backend and a friends/presence API.
+
+2. **Spectator Mode**
+   Players who arrive after a game has started are currently blocked with an error. A spectator role would let latecomers watch the ongoing game: Images, timer, and player indicators (without submitting answers).
+
+3. **Region & Difficulty Filters**
+   Mystery locations are currently drawn from an internal dataset at random. Letting the host restrict a session to a specific continent, country, or difficulty tier (major cities vs. rural areas) would make each session much more customizable.
+
+---
+
+## 👥 Authors & Acknowledgment
+
+Group 32 - University of Zurich, Software Praktikum FS26
+
+- [Faiaz Islam](https://github.com/faiaz18) - Group Leader, Backend
+- [Bleron Neziri](https://github.com/Bleronn4) - Frontend
+- [Nils Schmid](https://github.com/Nils557) - Frontend, Infrastructure
+- [Danish Mughal](https://github.com/vanix-dm) - Backend
+- [Thissan Iyadurai](https://github.com/scthisko) - Backend
+
+---
+
+## 🙏 Acknowledgments
+
+- SOPRA team at UZH
+- [Mapillary](https://www.mapillary.com/) for the street-level imagery API
+- [Leaflet](https://leafletjs.com/) and [OpenStreetMap](https://www.openstreetmap.org/copyright) for the open mapping stack
+- [Pixabay](https://pixabay.com/music/) for royalty-free in-game music
+
+---
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
