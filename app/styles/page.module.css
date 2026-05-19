@@ -732,8 +732,3 @@
       letter-spacing: 3px !important;
     }
   }
-
-  :global(.leaflet-control-attribution) {
-    font-size: 8px !important;
-    opacity: 0.6;
-  }
