@@ -5,6 +5,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "@/styles/globals.css";
 import "leaflet/dist/leaflet.css";
 import ClientProviders from "@/components/ClientProviders";
+import MusicProvider from "@/components/MusicProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,7 +66,8 @@ export default function RootLayout({
           }}
         >
           <AntdRegistry>
-            <AntdApp>
+             <AntdApp>
+              <MusicProvider />
               <ClientProviders>{children}</ClientProviders>
             </AntdApp>
           </AntdRegistry>
