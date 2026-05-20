@@ -1,6 +1,6 @@
 # 🌍 GeoGuess City (Client)
 
-> A real-time multiplayer geography game where players race to identify mystery locations by dropping a pin on an interactive map.
+> This is a real-time, multiplayer geography game in which players race to identify mystery cities by placing a pin on an interactive map.
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
@@ -81,15 +81,16 @@ Pin placement is locked the moment you confirm. No take-backs, choose wisely!
 GeoGuess City features a full audio experience that can be controlled independently for music and sound effects.
 
 **Music** plays contextually throughout the game:
-- Lobby music while waiting for players to join
+- Lobby music while creating lobbies or waiting for players to join
 - In-game music during active rounds
 
 **Sound Effects** trigger on key game moments:
 - A gong strike at the start of every new round
 - Celebration sound on the final results screen
-- Click sounds on interactive buttons
+- Click sounds on every interaction with buttons
 
-Both can be toggled independently via the audio controls. Mute the music, keep the effects, or silence everything. Your call. Note: the audio controls are only visible on non-game pages. They are hidden during active rounds, the round summary, and the final results screen.
+Both can be toggled independently via the audio controls. Mute the music, keep the effects, or silence everything. Your call. 
+Note: the audio controls are only visible on non-game pages. They are hidden during active rounds, the round summary, and the final results screen.
 
 ---
 
@@ -98,7 +99,7 @@ Both can be toggled independently via the audio controls. Mute the music, keep t
 GeoGuess City follows a linear, guided user flow across seven screens.
 
 #### Landing / Username Entry
-A new player enters a unique username to create a temporary profile. The input is pre-filled with a randomly generated name (adjective + animal + number, e.g. `SleepyCapybara42`) that can be re-rolled with a button. If the username is already taken, an inline error is shown. On success, the player is redirected to the home screen.
+A new player enters a unique username to create a temporary profile. The input is pre-filled with a randomly generated name (adjective + animal + number, e.g. `SleepyCapybara42`) that can be re-rolled with a button. Alternatively, the user can choose their own name by writing it into the name field. If the username is already taken, an inline error is shown. On success, the player is redirected to the home screen.
 
 <img width="2560" height="1255" alt="landingpage" src="https://github.com/user-attachments/assets/fb5eda87-e503-4f95-88a4-dd222a34e7e1" />
 
@@ -116,14 +117,17 @@ The host sets the number of rounds (1–10) and the maximum number of players (2
 The host sees the shareable lobby code and a "Start Game" button (only active with ≥ 2 players). Regular players see a waiting message. The player list updates live via WebSocket as people join.
 
 Host:
+
 <img width="2543" height="1256" alt="lobby(Host)" src="https://github.com/user-attachments/assets/c82b4325-a92a-44c1-bdeb-8b4421446c95" />
+
 Normal player:
+
 <img width="2560" height="1257" alt="lobby (normal player)" src="https://github.com/user-attachments/assets/6b61c99e-1749-43ca-ae7f-eae115b19312" />
 
 #### Game Screen / Round in Progress
 The main game screen shows:
-- A street-level image from Mapillary (a new image of the same location is pushed every 9 seconds)
-- A 45-second countdown timer synchronized across all players
+- A street-level image from Mapillary (a new image of the same city is pushed every 9 seconds)
+- A 45-second countdown timer synchronized across all players (5 images per round)
 - Player indicators that turn **green** when a guess has been submitted
 - An interactive Leaflet map where the player drops their pin
 
@@ -205,7 +209,7 @@ The following features would be the most impactful additions for new contributor
    Currently, players share a lobby code manually to play together. A friend system with persistent accounts would let players add each other, see who's online, and launch private lobbies directly no code-sharing needed. This would require persistent user accounts on the backend and a friends/presence API.
 
 2. **Spectator Mode**
-   Players who arrive after a game has started are currently blocked with an error. A spectator role would let latecomers watch the ongoing game: Images, timer, and player indicators (without submitting answers).
+   Players who arrive after a game has started are currently blocked with an error. A spectator role would let latecomers watch the ongoing game:    Images, timer, and player indicators (without submitting answers).
 
 3. **Region & Difficulty Filters**
    Mystery locations are currently drawn from an internal dataset at random. Letting the host restrict a session to a specific continent, country, or difficulty tier (major cities vs. rural areas) would make each session much more customizable.
