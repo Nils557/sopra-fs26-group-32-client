@@ -8,6 +8,8 @@ export default function MusicProvider() {
 const pathname = usePathname();
 const lobbyAudio = useRef<HTMLAudioElement | null>(null);
 const gameAudio = useRef<HTMLAudioElement | null>(null);
+const gongAudio = useRef<HTMLAudioElement | null>(null);
+const victoryAudio = useRef<HTMLAudioElement | null>(null);
 const musicMutedRef = useRef(false);
 const clicksMutedRef = useRef(false);
 
@@ -20,6 +22,11 @@ const isGame = pathname.startsWith("/game");
 
 useEffect(() => { musicMutedRef.current = musicMuted; }, [musicMuted]);
 useEffect(() => { clicksMutedRef.current = clicksMuted; }, [clicksMuted]);
+
+useEffect(() => {
+if (localStorage.getItem("musicMuted") === "true") setMusicMuted(true);
+if (localStorage.getItem("clicksMuted") === "true") setClicksMuted(true);
+}, []);
 
 useEffect(() => {
     if (!showPanel) return;
@@ -46,7 +53,7 @@ useEffect(() => {
     const target = e.target as HTMLElement;
     if (target.closest("button") && !clicksMutedRef.current) {
         const click = new Audio("/nilsclick.mp3");
-        click.volume = 0.5;
+        click.volume = 1.0;
         click.play().catch(() => {});
     }
     };
@@ -66,6 +73,9 @@ useEffect(() => {
 
     const isGamePage = pathname.startsWith("/game");
 
+    let lobbyResume: (() => void) | null = null;
+    let gameResume: (() => void) | null = null;
+
     if (isGamePage) {
     lobby.pause();
     const isMainGamePage = /^\/game\/[^/]+$/.test(pathname);
@@ -73,29 +83,40 @@ useEffect(() => {
         const gong = new Audio("/freesound-gong.mp3");
         gong.volume = 0.4;
         gong.play().catch(() => {});
+        gongAudio.current = gong; 
     }
     const isFinalResults = /^\/game\/[^/]+\/final-results$/.test(pathname);
-    if (isFinalResults && !clicksMutedRef.current) {
-        game.pause();
+    if (isFinalResults) {
+        game.pause(); 
+        if (!clicksMutedRef.current) {
         const victory = new Audio("/cyreljayvillaro-victory.mp3");
         victory.volume = 0.8;
         victory.play().catch(() => {});
+        victoryAudio.current = victory; 
+        }
     }
     if (!musicMutedRef.current && !isFinalResults) {
         game.play().catch(() => {
-        const resume = () => { game.play().catch(() => {}); window.removeEventListener("click", resume); };
-        window.addEventListener("click", resume);
+        gameResume = () => { if (!musicMutedRef.current) game.play().catch(() => {}); };
+        window.addEventListener("click", gameResume, { once: true });
         });
     }
     } else {
     game.pause();
-    if (!musicMutedRef.current) {
+    if (!musicMutedRef.current && pathname !== "/") {
         lobby.play().catch(() => {
-        const resume = () => { lobby.play().catch(() => {}); window.removeEventListener("click", resume); };
-        window.addEventListener("click", resume);
+        lobbyResume = () => { if (!musicMutedRef.current) lobby.play().catch(() => {}); };
+        window.addEventListener("click", lobbyResume, { once: true });
         });
     }
     }
+
+    return () => {
+    if (lobbyResume) window.removeEventListener("click", lobbyResume);
+    if (gameResume) window.removeEventListener("click", gameResume);
+    gongAudio.current?.pause();
+    victoryAudio.current?.pause();
+    };
 }, [pathname]);
 
 useEffect(() => {
@@ -119,7 +140,7 @@ useEffect(() => {
 
 return (
     <>
-    {!isGame && (
+    {!isGame && pathname !== "/" && (
         <div data-sound-panel="true" style={{ position: "fixed", top: isMobile ? "auto" : "20px", bottom:
 isMobile ? "80px" : "auto", right: "20px", zIndex: 1000 }}>
             {showPanel && (
@@ -132,7 +153,11 @@ right: 0,
                 minWidth: "140px", boxShadow: "0 4px 16px rgba(0,0,0,0.4)"
             }}>
             <button
-                onClick={() => setMusicMuted(m => !m)}
+                onClick={() => {
+                const newVal = !musicMuted;
+                localStorage.setItem("musicMuted", String(newVal));
+                setMusicMuted(newVal);
+                }}
                 style={{
                 background: musicMuted ? "#2a2a2a" : "#22426b",
                 color: musicMuted ? "#888" : "#fff",
@@ -144,7 +169,11 @@ right: 0,
                 Music
             </button>
             <button
-                onClick={() => setClicksMuted(c => !c)}
+                onClick={() => {
+                const newVal = !clicksMuted;
+                localStorage.setItem("clicksMuted", String(newVal));
+                setClicksMuted(newVal);
+                }}
                 style={{
                 background: clicksMuted ? "#2a2a2a" : "#22426b",
                 color: clicksMuted ? "#888" : "#fff",
