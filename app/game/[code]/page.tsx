@@ -96,7 +96,7 @@ interface SubmissionUpdateDTO {
   const handlePinPlaced = useCallback(
     async (pin: { lat: number; lng: number }) => {
       if (!round || hasSubmitted.current) return;
-      hasSubmitted.current = true; 
+      hasSubmitted.current = true;
       const answer = await apiService.post<Answer>(
         `/lobbies/${lobbyCode}/rounds/${round.roundId}/answers`,
         { playerId: Number(userId), latitude: pin.lat, longitude: pin.lng }
@@ -119,7 +119,7 @@ interface SubmissionUpdateDTO {
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/roundEnd`, handleRoundEnd);
 
   useWebSocket<number>(`/topic/lobby/${lobbyCode}/timer`, handleTimerUpdate);
-    
+
   const handleGameOver = useCallback(
     (msg: string) => {
       if (msg === "GAME_OVER") {
@@ -128,6 +128,17 @@ interface SubmissionUpdateDTO {
     },
     [router]
   );
+
+  const handleGameState = useCallback(
+    (msg: unknown) => {
+      if (typeof msg !== "string") {
+        sessionStorage.setItem("finalStandings", JSON.stringify((msg as { standings: unknown[] }).standings));
+        router.push(`/game/${lobbyCode}/final-results`);
+      }
+    },
+    [router, lobbyCode]
+  );
+  useWebSocket<unknown>(`/topic/lobby/${lobbyCode}/game-state`, handleGameState);
 
   const handleRoundEndNavigation = useCallback((data: RoundSummaryData) => {
     sessionStorage.setItem("roundSummary", JSON.stringify(data));
@@ -149,11 +160,11 @@ interface SubmissionUpdateDTO {
     [router, isHost, disconnect]
   );
   useWebSocket<string>(`/topic/lobby/${lobbyCode}/disconnect`, handleDisconnect);
-  
+
   const handleScoresUpdate = useCallback((data: { playerId: number; username: string; totalScore: number }[]) => {
     setPlayers(data.map(p => ({ id: p.playerId, username: p.username, totalScore: p.totalScore, connected: true })));
   }, []);
-  
+
   useWebSocket<{ playerId: number; username: string; totalScore: number }[]>(`/topic/lobby/${lobbyCode}/scores`, handleScoresUpdate);
 
   const handleSubmissionUpdate = useCallback((data: SubmissionUpdateDTO) => {
@@ -163,9 +174,9 @@ interface SubmissionUpdateDTO {
       return next;
     });
   }, []);
-  
+
   useWebSocket<SubmissionUpdateDTO>(`/topic/lobbies/${lobbyCode}/submissions`, handleSubmissionUpdate);
-  
+
   useEffect(() => {
     return () => {
       if (disconnectTimerRef.current) clearTimeout(disconnectTimerRef.current);
@@ -182,7 +193,7 @@ interface SubmissionUpdateDTO {
       .then(names => setPlayers(names.map(name => ({ id: 0, username: name, totalScore: 0, connected: true }))))
       .catch(() => {});
   }, [lobbyCode]);
-  
+
 
   useEffect(() => {
     if (roundEnded && submittedAnswer) {
@@ -190,7 +201,7 @@ interface SubmissionUpdateDTO {
       toastTimerRef.current = setTimeout(() => setSubmittedAnswer(null), 3000);
     }
   }, [roundEnded, submittedAnswer]);
-  
+
 
   return (
     <main className={styles.gameLayout}>

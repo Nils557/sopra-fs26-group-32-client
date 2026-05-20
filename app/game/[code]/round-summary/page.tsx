@@ -44,11 +44,28 @@
 
     useEffect(() => {
       if (progress > 0) return;
+      let cancelled = false;
+      let timerId: ReturnType<typeof setTimeout> | null = null;
       api.get<{ status: string }>(`/lobbies/${code}`)
         .then(({ status }) => {
-          router.push(status === "FINISHED" ? `/game/${code}/final-results` : `/game/${code}`);
+          if (cancelled) return;
+          if (status === "FINISHED") {
+            router.push(`/game/${code}/final-results`);
+          } else {
+            timerId = setTimeout(() => {
+              api.get<{ status: string }>(`/lobbies/${code}`)
+                .then(({ status: s }) => {
+                  if (!cancelled) router.push(s === "FINISHED" ? `/game/${code}/final-results` : `/game/${code}`);
+                })
+                .catch(() => { if (!cancelled) router.push(`/game/${code}`); });
+            }, 2000);
+          }
         })
-        .catch(() => router.push(`/game/${code}`));
+        .catch(() => { if (!cancelled) router.push(`/game/${code}`); });
+      return () => {
+        cancelled = true;
+        if (timerId) clearTimeout(timerId);
+      };
     }, [progress, api, code, router]);
 
     const handleGameState = useCallback(
