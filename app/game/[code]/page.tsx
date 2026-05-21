@@ -189,9 +189,15 @@ interface SubmissionUpdateDTO {
   }, [timeLeft]);
 
   useEffect(() => {
-    apiService.get<string[]>(`/lobbies/${lobbyCode}/players`)
-      .then(names => setPlayers(names.map(name => ({ id: 0, username: name, totalScore: 0, connected: true }))))
-      .catch(() => {});
+    const stored = sessionStorage.getItem("roundSummary");
+    if (stored) {
+      const summary: { standings: { username: string; totalScore: number }[] } = JSON.parse(stored);
+      setPlayers(summary.standings.map(p => ({ id: 0, username: p.username, totalScore: p.totalScore, connected: true })));
+    } else {
+      apiService.get<string[]>(`/lobbies/${lobbyCode}/players`)
+        .then(names => setPlayers(names.map(name => ({ id: 0, username: name, totalScore: 0, connected: true }))))
+        .catch(() => {});
+    }
   }, [lobbyCode]);
 
 
