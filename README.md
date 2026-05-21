@@ -141,7 +141,7 @@ After each round, all players see the correct location on the map and the curren
 <img width="2560" height="1254" alt="round-summary" src="https://github.com/user-attachments/assets/0ee4d675-f0c4-4f30-aa1e-edbfaa16f8dc" />
 
 #### Final Results
-The final standings screen announces the winner and allows players to return to the lobby. No scores are persisted, each new lobby starts fresh.
+The final standings screen announces the winner and allows players to return to home.
 
 <img width="2560" height="1253" alt="final summary" src="https://github.com/user-attachments/assets/19f6343c-08b4-446d-a82d-22a96d56b771" />
 
