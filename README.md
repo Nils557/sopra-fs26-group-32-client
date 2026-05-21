@@ -143,7 +143,8 @@ After each round, all players see the correct location on the map and the curren
 #### Final Results
 The final standings screen announces the winner and allows players to return to home.
 
-<img width="2560" height="1253" alt="final summary" src="https://github.com/user-attachments/assets/19f6343c-08b4-446d-a82d-22a96d56b771" />
+<img width="1248" height="692" alt="Final-Result-Screen" src="https://github.com/user-attachments/assets/239adafa-e975-46e1-b031-4cfd21917a21" />
+
 
 ---
 
