@@ -40,7 +40,15 @@ export default function FinalResults() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    sessionStorage.removeItem("roundSummary");
+    sessionStorage.removeItem("isHost");
+    sessionStorage.removeItem("maxPlayers");
+    sessionStorage.removeItem("hostUsername");
+  }, []);  
+
+  useEffect(() => {
     const stored = sessionStorage.getItem("finalStandings");
+    sessionStorage.removeItem("finalStandings");
     if (stored) {
       const data: { rank: number; playerId: number; username: string; totalScore: number }[] = JSON.parse(stored);
       setResults({
