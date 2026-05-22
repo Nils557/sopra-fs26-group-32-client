@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "@/styles/page.module.css";
 import { useApi } from "@/hooks/useApi";
-import { useWebSocket } from "@/hooks/useWebSocket";
 
 interface Player {
   id: number;

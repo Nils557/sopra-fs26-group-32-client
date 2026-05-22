@@ -220,37 +220,21 @@ interface SubmissionUpdateDTO {
         </div>
       )}
       {roundEnded && submittedAnswer && (
-      <div
-        className={`${styles.scoreFeedbackToast} ${
-          submittedAnswer.scoreResult === "CORRECT_CITY"
-            ? styles.scoreFeedbackCorrectCity
-            : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
-            ? styles.scoreFeedbackCorrectCountry
-            : styles.scoreFeedbackIncorrect
-        }`}
-      >
-        <div className={styles.scoreFeedbackLabel}>
-          <span className={
+        <div
+          className={`${styles.scoreFeedbackToast} ${
             submittedAnswer.scoreResult === "CORRECT_CITY"
-              ? styles.dotGreen
+              ? styles.scoreFeedbackCorrectCity
               : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
-              ? styles.dotYellow
-              : styles.dotRed
-          }>●</span>
-          {submittedAnswer.scoreResult === "CORRECT_CITY"
-            ? "Correct City!"
-            : submittedAnswer.scoreResult === "CORRECT_COUNTRY"
-            ? "Correct Country"
-            : "Wrong Location"}
+              ? styles.scoreFeedbackCorrectCountry
+              : styles.scoreFeedbackIncorrect
+          }`}
+        >
+          <div className={styles.scoreFeedbackPoints}>
+            +{submittedAnswer.pointsAwarded} pts
+          </div>
         </div>
-        {round?.correctCity && (
-          <div className={styles.scoreFeedbackCity}>{round.correctCity}</div>
-        )}
-        <div className={styles.scoreFeedbackPoints}>
-          +{submittedAnswer.pointsAwarded} pts
-        </div>
-      </div>
-    )}
+      )}
+
 
         <div className={styles.gameRow}>
           <div className={styles.gameSidebar}>
